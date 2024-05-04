@@ -1,11 +1,14 @@
-import React from 'react'
-// import Map from "../Map/Map";
-function Home() {
-  return (
-    <div>
- Home
-    </div>
-  )
-}
+import React from "react";
+import Map from "../Map/Map";
+// import ProfileSidebar from "../SideBar/ProfileSidebar";
 
-export default Home
+function Home() {
+  
+  return (
+    <div className="w-[100%] h-[100vh]">
+      <Map />
+      
+    </div>
+  );
+}
+export default Home;
