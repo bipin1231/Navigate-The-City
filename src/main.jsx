@@ -13,18 +13,21 @@ import Login from './components/Login/Login.jsx'
 import BusRoute from './components/BusRoute/BusRoute.jsx'
 import Home from './components/Home/Home.jsx'
 import Layout from './Layout.jsx'
-import Ticket from './components/Ticket/Ticket.jsx'
+
 import SelectBus from './components/Ticket/SelectBus.jsx'
 import SelectSeat from './components/Ticket/SelectSeat.jsx'
+import SearchBus from './components/Ticket/SearchBus.jsx'
+import TicketCard from './components/Ticket/TicketCard.jsx'
 
 const router=createBrowserRouter(
   createRoutesFromElements(
     <Route path='/' element={<Layout/>}>
       <Route path='/' element={<Home/>}/>
       <Route path='home' element={<Home/>}/>
-      <Route path='ticket' element={<Ticket/>}/>
+      <Route path='searchbus' element={<SearchBus/>}/>
       <Route path='selectbus' element={<SelectBus/>}/>
       <Route path='selectseat' element={<SelectSeat/>}/>
+      <Route path='ticketcard' element={<TicketCard/>}/>
       <Route path='route' element={<BusRoute/>}/>
       <Route path='login' element={<Login/>}/>
     </Route>

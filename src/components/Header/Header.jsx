@@ -15,7 +15,7 @@ function Header() {
         <Link to="/home">
         <li className='cursor-pointer'>Home</li>
         </Link>
-        <Link to="/ticket">
+        <Link to="/searchbus">
         <li className='cursor-pointer'>Buy Ticket</li></Link>
         <Link to="/route">
         <li className='cursor-pointer'>Route</li></Link>

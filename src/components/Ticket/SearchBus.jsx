@@ -1,7 +1,7 @@
 import React from 'react'
 import { useState } from 'react';
 import SelectBus from './SelectBus';
-import { Link, NavLink } from 'react-router-dom'
+import { Link, NavLink,useNavigate } from 'react-router-dom'
 import Select from 'react-select';
 
 import { Card, CardHeader, CardBody, CardFooter } from "@nextui-org/react";
@@ -14,14 +14,16 @@ import { Button, ButtonGroup } from "@nextui-org/react";
 
 import { useForm, Controller } from 'react-hook-form';
 
-function Ticket() {
+
+
+function SearchBus() {
 
   // const [isClearable, setIsClearable] = useState(true);
   // const [isSearchable, setIsSearchable] = useState(true);
   // const [isDisabled, setIsDisabled] = useState(false);
   // const [isLoading, setIsLoading] = useState(false);
   // const [isRtl, setIsRtl] = useState(false);
-
+  const navigate = useNavigate();
 
   const colourOptions = [
     { label: 'Kathmandu', value: 'Kathmandu' },
@@ -59,7 +61,20 @@ function Ticket() {
 
 
   const { register, handleSubmit, control } = useForm();
-  const onSubmit = (data) => console.log(data);
+  const onSubmit = (data) =>{
+
+
+ 
+
+   
+ navigate('/selectbus',{state:{...data}});
+   
+  } 
+
+
+  
+
+
   return (
     <>
       <form onSubmit={handleSubmit(onSubmit)}>
@@ -190,4 +205,4 @@ function Ticket() {
   )
 }
 
-export default Ticket
+export default SearchBus

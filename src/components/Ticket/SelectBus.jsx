@@ -1,8 +1,25 @@
 import React from 'react'
 import {Card, CardHeader, CardBody, CardFooter,Divider} from "@nextui-org/react";
+import { useLocation } from 'react-router-dom';
+
 import { Link } from 'react-router-dom';
 
 function SelectBus() {
+  let busSearch={
+    from:"",
+    to:"",
+    date:"",
+  }
+
+  const location = useLocation();
+  const data = location.state; 
+  console.log(data);
+  
+  busSearch.from=data.From.value
+  busSearch.to=data.To.value
+  busSearch.date=data.date
+
+  console.log(busSearch);
   return (
     <div className='w-full flex mt-10 justify-center gap-4'>
         <Card className='w-[40%] '>
