@@ -14,7 +14,7 @@ const Login = ({ onClose }) => {
   };
 
   return (
-    <div className="fixed top-0 left-0 w-full h-full flex justify-center items-center">
+    <div className="fixed top-0 left-0 w-full h-full flex justify-center items-center z-[1010]">
       <div className="bg-white rounded-lg p-8 shadow-lg">
         <form onSubmit={handleSubmit}>
           <div className="flex justify-between font-bold mb-3">

@@ -1,8 +1,18 @@
-import React from 'react'
+import React, {useState} from 'react'
 import {Link} from 'react-router-dom'
 import {Button} from "@nextui-org/react";
+import Login from '../Login/Login';
 
 function Header() {
+  const [isLoginFormOpen, setIsLoginFormOpen] = useState(false);
+
+  const openLoginForm = () => {
+    setIsLoginFormOpen(true);
+  };
+
+  const closeLoginForm = () => {
+    setIsLoginFormOpen(false);
+  };
   return (
     <nav className='bg-gray-950 text-white flex items-center h-20 text-xl'>
      <Link to="/">
@@ -21,11 +31,13 @@ function Header() {
         <li className='cursor-pointer'>Route</li></Link>
       </ul>
     </div>
-    <Link to="/login">
-    <Button size="lg" className='ml-[7.75rem] font-medium'>
+    {/* <Link to="/login"> */}
+    <Button size="lg" className='ml-[7.75rem] font-medium'  onClick={openLoginForm}>
       Login
       </Button> 
-    </Link>
+      {/* {isLoginFormOpen && <Login onClose={closeLoginForm} />} */}
+      {isLoginFormOpen && <Login onClose={closeLoginForm} />}
+    {/* </Link> */}
    </nav>
   )
 }
