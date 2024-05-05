@@ -18,6 +18,7 @@ import SelectBus from './components/Ticket/SelectBus.jsx'
 import SelectSeat from './components/Ticket/SelectSeat.jsx'
 import SearchBus from './components/Ticket/SearchBus.jsx'
 import TicketCard from './components/Ticket/TicketCard.jsx'
+import ConfirmationCard from './components/Ticket/ConfirmationCard.jsx'
 
 const router=createBrowserRouter(
   createRoutesFromElements(
@@ -28,6 +29,7 @@ const router=createBrowserRouter(
       <Route path='selectbus' element={<SelectBus/>}/>
       <Route path='selectseat' element={<SelectSeat/>}/>
       <Route path='ticketcard' element={<TicketCard/>}/>
+      <Route path='confirmationcard' element={<ConfirmationCard/>}/>
       <Route path='route' element={<BusRoute/>}/>
       <Route path='login' element={<Login/>}/>
     </Route>

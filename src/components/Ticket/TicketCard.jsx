@@ -1,23 +1,40 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import { useLocation } from 'react-router-dom'
 import { Card, CardHeader, CardBody, CardFooter, Divider } from "@nextui-org/react";
 import { Button, ButtonGroup } from "@nextui-org/react";
 import Select from 'react-select';
 import { useForm, Controller } from 'react-hook-form';
-import {Input} from "@nextui-org/input";
+import { Input } from "@nextui-org/input";
+import { useNavigate } from 'react-router-dom';
 function TicketCard() {
-
+  const navigate = useNavigate();
+  const [myObject, setMyObject] = useState({ key: 'value' });
   const location = useLocation();
- 
-  const seats = location.state.seatNo
-  const renderSeats= ()=>{
-    
 
-  }
-  
+  const seats = location.state.seatNo
+  useEffect(() => {
+    const data = localStorage.getItem('data');
+    if (data) {
+      setMyObject(JSON.parse(data));
+    }
+
+
+
+  }, []);
 
   const price = location.state.price;
 
+  const { register, handleSubmit, control } = useForm();
+  const onSubmit = (data) => {
+    console.log(data);
+    console.log(myObject.date);
+    console.log(myObject);
+    console.log(price);
+
+
+      navigate('/confirmationcard');
+
+  }
 
   return (
     <div className='w-full flex mt-5 justify-center'>
@@ -43,7 +60,8 @@ function TicketCard() {
                       Route
                     </p>
                     <p>
-                      Kathmandu-Chitwan
+                      {/* {myObject.From.value}-
+                     {myObject.To.value} */}
                     </p>
                   </div>
                   <div>
@@ -62,7 +80,7 @@ function TicketCard() {
                         Date
                       </p>
                       <p>
-                        2023-1-1
+                        {myObject.date}
                       </p>
                     </div>
                     <div>
@@ -70,9 +88,9 @@ function TicketCard() {
                         Seat No.
                       </p>
                       <p>
-                      {seats.join(',')}
+                        {seats.join(',')}
                       </p>
-                    {/* <div className='flex'>
+                      {/* <div className='flex'>
                       {seats.map((seat) => 
                         <p key={seat}>
                        {seat}
@@ -96,7 +114,7 @@ function TicketCard() {
 
 
               <p className='text-lg font-medium'>
-                {price}
+                {seats.length * price}
 
 
               </p>
@@ -111,22 +129,33 @@ function TicketCard() {
             </CardHeader>
             <Divider />
             <CardBody>
-              <div className='flex justify-center'>
-                <div className='flex flex-col gap-5 w-[60%]'>
-              <Input 
-              variant='underlined'
-              color='black'
-              type="email" label="Email" />
-              <Input 
-              max={10}
-              color='primary'
-              type="number" label="Number" />
-              <Input 
-           
-              color='primary'
-              type="text" label="Full Name" />
-              </div>
-              </div>
+              <form onSubmit={handleSubmit(onSubmit)}>
+                <div className='flex justify-center'>
+                  <div className='flex flex-col gap-5 w-[60%]'>
+                    <Input
+                      variant='underlined'
+                      color='black'
+                      type="email" label="Email"
+                      {...register("email")}
+                    />
+                    <Input
+                      color='primary'
+                      max={10}
+                      type="number" label="Number"
+                      {...register("number")}
+                      />
+                    <Input
+
+                      color='primary'
+                      type="text" label="Full Name" 
+                      {...register("name")}
+                      />
+                        <Button type='submit' radius="full" className='w-full font-semibold text-lg'>
+                  Continue
+                  </Button>
+                  </div>
+                </div>
+              </form>
             </CardBody>
             <Divider />
             <CardFooter className='flex justify-between'>

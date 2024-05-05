@@ -1,5 +1,5 @@
 import React from 'react'
-import { useState } from 'react';
+import { useState,useEffect } from 'react';
 import SelectBus from './SelectBus';
 import { Link, NavLink,useNavigate } from 'react-router-dom'
 import Select from 'react-select';
@@ -24,6 +24,8 @@ function SearchBus() {
   // const [isLoading, setIsLoading] = useState(false);
   // const [isRtl, setIsRtl] = useState(false);
   const navigate = useNavigate();
+
+  const [busInfo,setBusInfo]= useState({});
 
   const colourOptions = [
     { label: 'Kathmandu', value: 'Kathmandu' },
@@ -62,8 +64,7 @@ function SearchBus() {
 
   const { register, handleSubmit, control } = useForm();
   const onSubmit = (data) =>{
-
-
+    localStorage.setItem('data', JSON.stringify(data));
  
 
    
