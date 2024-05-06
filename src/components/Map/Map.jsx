@@ -2,8 +2,8 @@ import React, { useState, useEffect, useRef } from "react";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import 'leaflet-geosearch/dist/geosearch.css';
-
 import { GeoSearchControl, OpenStreetMapProvider } from 'leaflet-geosearch';
+import RoutingMachine from './RoutingMachine'; 
 
 function Map() {
   const mapRef = useRef(null);
@@ -13,6 +13,7 @@ function Map() {
     L.latLng(26.347, 80.058), // South-West
     L.latLng(30.447, 88.201) // North-East
   );
+  
 
   const initializeMap = (center) => {
     if (!mapRef.current) {
@@ -23,8 +24,9 @@ function Map() {
         minZoom: 7.5,
         maxBounds: nepalBounds,
         maxBoundsViscosity: 0.8,
-      });
-
+        zoomControl: false,
+      }).addControl(L.control.zoom({ position: 'bottomright' }));
+      RoutingMachine(mapRef.current);
       // Add tile layer
       L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
         attribution:
@@ -88,26 +90,6 @@ function Map() {
 
       // Create layer control
       L.control.layers(baseLayers).addTo(mapRef.current);
-
-      // Disable default zoom control
-      mapRef.current.zoomControl.remove();
-
-      // Add custom zoom control
-      const customZoomControl = L.Control.extend({
-        options: {
-          position: "bottomright",
-        },
-        onAdd: function () {
-          const container = L.DomUtil.create("div", "custom-zoom-control");
-          container.innerHTML = `
-                        <div style="margin-right: 10px; display: flex; flex-direction: column;">
-                            <button class="bg-white hover:scale-125 duration-200 mb-2" style="border: 1px solid black; border-radius: 50%; padding: 0 7px; font-size: 16px;" onclick="zoomIn()">+</button>
-                            <button class="bg-white hover:scale-125 duration-200 mb-2" style="border: 1px solid black; border-radius: 50%; padding: 0 7px; font-size: 16px;" onclick="zoomOut()">-</button>
-                        </div>
-                    `;
-          return container;
-        },
-      });
 
       mapRef.current.addControl(new customZoomControl());
 
