@@ -3,7 +3,11 @@ import { Card, CardHeader, CardBody, CardFooter, Divider } from "@nextui-org/rea
 import BusSeat from './BusSeat';
 import { Button, ButtonGroup } from "@nextui-org/react";
 import { Link,useNavigate } from 'react-router-dom';
+import {useDispatch,useSelector} from 'react-redux'
+import { seatPrices } from '../../ticketStore/ticketSlice';
 function SelectSeat() {
+
+    const dispatch=useDispatch();
 
   const totalSeats = 4;
   const price = 800;
@@ -41,6 +45,7 @@ function SelectSeat() {
   const navigate = useNavigate();
 
   const toComponentB=()=>{
+    dispatch(seatPrices({selectedSeat,price}))
 navigate('/ticketcard',{state:{seatNo:selectedSeat,price:price}});
   }
 

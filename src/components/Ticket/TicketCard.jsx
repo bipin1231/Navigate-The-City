@@ -6,21 +6,28 @@ import Select from 'react-select';
 import { useForm, Controller } from 'react-hook-form';
 import { Input } from "@nextui-org/input";
 import { useNavigate } from 'react-router-dom';
+import {useDispatch,useSelector} from 'react-redux'
+import { search} from '../../ticketStore/ticketSlice';
+
 function TicketCard() {
+  const info=useSelector(state=>state.ticketData);
+  const seatInfo=useSelector(state=>state.seatPrice);
+  console.log(seatInfo);
+  console.log(info);
   const navigate = useNavigate();
   const [myObject, setMyObject] = useState({ key: 'value' });
   const location = useLocation();
 
   const seats = location.state.seatNo
-  useEffect(() => {
-    const data = localStorage.getItem('data');
-    if (data) {
-      setMyObject(JSON.parse(data));
-    }
+  // useEffect(() => {
+  //   const data = localStorage.getItem('data');
+  //   if (data) {
+  //     setMyObject(JSON.parse(data));
+  //   }
 
 
 
-  }, []);
+  // }, []);
 
   const price = location.state.price;
 
@@ -60,8 +67,9 @@ function TicketCard() {
                       Route
                     </p>
                     <p>
-                      {/* {myObject.From.value}-
-                     {myObject.To.value} */}
+                     {info.From.value}-{
+                      info.To.value
+                     }
                     </p>
                   </div>
                   <div>
@@ -69,7 +77,7 @@ function TicketCard() {
                       No. of Passenger
                     </p>
                     <p>
-                      {seats.length}
+                      {seatInfo.selectedSeat.length}
                     </p>
                   </div>
                 </div>
@@ -80,7 +88,7 @@ function TicketCard() {
                         Date
                       </p>
                       <p>
-                        {myObject.date}
+                        {info.date}
                       </p>
                     </div>
                     <div>
@@ -88,7 +96,7 @@ function TicketCard() {
                         Seat No.
                       </p>
                       <p>
-                        {seats.join(',')}
+                        {seatInfo.selectedSeat.join(',')}
                       </p>
                       {/* <div className='flex'>
                       {seats.map((seat) => 
@@ -114,7 +122,7 @@ function TicketCard() {
 
 
               <p className='text-lg font-medium'>
-                {seats.length * price}
+                {seatInfo.selectedSeat.length * price}
 
 
               </p>

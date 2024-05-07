@@ -3,6 +3,8 @@ import {Card, CardHeader, CardBody, CardFooter,Divider} from "@nextui-org/react"
 import { useLocation } from 'react-router-dom';
 
 import { Link } from 'react-router-dom';
+import {useDispatch,useSelector} from 'react-redux'
+import { search } from '../../ticketStore/ticketSlice';
 
 function SelectBus() {
   let busSearch={
@@ -13,13 +15,16 @@ function SelectBus() {
 
   const location = useLocation();
   const data = location.state; 
-  console.log(data);
+//  console.log(data);
   
   busSearch.from=data.From.value
   busSearch.to=data.To.value
   busSearch.date=data.date
 
-  console.log(busSearch);
+  //console.log(busSearch);
+
+  const info=useSelector(state=>state.ticketData)
+  console.log(info);
   return (
     <div className='w-full flex mt-10 justify-center gap-4'>
         <Card className='w-[40%] '>

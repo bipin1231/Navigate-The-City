@@ -11,14 +11,20 @@ function Header() {
     </div>
     </Link>
     <div className='flex w-[60%] justify-center'>
-      <ul className='flex gap-16 font-medium text-xl'>
-        <Link to="/home">
+      <ul className='flex gap-16 font-medium text-xl '>
+        <NavLink to="/home"
+       className={({isActive})=>`${isActive?"text-gray-400":""}`}
+        >
         <li className='cursor-pointer'>Home</li>
-        </Link>
-        <Link to="/searchbus">
-        <li className='cursor-pointer'>Buy Ticket</li></Link>
-        <Link to="/route">
-        <li className='cursor-pointer'>Route</li></Link>
+        </NavLink>
+        <NavLink to="/searchbus"
+        className={({isActive})=>`${isActive?"text-gray-400":""}`}
+        >
+        <li className='cursor-pointer'>Buy Ticket</li></NavLink>
+        <NavLink to="/route"
+        className={({isActive})=>`${isActive?"text-gray-400":""}`}
+        >
+        <li className='cursor-pointer'>Route</li></NavLink>
       </ul>
     </div>
     <Link to="/login">

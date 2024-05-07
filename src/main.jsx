@@ -20,6 +20,9 @@ import SearchBus from './components/Ticket/SearchBus.jsx'
 import TicketCard from './components/Ticket/TicketCard.jsx'
 import ConfirmationCard from './components/Ticket/ConfirmationCard.jsx'
 
+
+import { store } from './ticketStore/store'
+import { Provider } from 'react-redux'
 const router=createBrowserRouter(
   createRoutesFromElements(
     <Route path='/' element={<Layout/>}>
@@ -38,10 +41,12 @@ const router=createBrowserRouter(
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
+      <Provider store={store}>
         <NextUIProvider>
        
    <RouterProvider router={router}/>
    
    </NextUIProvider>
+   </Provider>
   </React.StrictMode>,
 )

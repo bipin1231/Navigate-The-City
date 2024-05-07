@@ -14,6 +14,8 @@ import { Button, ButtonGroup } from "@nextui-org/react";
 
 import { useForm, Controller } from 'react-hook-form';
 
+import {useDispatch,useSelector} from 'react-redux'
+import { search} from '../../ticketStore/ticketSlice';
 
 
 function SearchBus() {
@@ -62,13 +64,20 @@ function SearchBus() {
   }
 
 
+  const dispatch=useDispatch()
+  
   const { register, handleSubmit, control } = useForm();
   const onSubmit = (data) =>{
+
     localStorage.setItem('data', JSON.stringify(data));
- 
+  //  e.preventDefault();
+  
+    dispatch(search(data))
 
    
  navigate('/selectbus',{state:{...data}});
+
+
    
   } 
 
