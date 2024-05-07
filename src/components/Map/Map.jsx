@@ -4,6 +4,8 @@ import "leaflet/dist/leaflet.css";
 import 'leaflet-geosearch/dist/geosearch.css';
 import { GeoSearchControl, OpenStreetMapProvider } from 'leaflet-geosearch';
 import RoutingMachine from './RoutingMachine'; 
+// import 'leaflet-control-geocoder/dist/Control.Geocoder.css';
+// import 'leaflet-control-geocoder/dist/Control.Geocoder.js';
 
 function Map() {
   const mapRef = useRef(null);
@@ -26,7 +28,7 @@ function Map() {
         maxBoundsViscosity: 0.8,
         zoomControl: false,
       }).addControl(L.control.zoom({ position: 'bottomright' }));
-      RoutingMachine(mapRef.current);
+      
       // Add tile layer
       L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
         attribution:
@@ -90,15 +92,8 @@ function Map() {
 
       // Create layer control
       L.control.layers(baseLayers).addTo(mapRef.current);
-
-      mapRef.current.addControl(new customZoomControl());
-
-      // Bind zoom functions
-      const zoomIn = () => mapRef.current.zoomIn();
-      const zoomOut = () => mapRef.current.zoomOut();
-
-      window.zoomIn = zoomIn;
-      window.zoomOut = zoomOut;
+      //adding or importing leaflet routing machine
+      RoutingMachine(mapRef.current);
     }
   };
 
@@ -150,6 +145,7 @@ function Map() {
   return (
     <div style={{ height: "86vh", width: "100%" }}>
       <div id="map" style={{ height: "100%" }} />
+      <RoutingMachine map={mapRef.current}/>
     </div>
   );
 }
