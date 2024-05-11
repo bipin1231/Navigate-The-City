@@ -21,7 +21,7 @@ import { login as authLogin } from '../../ticketStore/authSlice';
 
 import { GoogleLogin, useGoogleLogin } from '@react-oauth/google';
 import { jwtDecode } from "jwt-decode";
-function Signup() {
+function Login() {
 
   const [password, setPassword] = useState("");
   const [cpassword, setCPassword] = useState("");
@@ -75,6 +75,7 @@ const googleAuth=
 
 
   return (
+// <<<<<<< bipin
     <>
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className='w-full flex mt-10 justify-center gap-4 h-96'>
@@ -147,4 +148,70 @@ const googleAuth=
   )
 }
 
-export default Signup
+export default Login
+// =======
+// //     <div className="fixed top-0 left-0 w-full h-full flex justify-center items-center z-[1010]">
+// //       <div className="bg-white rounded-lg p-8 shadow-lg">
+// //         <form onSubmit={handleSubmit}>
+// //           <div className="flex justify-between font-bold mb-3">
+// //             <p>Login</p>
+
+// //             <button
+// //               type="button"
+// //               className="bg-red-500 hover:bg-red-700 text-white px-2 rounded focus:outline-none focus:shadow-outline"
+// //               onClick={onClose}
+// //             >
+// //               X
+// //             </button>
+// //           </div>
+// //           <div className="mb-4">
+// //             <label
+// //               htmlFor="email"
+// //               className="block text-gray-700 font-bold mb-2"
+// //             >
+// //               Email address
+// //             </label>
+// //             <input
+// //               type="email"
+// //               id="email"
+// //               className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+// //               placeholder="Enter email"
+// //               // value={email}
+// //               // onChange={(e) => setEmail(e.target.value)}
+// //             />
+// //           </div>
+
+// //           <div className="mb-6">
+// //             <label
+// //               htmlFor="password"
+// //               className="block text-gray-700 font-bold mb-2"
+// //             >
+// //               Password
+// //             </label>
+// //             <input
+// //               type="password"
+// //               id="password"
+// //               className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+// //               placeholder="Password"
+// //               // value={password}
+// //               // onChange={(e) => setPassword(e.target.value)}
+// //             />
+// //           </div>
+// //           <button
+// //             type="submit"
+// //             className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+// //           >
+// //             logIn
+// //           </button>
+// //           <div>
+// //             <p>Don't have an Account?</p>
+// //             <button className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Sign Up</button>
+// //           </div>
+// //         </form>
+// //       </div>
+// //     </div>
+// //   );
+// // };
+
+// // export default Login;
+// // >>>>>>> main
