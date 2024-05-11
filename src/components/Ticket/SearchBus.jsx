@@ -69,13 +69,13 @@ function SearchBus() {
   const { register, handleSubmit, control } = useForm();
   const onSubmit = (data) =>{
 
-    localStorage.setItem('data', JSON.stringify(data));
+    // localStorage.setItem('data', JSON.stringify(data));
   //  e.preventDefault();
   
-    dispatch(search(data))
-
+ console.log(dispatch(search(data)));   
+ dispatch(search(data))
    
- navigate('/selectbus',{state:{...data}});
+ navigate('/selectbus');
 
 
    

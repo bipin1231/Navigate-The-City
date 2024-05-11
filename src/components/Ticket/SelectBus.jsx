@@ -13,17 +13,17 @@ function SelectBus() {
     date:"",
   }
 
-  const location = useLocation();
-  const data = location.state; 
-//  console.log(data);
+//   const location = useLocation();
+//   const data = location.state; 
+// //  console.log(data);
   
-  busSearch.from=data.From.value
-  busSearch.to=data.To.value
-  busSearch.date=data.date
+//   busSearch.from=data.From.value
+//   busSearch.to=data.To.value
+//   busSearch.date=data.date
 
   //console.log(busSearch);
 
-  const info=useSelector(state=>state.ticketData)
+  const info=useSelector(state=>state.tkt)
   console.log(info);
   return (
     <div className='w-full flex mt-10 justify-center gap-4'>

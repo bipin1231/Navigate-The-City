@@ -20,9 +20,16 @@ import SearchBus from './components/Ticket/SearchBus.jsx'
 import TicketCard from './components/Ticket/TicketCard.jsx'
 import ConfirmationCard from './components/Ticket/ConfirmationCard.jsx'
 
-
-import { store } from './ticketStore/store'
+import store from './ticketStore/store.js'
 import { Provider } from 'react-redux'
+import Signup from './components/Login/Signup.jsx'
+
+import { PersistGate } from 'redux-persist/integration/react'
+import { persistStore } from 'redux-persist'
+
+import { GoogleOAuthProvider } from '@react-oauth/google';
+let persistor=persistStore(store)
+
 const router=createBrowserRouter(
   createRoutesFromElements(
     <Route path='/' element={<Layout/>}>
@@ -35,6 +42,7 @@ const router=createBrowserRouter(
       <Route path='confirmationcard' element={<ConfirmationCard/>}/>
       <Route path='route' element={<BusRoute/>}/>
       <Route path='login' element={<Login/>}/>
+      <Route path='signup' element={<Signup/>}/>
     </Route>
   )
 )
@@ -43,9 +51,11 @@ ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
       <Provider store={store}>
         <NextUIProvider>
-       
+       <PersistGate persistor={persistor}>
+       <GoogleOAuthProvider clientId="577751632897-bb8suvilk3crnlfr4lpcvbs3k4jcdsif.apps.googleusercontent.com">
    <RouterProvider router={router}/>
-   
+   </GoogleOAuthProvider>;
+   </PersistGate>
    </NextUIProvider>
    </Provider>
   </React.StrictMode>,

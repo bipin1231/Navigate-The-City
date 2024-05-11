@@ -10,8 +10,8 @@ import {useDispatch,useSelector} from 'react-redux'
 import { search} from '../../ticketStore/ticketSlice';
 
 function TicketCard() {
-  const info=useSelector(state=>state.ticketData);
-  const seatInfo=useSelector(state=>state.seatPrice);
+  const info=useSelector(state=>state.tkt.ticketData);
+  const seatInfo=useSelector(state=>state.tkt.seatPrice);
   console.log(seatInfo);
   console.log(info);
   const navigate = useNavigate();

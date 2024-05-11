@@ -1,8 +1,13 @@
 import React from 'react'
 import {Link,NavLink} from 'react-router-dom'
 import {Button} from "@nextui-org/react";
+import Logout from './Logout';
+import { useSelector } from 'react-redux';
+
 
 function Header() {
+  const selector=useSelector(state=>state.auth.status);
+  console.log(selector);
   return (
     <nav className='bg-gray-950 text-white flex items-center h-20 text-xl'>
      <Link to="/">
@@ -31,6 +36,7 @@ function Header() {
     <Button size="lg" className='ml-[7.75rem] font-medium'>
       Login
       </Button> 
+      <Logout/>
     </Link>
    </nav>
   )

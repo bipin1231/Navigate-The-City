@@ -3,13 +3,11 @@ import storage from 'redux-persist/lib/storage'; // defaults to localStorage for
 import { persistReducer, persistStore } from 'redux-persist';
 
 const initialState={
-  key:'ticket',
-  ticketData:{
-    text:"hello world",
-  
-  },
-  seatPrice:{},
-  storage
+
+  ticketData:null,
+  seatPrice:null
+    
+
 }
 
 //const persistedReducer = persistReducer(initialState);
@@ -19,6 +17,7 @@ export const ticketSlice=createSlice({
 initialState,
   reducers:{
     search:(state,action)=>{
+      console.log(action.payload)
       state.ticketData=action.payload
     },
     seatPrices:(state,action)=>{

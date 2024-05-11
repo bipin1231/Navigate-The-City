@@ -17,16 +17,11 @@ import { useDispatch, useSelector } from 'react-redux'
 import { Input } from "@nextui-org/input";
 
 import authService from "../../appwrite/auth";
-import { login as authLogin } from '../../ticketStore/authSlice';
 
-import { GoogleLogin, useGoogleLogin } from '@react-oauth/google';
-import { jwtDecode } from "jwt-decode";
 function Signup() {
 
   const [password, setPassword] = useState("");
   const [cpassword, setCPassword] = useState("");
-
-
 
 
   const navigate = useNavigate();
@@ -46,27 +41,18 @@ function Signup() {
     //navigate('/selectbus',{state:{...data}});
 
     try {
-  
-      const session = await authService.login(data)
-      if (session) {
+      const userData = await authService.createAccount(data)
+      if (userData) {
           const userData = await authService.getCurrentUser()
-          if(userData) dispatch(authLogin(userData));
-          navigate("/")
-         console.log(userData);
+        console.log(userData);
+     
       }
   } catch (error) {
       console.log(error);
   }
 
-
-
   };
 
-const googleAuth=
-    useGoogleLogin({
-      onSuccess:(takeResponse)=>console.log(takeResponse)
-    })  
- 
 
   
 
@@ -82,7 +68,12 @@ const googleAuth=
             <CardBody>
               <div className='flex justify-center'>
                 <div className='flex flex-col gap-5 w-[60%]'>
-                
+                  <Input
+                    variant='underlined'
+                    color='black'
+                    type="text" label="Full Name"
+                    {...register("name", {required: true })}
+                  />
                   <Input
                     variant='underlined'
                     color='black'
@@ -107,34 +98,8 @@ const googleAuth=
               
       
                   <Button type='submit' radius="full" className='w-full font-semibold text-lg'>
-                 Login
+                    Continue
                   </Button>
-                  <div>
-                   
-                  <Button 
-                  color='pri'
-                  radius="full" className='w-full font-semibold text-lg'
-                  onClick={()=>googleAuth()}
-                  >
-                     <img className='w-9 bg-transparent' src="https://imagepng.org/wp-content/uploads/2019/08/google-icon.png" alt="" />
-               <p> Sign in with Google</p>
-                  </Button>
-</div>
-
-
-                  <GoogleLogin
-                  
-  onSuccess={credentialResponse => {
-    console.log(credentialResponse);
-    console.log(jwtDecode(credentialResponse.credential));
-
-    const userData=authService.googleLogin();
-  }}
-  onError={() => {
-    console.log('Login Failed');
-  }}
-/>;
-             
                 </div>
               </div>
             </CardBody>
