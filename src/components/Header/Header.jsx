@@ -79,7 +79,7 @@ function Header() {
           </Link>
         </ul>
       </div>
-      <Button size='lg' className='ml-[7.75rem] font-medium' onClick={openLoginForm}>
+      <Button className='ml-[7.75rem] font-medium' onClick={openLoginForm}>
         Login
       </Button>
       {isLoginFormOpen && <Login onClose={closeLoginForm} />}

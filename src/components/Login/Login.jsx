@@ -21,7 +21,7 @@ import { login as authLogin } from '../../ticketStore/authSlice';
 
 import { GoogleLogin, useGoogleLogin } from '@react-oauth/google';
 import { jwtDecode } from "jwt-decode";
-function Login() {
+function Login({onClose}) {
 
   const [password, setPassword] = useState("");
   const [cpassword, setCPassword] = useState("");
@@ -76,13 +76,26 @@ const googleAuth=
 
   return (
 // <<<<<<< bipin
-    <>
+    <div className='fixed top-0 left-0 w-full h-full flex justify-center items-center z-[1010]'>
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className='w-full flex mt-10 justify-center gap-4 h-96'>
-          <Card className='w-[40%] '>
-            <CardBody>
-              <div className='flex justify-center'>
-                <div className='flex flex-col gap-5 w-[60%]'>
+          <Card>
+            <CardBody className='flex justify-center'>
+
+      <div className="flex justify-between font-bold mb-3">
+         <p>Login</p>
+
+          <button
+              type="button"
+              className="bg-red-500 hover:bg-red-700 text-white px-2 rounded focus:outline-none focus:shadow-outline"
+              onClick={onClose}
+            >
+              X
+            </button>
+          </div>
+
+              <div>
+                <div className='flex flex-col gap-5'>
                 
                   <Input
                     variant='underlined'
@@ -134,7 +147,7 @@ const googleAuth=
   onError={() => {
     console.log('Login Failed');
   }}
-/>;
+/>
              
                 </div>
               </div>
@@ -144,7 +157,7 @@ const googleAuth=
 
       </form>
 
-    </>
+    </div>
   )
 }
 
