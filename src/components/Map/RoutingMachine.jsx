@@ -41,21 +41,8 @@ const RoutingMachine = ({ map }) => {
   };
 
   return (
-    <button className="absolute top-20 z-[1100] m-1" onClick={toggleRouting}>
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        fill="none"
-        viewBox="0 0 24 24"
-        strokeWidth={1.5}
-        stroke="currentColor"
-        className="w-6 h-6"
-      >
-        <path
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          d="M3 7.5 7.5 3m0 0L12 7.5M7.5 3v13.5m13.5 0L16.5 21m0 0L12 16.5m4.5 4.5V7.5"
-        />
-      </svg>
+    <button className="absolute top-[85px] right-96 z-[1300] m-1" onClick={toggleRouting}>
+      <img src="../route-icon.svg" className='w-15 h-8' />
     </button>
   );
 };

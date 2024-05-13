@@ -4,19 +4,18 @@ import "leaflet/dist/leaflet.css";
 import 'leaflet-geosearch/dist/geosearch.css';
 import { GeoSearchControl, OpenStreetMapProvider } from 'leaflet-geosearch';
 import RoutingMachine from './RoutingMachine'; 
-// import 'leaflet-control-geocoder/dist/Control.Geocoder.css';
-// import 'leaflet-control-geocoder/dist/Control.Geocoder.js';
+import Speedometer from './Speedometer';
 
 function Map() {
   const mapRef = useRef(null);
   const [position, setPosition] = useState(null);
+  const [speed, setSpeed] = useState(0);
   const defaultPosition = [27.7172, 85.324]; // Default position for Kathmandu
   const nepalBounds = L.latLngBounds(
     L.latLng(26.347, 80.058), // South-West
     L.latLng(30.447, 88.201) // North-East
   );
   
-
   const initializeMap = (center) => {
     if (!mapRef.current) {
       mapRef.current = L.map("map", {
@@ -43,7 +42,6 @@ function Map() {
         autoCompleteDelay: 100,
         searchLabel: "Enter address",
       });
-
       mapRef.current.addControl(searchControl);
 
       // Restrict map bounds to Nepal
@@ -84,21 +82,15 @@ function Map() {
             ext: "jpg",
           }
         ),
-
       };
-
       // Add base layers to map
       baseLayers["Normal"].addTo(mapRef.current);
-
       // Create layer control
       L.control.layers(baseLayers).addTo(mapRef.current);
-      //adding or importing leaflet routing machine
-      RoutingMachine(mapRef.current);
     }
   };
 
   useEffect(() => {
-    // Try to get the user's location
     navigator.geolocation.getCurrentPosition(
       (position) => {
         const userPosition = [
@@ -116,13 +108,27 @@ function Map() {
       },
       (error) => {
         console.error("Error getting location:", error);
-        // Handle the case where user's location cannot be retrieved
         alert("Error getting your location. Using default position.");
         setPosition(defaultPosition);
         initializeMap(defaultPosition);
       },
       { enableHighAccuracy: true }
     );
+
+    // Watch user's position and update speed
+    const watchId = navigator.geolocation.watchPosition(
+      (position) => {
+        setSpeed(position.coords.speed || 0);
+      },
+      (error) => {
+        console.error("Error getting speed:", error);
+      }
+    );
+
+    return () => {
+      // Clean up the watchPosition when component unmounts
+      navigator.geolocation.clearWatch(watchId);
+    };
   }, []);
 
   useEffect(() => {
@@ -145,6 +151,7 @@ function Map() {
   return (
     <div style={{ height: "86vh", width: "100%" }}>
       <div id="map" style={{ height: "100%" }} />
+      <Speedometer speed={speed} />
       <RoutingMachine map={mapRef.current}/>
     </div>
   );
