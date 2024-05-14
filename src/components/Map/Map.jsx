@@ -5,11 +5,12 @@ import 'leaflet-geosearch/dist/geosearch.css';
 import { GeoSearchControl, OpenStreetMapProvider } from 'leaflet-geosearch';
 import RoutingMachine from './RoutingMachine'; 
 import Speedometer from './Speedometer';
+import LowerSlideBar from "./LowerSlideBar";
 
 function Map() {
   const mapRef = useRef(null);
   const [position, setPosition] = useState(null);
-  const [speed, setSpeed] = useState(0);
+  // const [speed, setSpeed] = useState(0);
   const defaultPosition = [27.7172, 85.324]; // Default position for Kathmandu
   const nepalBounds = L.latLngBounds(
     L.latLng(26.347, 80.058), // South-West
@@ -115,20 +116,20 @@ function Map() {
       { enableHighAccuracy: true }
     );
 
-    // Watch user's position and update speed
-    const watchId = navigator.geolocation.watchPosition(
-      (position) => {
-        setSpeed(position.coords.speed || 0);
-      },
-      (error) => {
-        console.error("Error getting speed:", error);
-      }
-    );
+    // // Watch user's position and update speed
+    // const watchId = navigator.geolocation.watchPosition(
+    //   (position) => {
+    //     setSpeed(position.coords.speed || 0);
+    //   },
+    //   (error) => {
+    //     console.error("Error getting speed:", error);
+    //   }
+    // );
 
-    return () => {
-      // Clean up the watchPosition when component unmounts
-      navigator.geolocation.clearWatch(watchId);
-    };
+    // return () => {
+    //   // Clean up the watchPosition when component unmounts
+    //   navigator.geolocation.clearWatch(watchId);
+    // };
   }, []);
 
   useEffect(() => {
@@ -149,10 +150,11 @@ function Map() {
   }, [position]);
 
   return (
-    <div style={{ height: "86vh", width: "100%" }}>
-      <div id="map" style={{ height: "100%" }} />
-      <Speedometer speed={speed} />
+    <div className="h-[86vh] w-full flex justify-center">
+      <div id="map" className="h-full w-full" />
+      {/* <Speedometer speed={speed} /> */}
       <RoutingMachine map={mapRef.current}/>
+      <LowerSlideBar />
     </div>
   );
 }
