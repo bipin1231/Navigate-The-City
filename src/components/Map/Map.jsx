@@ -150,7 +150,7 @@ function Map() {
   }, [position]);
 
   return (
-    <div className="h-[86vh] w-full flex justify-center">
+    <div className="h-[89vh] w-full flex justify-center">
       <div id="map" className="h-full w-full" />
       {/* <Speedometer speed={speed} /> */}
       <RoutingMachine map={mapRef.current}/>
