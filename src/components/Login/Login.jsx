@@ -66,25 +66,16 @@ const googleAuth=
     useGoogleLogin({
       onSuccess:(takeResponse)=>console.log(takeResponse)
     })  
- 
-
-  
-
-
-
-
-
-  return (
+ return (
 // <<<<<<< bipin
-    <div className='fixed top-0 left-0 w-full h-full flex justify-center items-center z-[1010]'>
+    <div className='fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-[1010]'>
       <form onSubmit={handleSubmit(onSubmit)}>
-        <div className='w-full flex mt-10 justify-center gap-4 h-96'>
-          <Card>
+        <div className='w-full flex justify-center gap-4'>
+          <Card className="w-80 p-3">
             <CardBody className='flex justify-center'>
 
       <div className="flex justify-between font-bold mb-3">
-         <p>Login</p>
-
+         <p className='text-center w-full'>Login</p>
           <button
               type="button"
               className="bg-red-500 hover:bg-red-700 text-white px-2 rounded focus:outline-none focus:shadow-outline"
@@ -93,10 +84,8 @@ const googleAuth=
               X
             </button>
           </div>
-
               <div>
                 <div className='flex flex-col gap-5'>
-                
                   <Input
                     variant='underlined'
                     color='black'
@@ -117,14 +106,11 @@ const googleAuth=
                     type="password" label="Confirm Password"
                     {...register("cpassword")}
                
-                  /> */}
-              
-      
+                  /> */}     
                   <Button type='submit' radius="full" className='w-full font-semibold text-lg'>
                  Login
                   </Button>
-                  <div>
-                   
+                  <div>                   
                   <Button 
                   color='pri'
                   radius="full" className='w-full font-semibold text-lg'
@@ -134,8 +120,6 @@ const googleAuth=
                <p> Sign in with Google</p>
                   </Button>
 </div>
-
-
                   <GoogleLogin
                   
   onSuccess={credentialResponse => {
@@ -147,22 +131,17 @@ const googleAuth=
   onError={() => {
     console.log('Login Failed');
   }}
-/>
-             
+/>           
                 </div>
               </div>
             </CardBody>
           </Card>
         </div>
-
       </form>
-
     </div>
   )
 }
-
 export default Login
-// =======
 // //     <div className="fixed top-0 left-0 w-full h-full flex justify-center items-center z-[1010]">
 // //       <div className="bg-white rounded-lg p-8 shadow-lg">
 // //         <form onSubmit={handleSubmit}>
