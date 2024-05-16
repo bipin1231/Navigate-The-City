@@ -49,15 +49,24 @@ const ContextMenu = ({ map }) => {
         };
         return menuItem;
       };
-
+      
+      const coordinatesText = `${e.latlng.lat.toFixed(5)}, ${e.latlng.lng.toFixed(5)}`;
+      const showCoordinatesItem = createMenuItem(coordinatesText, () => {
+        navigator.clipboard.writeText(coordinatesText)
+          // .then(() => {
+          //   console.log('Coordinates copied to clipboard');
+          // })
+          // .catch((error) => {
+          //   console.error('Failed to copy coordinates: ', error);
+          // });
+      });
+      
       const addMarkerItem = createMenuItem('Add Marker', () => {
         L.marker(e.latlng).addTo(map);
       });
 
-      const showCoordinatesItem = createMenuItem(`Coordinates: ${e.latlng.lat.toFixed(5)}, ${e.latlng.lng.toFixed(5)}`, () => {});
-
-      contextMenu.appendChild(addMarkerItem);
       contextMenu.appendChild(showCoordinatesItem);
+      contextMenu.appendChild(addMarkerItem);
 
       // Append the context menu to the map container
       map.getContainer().appendChild(contextMenu);
