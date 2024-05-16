@@ -6,6 +6,7 @@ import { GeoSearchControl, OpenStreetMapProvider } from 'leaflet-geosearch';
 import RoutingMachine from './RoutingMachine'; 
 import Speedometer from './Speedometer';
 import LowerSlideBar from "./LowerSlideBar";
+import ContextMenu from "./ContextMenu";
 
 function Map() {
   const mapRef = useRef(null);
@@ -150,11 +151,12 @@ function Map() {
   }, [position]);
 
   return (
-    <div className="h-[89vh] w-full flex justify-center">
+    <div className="h-[89.5vh] w-full flex justify-center">
       <div id="map" className="h-full w-full" />
       {/* <Speedometer speed={speed} /> */}
       <RoutingMachine map={mapRef.current}/>
       <LowerSlideBar />
+      {mapRef.current && <ContextMenu map={mapRef.current} />}
     </div>
   );
 }
