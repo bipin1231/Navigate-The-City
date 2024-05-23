@@ -36,6 +36,7 @@ const ContextMenu = ({ map }) => {
         Object.assign(menuItem.style, {
           padding: '5px 10px',
           cursor: 'pointer',
+          borderRadius: '10px',
         });
         menuItem.onmouseenter = () => {
           menuItem.style.backgroundColor = '#bab4b4';

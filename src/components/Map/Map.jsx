@@ -2,9 +2,11 @@ import React, { useState, useEffect, useRef } from "react";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import 'leaflet-geosearch/dist/geosearch.css';
+import 'leaflet-compass/dist/leaflet-compass.min.css';
+import 'leaflet-compass';
 import { GeoSearchControl, OpenStreetMapProvider } from 'leaflet-geosearch';
 import RoutingMachine from './RoutingMachine'; 
-import Speedometer from './Speedometer';
+// import Speedometer from './Speedometer';
 import LowerSlideBar from "./LowerSlideBar";
 import ContextMenu from "./ContextMenu";
 
@@ -29,6 +31,9 @@ function Map() {
         maxBoundsViscosity: 0.8,
         zoomControl: false,
       }).addControl(L.control.zoom({ position: 'bottomright' }));
+
+      //Add compass
+      mapRef.current.addControl( new L.Control.Compass() );
       
       // Add tile layer
       L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
