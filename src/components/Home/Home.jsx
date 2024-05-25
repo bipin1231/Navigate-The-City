@@ -1,16 +1,15 @@
 import React from "react";
 import Map from "../Map/Map";
-import { Card, CardHeader, CardBody, CardFooter } from "@nextui-org/react";
+import SimpleMap from "../Map/SimpleMap";
+import MapWithCustomMaker from "../Map/MapWithCustomMarker";
+import MultipleUserMap from "../Map/MultipleUserMap";
+import { useSelector } from "react-redux";
 function Home() {
-  
+
   return (
     <div>
-      {/* <Card>
-        <CardBody>
-      <Map />
-      </CardBody>
-      </Card> */}
-      <Map />
+<MultipleUserMap/>
+      
     </div>
   );
 }

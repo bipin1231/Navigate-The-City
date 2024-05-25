@@ -42,13 +42,59 @@
 //    </nav>
 //   )
 // =======
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from '@nextui-org/react';
 import Login from '../Login/Login';
+import Logout from './Logout';
+import {useSelector,useDispatch} from 'react-redux'
+import { useNavigate } from 'react-router-dom'
+import authService from '../../appwrite/auth';
+import { login } from '../../ticketStore/authSlice';
 
 function Header() {
-  const mapRef = useRef(null);
+  const dispatch=useDispatch();
+  const status=useSelector(state=>state.auth.status)
+  console.log(status);
+  // const userData=useSelector(state=>state.auth)
+  // console.log(userData);
+  
+// try{
+//   const info=authService.getSessions();
+
+// if(info) console.log(info);
+// else console.log("not");
+// }catch(error){
+//   console.log(error);
+// }
+
+//-------------appwrite get data----------
+// const getData=async()=>{
+//   const data=await authService.getCurrentUser();
+//   console.log(data);
+//   if(data.$id) {
+//     dispatch(login(data))
+//   }
+// }
+// getData();
+
+
+useEffect(()=>{
+  const getData=async()=>{
+  const data=await authService.getCurrentUser();
+  console.log(data);
+  if(data) {
+    dispatch(login(data))
+  }
+}
+getData();
+})
+
+  // const authStatus = useSelector((state) => state.auth)
+  // console.log(authStatus);
+  // const navigate = useNavigate()
+
+  //const mapRef = useRef(null);
   const [isLoginFormOpen, setIsLoginFormOpen] = useState(false);
 
   const openLoginForm = () => {
@@ -79,10 +125,18 @@ function Header() {
           </Link>
         </ul>
       </div>
-      <Button size='lg' className='ml-[7.75rem] font-medium' onClick={openLoginForm}>
+      {/* <Button size='lg' className='ml-[7.75rem] font-medium' onClick={openLoginForm}>
         Login
-      </Button>
-      {isLoginFormOpen && <Login onClose={closeLoginForm} />}
+      </Button> */}
+      {/* {isLoginFormOpen && <Login onClose={closeLoginForm} />} */}
+
+  { !status &&   <Link to="/login">
+      <Button size="lg" className='ml-[7.75rem] font-medium'>
+       Login
+       </Button> 
+       </Link>}
+    { status &&  <Logout/>}
+    {/* <Logout/> */}
     </nav>
   );
 // >>>>>>> main
