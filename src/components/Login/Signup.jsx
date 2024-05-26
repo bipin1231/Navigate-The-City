@@ -4,7 +4,7 @@ import { Link, NavLink, useNavigate } from 'react-router-dom'
 
 
 import { Card, CardHeader, CardBody, CardFooter } from "@nextui-org/react";
-import { DatePicker } from "@nextui-org/date-picker";
+
 
 
 
@@ -15,20 +15,12 @@ import { useForm, Controller } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux'
 
 import { Input } from "@nextui-org/input";
-
-import authService from "../../appwrite/auth";
+import authService from '../../appwrite/auth';
 
 function Signup() {
 
-  const [password, setPassword] = useState("");
-  const [cpassword, setCPassword] = useState("");
 
-
-  const navigate = useNavigate();
-
-
-
-  const dispatch = useDispatch()
+const navigate=useNavigate();
 
   const {
     register,
@@ -36,15 +28,17 @@ function Signup() {
     formState: { errors }
   } = useForm();
   const onSubmit = async(data) => {
-    console.log(data);
+   
 
-    //navigate('/selectbus',{state:{...data}});
+    console.log(errors);
 
     try {
       const userData = await authService.createAccount(data)
       if (userData) {
           const userData = await authService.getCurrentUser()
+          authService.logout();
         console.log(userData);
+        navigate('/login');
      
       }
   } catch (error) {
@@ -74,6 +68,7 @@ function Signup() {
                     type="text" label="Full Name"
                     {...register("name", {required: true })}
                   />
+                  {console.log(errors)}
                   <Input
                     variant='underlined'
                     color='black'
@@ -84,7 +79,9 @@ function Signup() {
                     variant='underlined'
                     color='black'
                     type="password" label="Password"
-                    {...register("password", {required: true })}
+                    {...register("password", {required: true,minLength:8 })}
+
+                
                   //  onChange={(e) => setPassword(e.target.value)}
                   />
 
@@ -98,8 +95,14 @@ function Signup() {
               
       
                   <Button type='submit' radius="full" className='w-full font-semibold text-lg'>
-                    Continue
+                    Signup
                   </Button>
+                  <h1 className='text-center'>For a company?
+               <Link to={'/companysignup'}>
+               <span className='text-blue-600 cursor-pointer ml-2'>Sign Up</span>  </Link></h1>
+                  <h1 className='text-center'>Are you a driver?
+               <Link to={'/driversignup'}>
+               <span className='text-blue-600 cursor-pointer ml-2'>Sign Up</span>  </Link></h1>
                 </div>
               </div>
             </CardBody>

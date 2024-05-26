@@ -21,7 +21,12 @@ import { login as authLogin } from '../../ticketStore/authSlice';
 
 import { GoogleLogin, useGoogleLogin } from '@react-oauth/google';
 import { jwtDecode } from "jwt-decode";
+
 function Login({onClose}) {
+
+
+function Login() {
+
 
   const [password, setPassword] = useState("");
   const [cpassword, setCPassword] = useState("");
@@ -40,27 +45,30 @@ function Login({onClose}) {
     handleSubmit,
     formState: { errors }
   } = useForm();
-  const onSubmit = async(data) => {
+  const onSubmit = async (data) => {
     console.log(data);
 
     //navigate('/selectbus',{state:{...data}});
 
     try {
-  
+
       const session = await authService.login(data)
       if (session) {
-          const userData = await authService.getCurrentUser()
-          if(userData) dispatch(authLogin(userData));
+        const userData = await authService.getCurrentUser()
+        if (userData) {
+          dispatch(authLogin(userData));
           navigate("/")
-         console.log(userData);
+          console.log(userData);
+        }
       }
-  } catch (error) {
+    } catch (error) {
       console.log(error);
-  }
+    }
 
 
 
   };
+
 
 const googleAuth=
     useGoogleLogin({
@@ -86,18 +94,43 @@ const googleAuth=
           </div>
               <div>
                 <div className='flex flex-col gap-5'>
+
+  const googleAuth = () => {
+ 
+    authService.googleLogin()
+
+
+ 
+    }
+  
+  // useGoogleLogin({
+  //   onSuccess:(takeResponse)=>{console.log(takeResponse);
+  //     authService.googleLogin()
+  //   }
+
+
+  return (
+
+    <>
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <div className='w-full flex mt-10 justify-center h-96'>
+          <Card className='w-[40%] '>
+            <CardBody>
+              <div className='flex justify-center'>
+                <div className='flex flex-col gap-7 w-[60%]'>
+
                   <Input
                     variant='underlined'
                     color='black'
                     type="email" label="Email"
-                    {...register("email", {required: true })}
+                    {...register("email", { required: true })}
                   />
                   <Input
                     variant='underlined'
                     color='black'
                     type="password" label="Password"
-                    {...register("password", {required: true })}
-                  //  onChange={(e) => setPassword(e.target.value)}
+                    {...register("password", { required: true })}
+
                   />
 
                   {/* <Input
@@ -107,9 +140,14 @@ const googleAuth=
                     {...register("cpassword")}
                
                   /> */}     
+
+
+
+
                   <Button type='submit' radius="full" className='w-full font-semibold text-lg'>
-                 Login
+                    Login
                   </Button>
+
                   <div>                   
                   <Button 
                   color='pri'
@@ -132,6 +170,39 @@ const googleAuth=
     console.log('Login Failed');
   }}
 />           
+
+                  <div>
+
+                    <Button
+                      color=''
+                      radius="full" className='w-full font-semibold text-lg'
+                      onClick={googleAuth}
+                    >
+                      <img className='w-9 bg-transparent' src="https://imagepng.org/wp-content/uploads/2019/08/google-icon.png" alt="" />
+                      <p> Sign in with Google</p>
+                    </Button>
+                 
+                  </div>
+
+
+                  {/* <GoogleLogin
+
+                    onSuccess={credentialResponse => {
+                      console.log(credentialResponse);
+                      console.log(jwtDecode(credentialResponse.credential));
+
+                      const userData = authService.googleLogin();
+                      console.log(userData);
+                    }}
+                    onError={() => {
+                      console.log('Login Failed');
+                    }}
+                  />; */}
+               
+               <h1 className='text-center'>Dont have an account?
+               <Link to={'/signup'}>
+               <span className='text-blue-600 cursor-pointer ml-2'>Sign Up</span>  </Link></h1>
+
                 </div>
               </div>
             </CardBody>

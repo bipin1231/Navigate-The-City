@@ -28,6 +28,12 @@ import { PersistGate } from 'redux-persist/integration/react'
 import { persistStore } from 'redux-persist'
 
 import { GoogleOAuthProvider } from '@react-oauth/google';
+import SimpleMap from './components/Map/SimpleMap.jsx'
+import MultipleUserMap from './components/Map/MultipleUserMap.jsx'
+import CompanySignup from './components/Login/CompanySignup.jsx'
+import DriverSignup from './components/Login/DriverSignup.jsx'
+import AddBus from './components/company/AddBus.jsx'
+import AddRoute from './components/company/AddRoute.jsx'
 let persistor=persistStore(store)
 
 const router=createBrowserRouter(
@@ -43,6 +49,12 @@ const router=createBrowserRouter(
       <Route path='route' element={<BusRoute/>}/>
       <Route path='login' element={<Login/>}/>
       <Route path='signup' element={<Signup/>}/>
+      <Route path='companysignup' element={<CompanySignup/>}/>
+      <Route path='driversignup' element={<DriverSignup/>}/>
+ 
+      <Route path='multipleusermap' element={<MultipleUserMap/>}/>
+      <Route path='addbus' element={<AddBus/>}/>
+      <Route path='addroute' element={<AddRoute/>}/>
     </Route>
   )
 )
@@ -54,7 +66,10 @@ ReactDOM.createRoot(document.getElementById('root')).render(
        <PersistGate persistor={persistor}>
        <GoogleOAuthProvider clientId="577751632897-bb8suvilk3crnlfr4lpcvbs3k4jcdsif.apps.googleusercontent.com">
    <RouterProvider router={router}/>
-   </GoogleOAuthProvider>
+
+              
+   </GoogleOAuthProvider>;
+
    </PersistGate>
    </NextUIProvider>
    </Provider>

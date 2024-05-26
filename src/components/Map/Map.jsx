@@ -9,9 +9,26 @@ import RoutingMachine from './RoutingMachine';
 import LowerSlideBar from "./LowerSlideBar";
 import ContextMenu from "./ContextMenu";
 
+import service from "../../appwrite/config";
+import {useSelector,useDispatch} from 'react-redux'
+
 function Map() {
+
+  const userStat=useSelector(state=>state.auth)
+   console.log(userStat);
+// console.log(userData.userData.$id);
+
+  const [userLocation,setUserLocation]=useState({
+    userId:null,
+    lattitude:null,
+    longitude:null,
+  
+  })
+  //console.log(userLocation);
+
+  const [userPosition,setUserPosition]=useState([]);
   const mapRef = useRef(null);
-  const [position, setPosition] = useState(null);
+  const [position, setPosition] = useState([]);
   const defaultPosition = [27.7172, 85.324]; // Default position for Kathmandu
   const nepalBounds = L.latLngBounds(
     L.latLng(26.347, 80.058), // South-West
@@ -98,13 +115,46 @@ function Map() {
   useEffect(() => {
     navigator.geolocation.getCurrentPosition(
       (position) => {
-        const userPosition = [
-          position.coords.latitude,
-          position.coords.longitude,
-        ];
+         setUserPosition([...userPosition,{
+         longitude: position.coords.latitude,
+         lattitude: position.coords.longitude,
+         }])
+         
+      
+        
+        setUserLocation({
+          userId:userStat.userData.$id,
+          lattitude:userPosition[0],
+          longitude:userPosition[1]
+        })
+        // const userPosition = {
+        //   userId:userData.userData.$id,
+        // lattitude: position.coords.latitude,
+        //   longitude:position.coords.longitude,
+        // };
+
+//        console.log(userLocation);
+        const addLocation=async()=>{
+        // return await service.addLocation(userLocation); 
+        }
+        // if(userPosition){
+        //   addLocation();
+        // }
         if (nepalBounds.contains(userPosition)) {
-          setPosition(userPosition);
-          initializeMap(userPosition);
+// userPosition.forEach(a => {
+//   console.log("this is the location from loop",[a.lattitude,a.longitude]);
+//   setPosition([]);
+
+// });
+
+userPosition.forEach(a => {
+  console.log("this is the location from loop",[a.lattitude,a.longitude]);
+  initializeMap(a.longitude,a.lattitude)
+}
+)
+          // userPosition.map(setPosition([userPosition.lattitude,userPosition.longitude]));
+          
+          // userPosition.map(initializeMap([userPosition.lattitude,userPosition.longitude]));
         } else {
           alert("Your current location is outside Nepal.");
           setPosition(defaultPosition);
@@ -120,9 +170,10 @@ function Map() {
       { enableHighAccuracy: true }
     );
   }, []);
-
+ 
   useEffect(() => {
-    if (mapRef.current && position) {
+    userPosition.forEach(a => {
+    if (mapRef.current && [a.longitude,a.lattitude]) {
       // Clear existing marker
       mapRef.current.eachLayer((layer) => {
         if (layer instanceof L.Marker) {
@@ -131,17 +182,49 @@ function Map() {
       });
 
       // Add marker for user's position
-      L.marker(position)
+      L.marker([a.longitude,a.lattitude])
         .addTo(mapRef.current)
         .bindPopup("You are here")
         .openPopup();
     }
-  }, [position]);
+  })
+  }, [userPosition]);
+
+
+
+  const getUserInfoAppwrite=async()=>{
+    const data=await service.getUserLocation(userStat.userData.$id);
+    console.log(data);
+    
+    const [lastItem]=data.documents.slice(-1);
+    const last=data.documents[data.documents.length-1]
+    console.log(last);
+    setUserPosition(prevPosition=>{
+      console.log(prevPosition);
+      return[
+        ...prevPosition,
+        last
+      ]
+    });
+    //console.log(lastItem);
+   // console.log(data.documents);
+  }
+  console.log(userPosition);
+  userPosition.forEach(a => {
+    console.log("this is the location from loop",[a.lattitude,a.longitude]);
+  }
+  )
 
   return (
+
     <div className="h-[89.5vh] w-full flex justify-center">
       <div id="map" className="h-full w-full" />
       {/* <Speedometer speed={speed} /> */}
+
+    <div style={{ height: "86vh", width: "100%" }}>
+    <button onClick={getUserInfoAppwrite}>clikme</button>
+      <div id="map" style={{ height: "100%" }} />
+
       <RoutingMachine map={mapRef.current}/>
       <LowerSlideBar />
       {mapRef.current && <ContextMenu map={mapRef.current} />}
