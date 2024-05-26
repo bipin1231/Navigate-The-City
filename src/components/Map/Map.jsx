@@ -2,10 +2,12 @@ import React, { useState, useEffect, useRef } from "react";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import 'leaflet-geosearch/dist/geosearch.css';
+import 'leaflet-compass/dist/leaflet-compass.min.css';
+import 'leaflet-compass';
 import { GeoSearchControl, OpenStreetMapProvider } from 'leaflet-geosearch';
 import RoutingMachine from './RoutingMachine'; 
-// import 'leaflet-control-geocoder/dist/Control.Geocoder.css';
-// import 'leaflet-control-geocoder/dist/Control.Geocoder.js';
+import LowerSlideBar from "./LowerSlideBar";
+import ContextMenu from "./ContextMenu";
 
 import service from "../../appwrite/config";
 import {useSelector,useDispatch} from 'react-redux'
@@ -33,7 +35,6 @@ function Map() {
     L.latLng(30.447, 88.201) // North-East
   );
   
-
   const initializeMap = (center) => {
     if (!mapRef.current) {
       mapRef.current = L.map("map", {
@@ -45,6 +46,9 @@ function Map() {
         maxBoundsViscosity: 0.8,
         zoomControl: false,
       }).addControl(L.control.zoom({ position: 'bottomright' }));
+
+      //Add compass
+      mapRef.current.addControl( new L.Control.Compass() );
       
       // Add tile layer
       L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
@@ -60,7 +64,6 @@ function Map() {
         autoCompleteDelay: 100,
         searchLabel: "Enter address",
       });
-
       mapRef.current.addControl(searchControl);
 
       // Restrict map bounds to Nepal
@@ -101,21 +104,15 @@ function Map() {
             ext: "jpg",
           }
         ),
-
       };
-
       // Add base layers to map
       baseLayers["Normal"].addTo(mapRef.current);
-
       // Create layer control
       L.control.layers(baseLayers).addTo(mapRef.current);
-      //adding or importing leaflet routing machine
-      RoutingMachine(mapRef.current);
     }
   };
 
   useEffect(() => {
-    // Try to get the user's location
     navigator.geolocation.getCurrentPosition(
       (position) => {
          setUserPosition([...userPosition,{
@@ -166,7 +163,6 @@ userPosition.forEach(a => {
       },
       (error) => {
         console.error("Error getting location:", error);
-        // Handle the case where user's location cannot be retrieved
         alert("Error getting your location. Using default position.");
         setPosition(defaultPosition);
         initializeMap(defaultPosition);
@@ -220,10 +216,18 @@ userPosition.forEach(a => {
   )
 
   return (
+
+    <div className="h-[89.5vh] w-full flex justify-center">
+      <div id="map" className="h-full w-full" />
+      {/* <Speedometer speed={speed} /> */}
+
     <div style={{ height: "86vh", width: "100%" }}>
     <button onClick={getUserInfoAppwrite}>clikme</button>
       <div id="map" style={{ height: "100%" }} />
+
       <RoutingMachine map={mapRef.current}/>
+      <LowerSlideBar />
+      {mapRef.current && <ContextMenu map={mapRef.current} />}
     </div>
   );
 }

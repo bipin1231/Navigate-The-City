@@ -22,7 +22,11 @@ import { login as authLogin } from '../../ticketStore/authSlice';
 import { GoogleLogin, useGoogleLogin } from '@react-oauth/google';
 import { jwtDecode } from "jwt-decode";
 
+function Login({onClose}) {
+
+
 function Login() {
+
 
   const [password, setPassword] = useState("");
   const [cpassword, setCPassword] = useState("");
@@ -65,6 +69,32 @@ function Login() {
 
   };
 
+
+const googleAuth=
+    useGoogleLogin({
+      onSuccess:(takeResponse)=>console.log(takeResponse)
+    })  
+ return (
+// <<<<<<< bipin
+    <div className='fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-[1010]'>
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <div className='w-full flex justify-center gap-4'>
+          <Card className="w-80 p-3">
+            <CardBody className='flex justify-center'>
+
+      <div className="flex justify-between font-bold mb-3">
+         <p className='text-center w-full'>Login</p>
+          <button
+              type="button"
+              className="bg-red-500 hover:bg-red-700 text-white px-2 rounded focus:outline-none focus:shadow-outline"
+              onClick={onClose}
+            >
+              X
+            </button>
+          </div>
+              <div>
+                <div className='flex flex-col gap-5'>
+
   const googleAuth = () => {
  
     authService.googleLogin()
@@ -103,12 +133,44 @@ function Login() {
 
                   />
 
+                  {/* <Input
+                    variant='underlined'
+                    color='black'
+                    type="password" label="Confirm Password"
+                    {...register("cpassword")}
+               
+                  /> */}     
+
 
 
 
                   <Button type='submit' radius="full" className='w-full font-semibold text-lg'>
                     Login
                   </Button>
+
+                  <div>                   
+                  <Button 
+                  color='pri'
+                  radius="full" className='w-full font-semibold text-lg'
+                  onClick={()=>googleAuth()}
+                  >
+                     <img className='w-9 bg-transparent' src="https://imagepng.org/wp-content/uploads/2019/08/google-icon.png" alt="" />
+               <p> Sign in with Google</p>
+                  </Button>
+</div>
+                  <GoogleLogin
+                  
+  onSuccess={credentialResponse => {
+    console.log(credentialResponse);
+    console.log(jwtDecode(credentialResponse.credential));
+
+    const userData=authService.googleLogin();
+  }}
+  onError={() => {
+    console.log('Login Failed');
+  }}
+/>           
+
                   <div>
 
                     <Button
@@ -140,20 +202,17 @@ function Login() {
                <h1 className='text-center'>Dont have an account?
                <Link to={'/signup'}>
                <span className='text-blue-600 cursor-pointer ml-2'>Sign Up</span>  </Link></h1>
+
                 </div>
               </div>
             </CardBody>
           </Card>
         </div>
-
       </form>
-
-    </>
+    </div>
   )
 }
-
 export default Login
-// =======
 // //     <div className="fixed top-0 left-0 w-full h-full flex justify-center items-center z-[1010]">
 // //       <div className="bg-white rounded-lg p-8 shadow-lg">
 // //         <form onSubmit={handleSubmit}>

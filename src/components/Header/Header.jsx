@@ -106,7 +106,7 @@ getData();
   };
 
   return (
-    <nav className='bg-[#1506B5] text-white flex items-center h-20 text-xl'>
+    <nav className='bg-[#1506B5] text-white flex items-center h-[60px] text-xl'>
       <Link to='/'>
         <div className='w-52  text-3xl justify-center items-center flex cursor-pointer font-semibold'>
           <img src='../logo.svg' className='w-25 h-12'/>
@@ -125,10 +125,14 @@ getData();
           </Link>
         </ul>
       </div>
-      {/* <Button size='lg' className='ml-[7.75rem] font-medium' onClick={openLoginForm}>
-        Login
-      </Button> */}
-      {/* {isLoginFormOpen && <Login onClose={closeLoginForm} />} */}
+// // <<<<<<< main
+// //       <Button className='ml-[7.75rem] font-medium' onClick={openLoginForm}>
+// // =======
+//       {/* <Button size='lg' className='ml-[7.75rem] font-medium' onClick={openLoginForm}>
+// >>>>>>> recovery-branch
+//         Login
+//       </Button> */}
+//       {/* {isLoginFormOpen && <Login onClose={closeLoginForm} />} */}
 
   { !status &&   <Link to="/login">
       <Button size="lg" className='ml-[7.75rem] font-medium'>
@@ -139,7 +143,6 @@ getData();
     {/* <Logout/> */}
     </nav>
   );
-// >>>>>>> main
 }
 
 export default Header;
