@@ -7,7 +7,10 @@
     "dev": "vite",
     "build": "vite build",
     "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
-    "preview": "vite preview"
+    "preview": "vite preview",
+   "predeploy": "npm run build",
+    "deploy": "gh-pages -d build",
+    "start": "vite start"
   },
   "dependencies": {
     "@mui/x-date-pickers": "^7.3.1",
@@ -22,6 +25,7 @@
     "@shoelace-style/shoelace": "^2.15.0",
     "appwrite": "^14.0.1",
     "framer-motion": "^11.1.7",
+    "gh-pages": "^6.1.1",
     "jwt-decode": "^4.0.0",
     "leaflet": "^1.9.4",
     "leaflet-control-geocoder": "^2.4.0",
@@ -53,3 +57,5 @@
     "vite": "^5.2.11"
   }
 }
+
+
