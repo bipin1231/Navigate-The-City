@@ -4,6 +4,7 @@ import App from './App.jsx'
 import './index.css'
 
 import {NextUIProvider} from '@nextui-org/react'
+import { HashRouter as Router } from 'react-router-dom';
 
 
 
@@ -61,6 +62,7 @@ const router=createBrowserRouter(
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
+
       <Provider store={store}>
         <NextUIProvider>
        <PersistGate persistor={persistor}>
@@ -71,5 +73,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
    </PersistGate>
    </NextUIProvider>
    </Provider>
+
   </React.StrictMode>,
+  
 )
