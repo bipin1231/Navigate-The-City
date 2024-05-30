@@ -9,12 +9,11 @@
     "build": "vite build",
     "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
-<<<<<<< HEAD
+
     "predeploy": "npm run build",
     "deploy": "gh-pages -d dist",
-=======
+
    
->>>>>>> f3bc84b94a5e850623ad3c83ed893aecfb0342df
     "start": "vite start"
   },
   "dependencies": {

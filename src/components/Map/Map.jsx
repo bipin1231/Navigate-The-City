@@ -122,8 +122,6 @@ function Map() {
          longitude: position.coords.latitude,
          lattitude: position.coords.longitude,
          }])
-         
-      
         
         setUserLocation({
           userId:userStat.userData.$id,
@@ -147,16 +145,13 @@ function Map() {
 // userPosition.forEach(a => {
 //   console.log("this is the location from loop",[a.lattitude,a.longitude]);
 //   setPosition([]);
-
 // });
 
 userPosition.forEach(a => {
   console.log("this is the location from loop",[a.lattitude,a.longitude]);
   initializeMap(a.longitude,a.lattitude)
-}
-)
-          // userPosition.map(setPosition([userPosition.lattitude,userPosition.longitude]));
-          
+})
+          // userPosition.map(setPosition([userPosition.lattitude,userPosition.longitude]));         
           // userPosition.map(initializeMap([userPosition.lattitude,userPosition.longitude]));
         } else {
           alert("Your current location is outside Nepal.");
@@ -194,8 +189,6 @@ userPosition.forEach(a => {
   })
   }, [userPosition]);
 
-
-
   const getUserInfoAppwrite=async()=>{
     const data=await service.getUserLocation(userStat.userData.$id);
     console.log(data);
@@ -216,8 +209,7 @@ userPosition.forEach(a => {
   console.log(userPosition);
   userPosition.forEach(a => {
     console.log("this is the location from loop",[a.lattitude,a.longitude]);
-  }
-  )
+  })
 
   return (
     <div style={{ height: "86vh", width: "100%" }}>
