@@ -67,7 +67,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
        <GoogleOAuthProvider clientId="577751632897-bb8suvilk3crnlfr4lpcvbs3k4jcdsif.apps.googleusercontent.com">
    <RouterProvider router={router}/>
               
-   </GoogleOAuthProvider>;
+   </GoogleOAuthProvider>
    </PersistGate>
    </NextUIProvider>
    </Provider>

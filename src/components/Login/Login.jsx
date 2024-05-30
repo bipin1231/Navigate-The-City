@@ -135,7 +135,7 @@ function Login() {
                     onError={() => {
                       console.log('Login Failed');
                     }}
-                  />; */}
+                  /> */}
                
                <h1 className='text-center'>Dont have an account?
                <Link to={'/signup'}>
