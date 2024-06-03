@@ -136,7 +136,7 @@ function MultipleUserMap() {
       // Add marker for user's position
       const customMarkerIcon = L.icon({
         iconUrl: '../pin.png',
-        iconSize: [45, 45],
+        iconSize: [45, 60],
       });
       
       // Add the marker with the custom icon to the map
@@ -149,7 +149,7 @@ function MultipleUserMap() {
 
   return (
     <div className="h-[90vh] w-full flex justify-center">
-      <div id="map" style={{ height: "100%" }} />
+      <div id="map" style={{ height: "100%", width: '100%' }} />
       <LowerSlideBar />
       {mapRef.current && <ContextMenu map={mapRef.current} />}
       <RoutingMachine map={mapRef.current}/>
