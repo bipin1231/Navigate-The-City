@@ -9,7 +9,7 @@ const RoutingMachine = ({ map }) => {
   const [isRoutingEnabled, setIsRoutingEnabled] = useState(false);
 
   useEffect(() => {
-    if (isRoutingEnabled) {
+    if (map && isRoutingEnabled) {
       // Add routing control to the map
       const control = L.Routing.control({
         waypoints: [],
@@ -27,14 +27,18 @@ const RoutingMachine = ({ map }) => {
       }).addTo(map);
 
       setRoutingControl(control);
-    } else {
+      return () => {
+        // Cleanup control when component unmounts or isRoutingEnabled changes
+        if (map && control) {
+          map.removeControl(control);
+        }
+      };
+    } else if (routingControl) {
       // Remove routing control from the map
-      if (routingControl) {
-        map.removeControl(routingControl);
-        setRoutingControl(null);
-      }
+      map.removeControl(routingControl);
+      setRoutingControl(null);
     }
-  }, [isRoutingEnabled]);
+  }, [map, isRoutingEnabled]);
 
   const toggleRouting = () => {
     setIsRoutingEnabled((prevState) => !prevState);

@@ -13,7 +13,8 @@ function MultipleUserMap() {
   const mapRef = useRef(null);
   const [position, setPosition] = useState(null);
   const [showLocation, setShowLocation] = useState(false); // State to control location display
-  const defaultPosition = [27.7172, 85.324]; // Default position for Kathmandu
+  const [mapInitialized, setMapInitialized] = useState(false); // To track if the map is initialized
+  const defaultPosition = [27.68170, 84.43005]; // Default position for Bharatpur
   const nepalBounds = L.latLngBounds(
     L.latLng(26.347, 80.058), // South-West
     L.latLng(30.447, 88.201) // North-East
@@ -79,6 +80,8 @@ function MultipleUserMap() {
 
       // Create layer control
       L.control.layers(baseLayers).addTo(mapRef.current);
+
+      setMapInitialized(true); // Mark the map as initialized
     }
   };
 
@@ -160,8 +163,8 @@ function MultipleUserMap() {
     <div className="h-[90vh] w-full flex flex-col items-center">
       <div id="map" style={{ height: "100%", width: '100%' }} />
       <LowerSlideBar />
-      {mapRef.current && <ContextMenu map={mapRef.current} />}
-      <RoutingMachine map={mapRef.current}/>
+      {mapInitialized && <ContextMenu map={mapRef.current} />}
+      {mapInitialized && <RoutingMachine map={mapRef.current}/>}
       <button onClick={handleShowLocation} className="absolute right-3 top-32 z-[1300]">
         <img src="../target-location.svg" className="w-[45px] h-[45px]" />
       </button>
