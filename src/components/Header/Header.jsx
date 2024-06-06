@@ -106,8 +106,7 @@ getData();
   };
 
   return (
-    <nav className='bg-red-900 text-white flex items-center h-[10vh] text-xl'>
-    {/* <nav className='bg-[#1506B5] text-white flex items-center h-[10vh] text-xl'> */}
+    <nav className='bg-[#1506B5] text-white flex items-center h-[10vh] text-xl'>
       <Link to='/'>
         <div className='w-52  text-3xl justify-center items-center flex cursor-pointer font-semibold'>
           <img src='../logo.svg' className='w-25 h-12'/>

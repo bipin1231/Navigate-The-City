@@ -11,6 +11,7 @@ import LowerSlideBar from "./LowerSlideBar";
 
 function MultipleUserMap() {
   const mapRef = useRef(null);
+  const markerRef = useRef(null); // Reference for the user position marker
   const [position, setPosition] = useState(null);
   const [showLocation, setShowLocation] = useState(false);
   const defaultPosition = [27.7172, 85.324]; // Default position for Kathmandu
@@ -118,24 +119,21 @@ function MultipleUserMap() {
 
   useEffect(() => {
     if (mapRef.current && showLocation && position) {
-      // Clear existing marker
-      mapRef.current.eachLayer((layer) => {
-        if (layer instanceof L.Marker) {
-          mapRef.current.removeLayer(layer);
-        }
-      });
-
-      // Add marker for user's position
-      const customMarkerIcon = L.icon({
-        iconUrl: '../pin.svg',
-        iconSize: [45, 60],
-      });
-      
-      // Add the marker with the custom icon to the map
-      L.marker(position, { icon: customMarkerIcon })
-        .addTo(mapRef.current)
-        .bindPopup("You are here")
-        .openPopup();
+      // Add marker for user's position if it doesn't exist
+      if (!markerRef.current) {
+        const customMarkerIcon = L.icon({
+          iconUrl: '../pin.svg',
+          iconSize: [45, 60],
+        });
+        
+        markerRef.current = L.marker(position, { icon: customMarkerIcon })
+          .addTo(mapRef.current)
+          .bindPopup("You are here")
+          .openPopup();
+      } else {
+        // Update the marker position if it already exists
+        markerRef.current.setLatLng(position);
+      }
     }
   }, [showLocation, position]);
 
