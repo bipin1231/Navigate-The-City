@@ -14,7 +14,7 @@ function MultipleUserMap() {
   const markerRef = useRef(null); // Reference for the user position marker
   const [position, setPosition] = useState(null);
   const [showLocation, setShowLocation] = useState(false);
-  const defaultPosition = [27.7172, 85.324]; // Default position for Kathmandu
+  const defaultPosition = [27.68167, 84.43007]; // Default position for Bharatpur
   const nepalBounds = L.latLngBounds(
     L.latLng(26.347, 80.058), // South-West
     L.latLng(30.447, 88.201) // North-East
