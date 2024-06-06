@@ -12,9 +12,8 @@ import LowerSlideBar from "./LowerSlideBar";
 function MultipleUserMap() {
   const mapRef = useRef(null);
   const [position, setPosition] = useState(null);
-  const [showLocation, setShowLocation] = useState(false); // State to control location display
-  const [mapInitialized, setMapInitialized] = useState(false); // To track if the map is initialized
-  const defaultPosition = [27.68170, 84.43005]; // Default position for Bharatpur
+  const [showLocation, setShowLocation] = useState(false);
+  const defaultPosition = [27.7172, 85.324]; // Default position for Kathmandu
   const nepalBounds = L.latLngBounds(
     L.latLng(26.347, 80.058), // South-West
     L.latLng(30.447, 88.201) // North-East
@@ -80,8 +79,6 @@ function MultipleUserMap() {
 
       // Create layer control
       L.control.layers(baseLayers).addTo(mapRef.current);
-
-      setMapInitialized(true); // Mark the map as initialized
     }
   };
 
@@ -143,14 +140,21 @@ function MultipleUserMap() {
   }, [showLocation, position]);
 
   useEffect(() => {
-    // Watch user's position and update speed
+    // Watch user's position and update speed and position
     const watchId = navigator.geolocation.watchPosition(
       (position) => {
+        const userPosition = [
+          position.coords.latitude,
+          position.coords.longitude,
+        ];
+        setPosition(userPosition);
         setSpeed(position.coords.speed || 0);
+        mapRef.current.setView(userPosition, mapRef.current.getZoom());
       },
       (error) => {
-        console.error("Error getting speed:", error);
-      }
+        console.error("Error getting position and speed:", error);
+      },
+      { enableHighAccuracy: true }
     );
   
     return () => {
@@ -163,8 +167,8 @@ function MultipleUserMap() {
     <div className="h-[90vh] w-full flex flex-col items-center">
       <div id="map" style={{ height: "100%", width: '100%' }} />
       <LowerSlideBar />
-      {mapInitialized && <ContextMenu map={mapRef.current} />}
-      {mapInitialized && <RoutingMachine map={mapRef.current}/>}
+      {mapRef.current && <ContextMenu map={mapRef.current} />}
+      <RoutingMachine map={mapRef.current}/>
       <button onClick={handleShowLocation} className="absolute right-3 top-32 z-[1300]">
         <img src="../target-location.svg" className="w-[45px] h-[45px]" />
       </button>
