@@ -45,7 +45,8 @@ const RoutingMachine = ({ map }) => {
   };
 
   return (
-    <button className="absolute top-[70px] right-[30%] z-[1300] m-1" onClick={toggleRouting}>
+    <button className="" onClick={toggleRouting}>
+    {/* <button className="absolute top-[70px] right-[30%] z-[1300] m-1" onClick={toggleRouting}> */}
       <img src="../route-icon.png" className='w-15 h-8' />
     </button>
   );

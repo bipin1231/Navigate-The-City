@@ -2,6 +2,8 @@ import React, { useState, useEffect, useRef } from "react";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import 'leaflet-geosearch/dist/geosearch.css';
+import 'leaflet-compass/dist/leaflet-compass.min.css';
+import 'leaflet-compass';
 import { GeoSearchControl, OpenStreetMapProvider } from 'leaflet-geosearch';
 import RoutingMachine from './RoutingMachine'; 
 import service from '../../appwrite/config';
@@ -11,10 +13,10 @@ import LowerSlideBar from "./LowerSlideBar";
 
 function MultipleUserMap() {
   const mapRef = useRef(null);
-  const markerRef = useRef(null); // Reference for the user position marker
+  const markerRef = useRef(null);
   const [position, setPosition] = useState(null);
   const [showLocation, setShowLocation] = useState(false);
-  const defaultPosition = [27.68167, 84.43007]; // Default position for Bharatpur
+  const defaultPosition = [27.68167, 84.43007]; // Default location for Bharatpur
   const nepalBounds = L.latLngBounds(
     L.latLng(26.347, 80.058), // South-West
     L.latLng(30.447, 88.201) // North-East
@@ -31,6 +33,18 @@ function MultipleUserMap() {
         maxBoundsViscosity: 0.8,
         zoomControl: false,
       }).addControl(L.control.zoom({ position: 'bottomright' }));
+
+      //Add compass
+      mapRef.current.addControl(new L.Control.Compass({ position: 'topleft' }));
+      // const compassControl = new L.Control.Compass({ position: 'topleft' });
+      // mapRef.current.addControl(compassControl);
+
+      // setTimeout(() => {
+      //   const compassElement = document.querySelector('.leaflet-compass');
+      //   if (compassElement) {
+      //     compassElement.classList.add('absolute', 'top-10');
+      //   }
+      // }, 0);
       
       // Add tile layer
       L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
@@ -62,24 +76,32 @@ function MultipleUserMap() {
           "https://{s}.tile.openstreetmap.fr/osmfr/{z}/{x}/{y}.png",
           {
             attribution:
-              '&copy; OpenStreetMap France | &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+            '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
           }
         ),
         Satellite: L.tileLayer(
           "https://tiles.stadiamaps.com/tiles/alidade_satellite/{z}/{x}/{y}{r}.{ext}",
           {
             attribution:
-              '&copy; CNES, Distribution Airbus DS, © Airbus DS, © PlanetObserver (Contains Copernicus Data) | &copy; <a href="https://www.stadiamaps.com/" target="_blank">Stadia Maps</a> &copy; <a href="https://openmaptiles.org/" target="_blank">OpenMapTiles</a> &copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+            '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
             ext: "jpg",
           }
         ),
       };
-
+      
       // Add base layers to map
       baseLayers["Normal"].addTo(mapRef.current);
 
       // Create layer control
-      L.control.layers(baseLayers).addTo(mapRef.current);
+      L.control.layers(baseLayers, {}, { position: 'topleft' }).addTo(mapRef.current);
+      // const layerControl = L.control.layers(baseLayers, {}, { position: 'topleft' }).addTo(mapRef.current);
+
+      // setTimeout(() => {
+      //   const layerControlElement = document.querySelector('.leaflet-control-layers');
+      //   if (layerControlElement) {
+      //     layerControlElement.classList.add('absolute', 'top-11'); // Adjust the values as needed
+      //   }
+      // }, 0);
     }
   };
 
@@ -166,10 +188,13 @@ function MultipleUserMap() {
       <div id="map" style={{ height: "100%", width: '100%' }} />
       <LowerSlideBar />
       {mapRef.current && <ContextMenu map={mapRef.current} />}
+      <div className="absolute top-[65px] right-[25%] z-[1300] flex justify-between gap-4">
       <RoutingMachine map={mapRef.current}/>
-      <button onClick={handleShowLocation} className="absolute right-3 top-32 z-[1300]">
+      <button onClick={handleShowLocation}>
+      {/* <button onClick={handleShowLocation} className="absolute right-3 top-32 z-[1300]"> */}
         <img src="../target-location.svg" className="w-[45px] h-[45px]" />
       </button>
+      </div>
     </div>
   );
 }
