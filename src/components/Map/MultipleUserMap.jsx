@@ -162,7 +162,7 @@ function MultipleUserMap() {
   }, []);
 
   return (
-    <div className="h-[90lvh] w-full flex flex-col items-center">
+    <div className="h-[90vh] w-full flex flex-col items-center">
       <div id="map" style={{ height: "100%", width: '100%' }} />
       <LowerSlideBar />
       {mapRef.current && <ContextMenu map={mapRef.current} />}
