@@ -9,6 +9,8 @@ import 'leaflet-geosearch/dist/geosearch.css';
 import "leaflet-routing-machine/dist/leaflet-routing-machine.css";
 import "leaflet-routing-machine";
 import "leaflet-control-geocoder";
+import LowerSlideBar from "./LowerSlideBar";
+import ContextMenu from "./ContextMenu";
 
 const nepalBounds = L.latLngBounds(
   L.latLng(26.347, 80.058), // South-West
@@ -176,7 +178,7 @@ function MultipleUserMap() {
   });
 
   return (
-    <div style={{ height: "90vh", width: "100%", position: "relative" }}>
+    <div className='h-[90vh] w-full relative flex flex-col items-center'>
       <MapContainer
         center={defaultPosition}
         zoom={10}
@@ -203,6 +205,7 @@ function MultipleUserMap() {
         <SearchControl />
         <RoutingControl isRoutingEnabled={isRoutingEnabled} />
         <ZoomControl />
+      <ContextMenu />
       </MapContainer>
       <button 
         className="absolute top-[10px] right-[30%] z-[1300]" 
@@ -210,6 +213,7 @@ function MultipleUserMap() {
       >
         <img src="../route-icon.png" className='w-15 h-8' alt="Routing Icon" />
       </button>
+      <LowerSlideBar />
     </div>
   );
 }
