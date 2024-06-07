@@ -2,37 +2,25 @@ import React, { useState, useEffect, useRef } from "react";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import 'leaflet-geosearch/dist/geosearch.css';
+import 'leaflet-compass/dist/leaflet-compass.min.css';
+import 'leaflet-compass';
 import { GeoSearchControl, OpenStreetMapProvider } from 'leaflet-geosearch';
 import RoutingMachine from './RoutingMachine'; 
-// import 'leaflet-control-geocoder/dist/Control.Geocoder.css';
-// import 'leaflet-control-geocoder/dist/Control.Geocoder.js';
+import service from '../../appwrite/config';
+import { useSelector } from 'react-redux';
+import ContextMenu from "./ContextMenu";
+import LowerSlideBar from "./LowerSlideBar";
 
-import service from "../../appwrite/config";
-import {useSelector,useDispatch} from 'react-redux'
-
-function Map() {
-
-  const userStat=useSelector(state=>state.auth)
-   console.log(userStat);
-// console.log(userData.userData.$id);
-
-  const [userLocation,setUserLocation]=useState({
-    userId:null,
-    lattitude:null,
-    longitude:null,
-  
-  })
-  //console.log(userLocation);
-
-  const [userPosition,setUserPosition]=useState([]);
+function MultipleUserMap() {
   const mapRef = useRef(null);
-  const [position, setPosition] = useState([]);
-  const defaultPosition = [27.7172, 85.324]; // Default position for Kathmandu
+  const markerRef = useRef(null);
+  const [position, setPosition] = useState(null);
+  const [showLocation, setShowLocation] = useState(false);
+  const defaultPosition = [27.68167, 84.43007]; // Default location for Bharatpur
   const nepalBounds = L.latLngBounds(
     L.latLng(26.347, 80.058), // South-West
     L.latLng(30.447, 88.201) // North-East
   );
-  
 
   const initializeMap = (center) => {
     if (!mapRef.current) {
@@ -45,6 +33,18 @@ function Map() {
         maxBoundsViscosity: 0.8,
         zoomControl: false,
       }).addControl(L.control.zoom({ position: 'bottomright' }));
+
+      //Add compass
+      mapRef.current.addControl(new L.Control.Compass({ position: 'topleft' }));
+      // const compassControl = new L.Control.Compass({ position: 'topleft' });
+      // mapRef.current.addControl(compassControl);
+
+      // setTimeout(() => {
+      //   const compassElement = document.querySelector('.leaflet-compass');
+      //   if (compassElement) {
+      //     compassElement.classList.add('absolute', 'top-10');
+      //   }
+      // }, 0);
       
       // Add tile layer
       L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
@@ -63,20 +63,6 @@ function Map() {
 
       mapRef.current.addControl(searchControl);
 
-      // Restrict map bounds to Nepal
-      mapRef.current.setMaxBounds(nepalBounds);
-      mapRef.current.on("drag", () => {
-        if (!nepalBounds.contains(mapRef.current.getCenter())) {
-          mapRef.current.panInsideBounds(nepalBounds, { animate: false });
-        }
-      });
-
-      mapRef.current.on("zoomend", () => {
-        if (!nepalBounds.contains(mapRef.current.getCenter())) {
-          mapRef.current.fitBounds(nepalBounds);
-        }
-      });
-
       // Define base layers
       const baseLayers = {
         Normal: L.tileLayer(
@@ -90,134 +76,127 @@ function Map() {
           "https://{s}.tile.openstreetmap.fr/osmfr/{z}/{x}/{y}.png",
           {
             attribution:
-              '&copy; OpenStreetMap France | &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+            '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
           }
         ),
         Satellite: L.tileLayer(
           "https://tiles.stadiamaps.com/tiles/alidade_satellite/{z}/{x}/{y}{r}.{ext}",
           {
             attribution:
-              '&copy; CNES, Distribution Airbus DS, © Airbus DS, © PlanetObserver (Contains Copernicus Data) | &copy; <a href="https://www.stadiamaps.com/" target="_blank">Stadia Maps</a> &copy; <a href="https://openmaptiles.org/" target="_blank">OpenMapTiles</a> &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+            '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
             ext: "jpg",
           }
         ),
-
       };
-
+      
       // Add base layers to map
       baseLayers["Normal"].addTo(mapRef.current);
 
       // Create layer control
-      L.control.layers(baseLayers).addTo(mapRef.current);
-      //adding or importing leaflet routing machine
-      RoutingMachine(mapRef.current);
+      L.control.layers(baseLayers, {}, { position: 'topleft' }).addTo(mapRef.current);
+      // const layerControl = L.control.layers(baseLayers, {}, { position: 'topleft' }).addTo(mapRef.current);
+
+      // setTimeout(() => {
+      //   const layerControlElement = document.querySelector('.leaflet-control-layers');
+      //   if (layerControlElement) {
+      //     layerControlElement.classList.add('absolute', 'top-11'); // Adjust the values as needed
+      //   }
+      // }, 0);
     }
   };
 
-  useEffect(() => {
-    // Try to get the user's location
+  // Function to handle the button click and show location
+  const handleShowLocation = () => {
     navigator.geolocation.getCurrentPosition(
       (position) => {
-         setUserPosition([...userPosition,{
-         longitude: position.coords.latitude,
-         lattitude: position.coords.longitude,
-         }])
-        
-        setUserLocation({
-          userId:userStat.userData.$id,
-          lattitude:userPosition[0],
-          longitude:userPosition[1]
-        })
-        // const userPosition = {
-        //   userId:userData.userData.$id,
-        // lattitude: position.coords.latitude,
-        //   longitude:position.coords.longitude,
-        // };
-
-//        console.log(userLocation);
-        const addLocation=async()=>{
-        // return await service.addLocation(userLocation); 
-        }
-        // if(userPosition){
-        //   addLocation();
-        // }
+        const userPosition = [
+          position.coords.latitude,
+          position.coords.longitude,
+        ];
         if (nepalBounds.contains(userPosition)) {
-// userPosition.forEach(a => {
-//   console.log("this is the location from loop",[a.lattitude,a.longitude]);
-//   setPosition([]);
-// });
-
-userPosition.forEach(a => {
-  console.log("this is the location from loop",[a.lattitude,a.longitude]);
-  initializeMap(a.longitude,a.lattitude)
-})
-          // userPosition.map(setPosition([userPosition.lattitude,userPosition.longitude]));         
-          // userPosition.map(initializeMap([userPosition.lattitude,userPosition.longitude]));
+          setPosition(userPosition);
+          setShowLocation(true);
+          mapRef.current.setView(userPosition, 14);
         } else {
           alert("Your current location is outside Nepal.");
           setPosition(defaultPosition);
-          initializeMap(defaultPosition);
+          setShowLocation(true);
+          mapRef.current.setView(defaultPosition, 14);
         }
       },
       (error) => {
         console.error("Error getting location:", error);
-        // Handle the case where user's location cannot be retrieved
         alert("Error getting your location. Using default position.");
         setPosition(defaultPosition);
-        initializeMap(defaultPosition);
+        setShowLocation(true);
+        mapRef.current.setView(defaultPosition, 14);
       },
       { enableHighAccuracy: true }
     );
-  }, []);
- 
+  };
+
   useEffect(() => {
-    userPosition.forEach(a => {
-    if (mapRef.current && [a.longitude,a.lattitude]) {
-      // Clear existing marker
-      mapRef.current.eachLayer((layer) => {
-        if (layer instanceof L.Marker) {
-          mapRef.current.removeLayer(layer);
-        }
-      });
+    initializeMap(defaultPosition);
+  }, []);
 
-      // Add marker for user's position
-      L.marker([a.longitude,a.lattitude])
-        .addTo(mapRef.current)
-        .bindPopup("You are here")
-        .openPopup();
+  useEffect(() => {
+    if (mapRef.current && showLocation && position) {
+      // Add marker for user's position if it doesn't exist
+      if (!markerRef.current) {
+        const customMarkerIcon = L.icon({
+          iconUrl: '../pin.svg',
+          iconSize: [45, 60],
+        });
+        
+        markerRef.current = L.marker(position, { icon: customMarkerIcon })
+          .addTo(mapRef.current)
+          .bindPopup("You are here")
+          .openPopup();
+      } else {
+        // Update the marker position if it already exists
+        markerRef.current.setLatLng(position);
+      }
     }
-  })
-  }, [userPosition]);
+  }, [showLocation, position]);
 
-  const getUserInfoAppwrite=async()=>{
-    const data=await service.getUserLocation(userStat.userData.$id);
-    console.log(data);
-    
-    const [lastItem]=data.documents.slice(-1);
-    const last=data.documents[data.documents.length-1]
-    console.log(last);
-    setUserPosition(prevPosition=>{
-      console.log(prevPosition);
-      return[
-        ...prevPosition,
-        last
-      ]
-    });
-    //console.log(lastItem);
-   // console.log(data.documents);
-  }
-  console.log(userPosition);
-  userPosition.forEach(a => {
-    console.log("this is the location from loop",[a.lattitude,a.longitude]);
-  })
+  useEffect(() => {
+    // Watch user's position and update speed and position
+    const watchId = navigator.geolocation.watchPosition(
+      (position) => {
+        const userPosition = [
+          position.coords.latitude,
+          position.coords.longitude,
+        ];
+        setPosition(userPosition);
+        setSpeed(position.coords.speed || 0);
+        mapRef.current.setView(userPosition, mapRef.current.getZoom());
+      },
+      (error) => {
+        console.error("Error getting position and speed:", error);
+      },
+      { enableHighAccuracy: true }
+    );
+  
+    return () => {
+      // Clean up the watchPosition when component unmounts
+      navigator.geolocation.clearWatch(watchId);
+    };
+  }, []);
 
   return (
-    <div style={{ height: "86vh", width: "100%" }}>
-    <button onClick={getUserInfoAppwrite}>clikme</button>
-      <div id="map" style={{ height: "100%" }} />
+    <div className="h-[90vh] w-full flex flex-col items-center">
+      <div id="map" style={{ height: "100%", width: '100%' }} />
+      <LowerSlideBar />
+      {mapRef.current && <ContextMenu map={mapRef.current} />}
+      <div className="absolute top-[65px] right-[25%] z-[1300] flex justify-between gap-4">
       <RoutingMachine map={mapRef.current}/>
+      <button onClick={handleShowLocation}>
+      {/* <button onClick={handleShowLocation} className="absolute right-3 top-32 z-[1300]"> */}
+        <img src="../target-location.svg" className="w-[45px] h-[45px]" />
+      </button>
+      </div>
     </div>
   );
 }
 
-export default Map;
+export default MultipleUserMap;

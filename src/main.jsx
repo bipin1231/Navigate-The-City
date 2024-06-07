@@ -53,6 +53,7 @@ const router=createBrowserRouter(
       <Route path='companysignup' element={<CompanySignup/>}/>
       <Route path='driversignup' element={<DriverSignup/>}/>
  
+      {/* <Route path='map' element={<Map/>}/> */}
       <Route path='multipleusermap' element={<MultipleUserMap/>}/>
       <Route path='addbus' element={<AddBus/>}/>
       <Route path='addroute' element={<AddRoute/>}/>

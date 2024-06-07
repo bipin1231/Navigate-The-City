@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from "react";
-import "leaflet-routing-machine/dist/leaflet-routing-machine.css";
+import { useMap } from "react-leaflet";
 import L from "leaflet";
+import "leaflet-routing-machine/dist/leaflet-routing-machine.css";
 import "leaflet-routing-machine";
 import "leaflet-control-geocoder";
 
-const RoutingMachine = ({ map }) => {
+const RoutingMachine = () => {
+  const map = useMap();
   const [routingControl, setRoutingControl] = useState(null);
   const [isRoutingEnabled, setIsRoutingEnabled] = useState(false);
 
@@ -14,15 +16,8 @@ const RoutingMachine = ({ map }) => {
       const control = L.Routing.control({
         waypoints: [],
         routeWhileDragging: true,
-        draggableWaypoints: false,
-        removeWaypoints: false,
-        altLineOptions: {
-          styles: [
-            { color: "black", opacity: 0.15, weight: 9 },
-            { color: "white", opacity: 0.8, weight: 6 },
-            { color: "blue", opacity: 0.5, weight: 2 },
-          ],
-        },
+        draggableWaypoints: true,
+        removeWaypoints: true,
         geocoder: L.Control.Geocoder.nominatim(),
       }).addTo(map);
 
@@ -38,16 +33,18 @@ const RoutingMachine = ({ map }) => {
       map.removeControl(routingControl);
       setRoutingControl(null);
     }
-  }, [map, isRoutingEnabled]);
+  }, [map, isRoutingEnabled, routingControl]);
 
   const toggleRouting = () => {
     setIsRoutingEnabled((prevState) => !prevState);
   };
 
   return (
-    <button className="" onClick={toggleRouting}>
-    {/* <button className="absolute top-[70px] right-[30%] z-[1300] m-1" onClick={toggleRouting}> */}
-      <img src="../route-icon.png" className='w-15 h-8' />
+    <button 
+      className="absolute top-[70px] right-[30%] z-[1300] m-1" 
+      onClick={toggleRouting}
+    >
+      <img src="../route-icon.png" className='w-15 h-8' alt="Routing Icon" />
     </button>
   );
 };
