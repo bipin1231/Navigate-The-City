@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
@@ -122,6 +122,9 @@ function MultipleUserMap() {
   const [users, setUsers] = useState([]);
   const defaultPosition = [27.68167, 84.43007]; // Default location for Bharatpur
   const [isRoutingEnabled, setIsRoutingEnabled] = useState(false);
+  const markerRefs = useRef({}); // To store references to user markers
+  const mapRef = useRef(null); // To store reference to the map
+  const [showLocation, setShowLocation] = useState(false);
 
   useEffect(() => {
     const fetchUserLocation = async () => {
@@ -137,45 +140,46 @@ function MultipleUserMap() {
     fetchUserLocation();
   }, []);
 
-  const [position, setPosition] = useState(null);
-
-  if (status) {
-    useEffect(() => {
-      if (navigator.geolocation) {
-        const geoId = navigator.geolocation.watchPosition(
-          (position) => {
-            const { latitude, longitude } = position.coords;
-            setPosition([latitude, longitude]);
-            const storeLoc = async () => {
-              await service.storeUserLocation({ userId: userData.$id, latitude, longitude });
-            }
-            storeLoc();
-          },
-          (error) => {
-            console.error('Error occurred while retrieving location:', error);
-          },
-          { enableHighAccuracy: true }
-        );
-
-        return () => {
-          navigator.geolocation.clearWatch(geoId);
-        };
-      } else {
-        console.error('Geolocation is not supported by this browser.');
-      }
-    }, []);
+  const handleShowLocation = () => {
+  useEffect(() => {
+    if (status) {
+      const watchId = navigator.geolocation.watchPosition(
+        (position) => {
+          const { latitude, longitude } = position.coords;
+          const currentPosition = [latitude, longitude];
+          if (markerRefs.current[userData.$id]) {
+            markerRefs.current[userData.$id].setLatLng(currentPosition);
+          } else {
+            const customMarkerIcon = L.icon({
+              iconUrl: '../pin.svg',
+              iconSize: [45, 60],
+            });
+            markerRefs.current[userData.$id] = L.marker(currentPosition, { icon: customMarkerIcon })
+              .addTo(mapRef.current)
+              .bindPopup("You are here")
+              .openPopup();
+          }
+          const storeLoc = async () => {
+            await service.storeUserLocation({ userId: userData.$id, latitude, longitude });
+          }
+          storeLoc();
+        },
+        (error) => {
+          console.error('Error occurred while retrieving location:', error);
+        },
+        { enableHighAccuracy: true }
+      );
+    
+    return () => {
+      navigator.geolocation.clearWatch(watchId);
+    };
   }
+}, [status, userData.$id]);
+};
 
   const toggleRouting = () => {
     setIsRoutingEnabled((prevState) => !prevState);
   };
-
-  const markerIcon = new L.Icon({
-    iconUrl: "../pin.svg",
-    iconSize: [35, 45],
-    iconAnchor: [17, 46],
-    popupAnchor: [3, -46]
-  });
 
   return (
     <div className='h-[90vh] w-full relative flex flex-col items-center'>
@@ -189,6 +193,7 @@ function MultipleUserMap() {
         maxBounds={nepalBounds}
         maxBoundsViscosity={0.8}
         zoomControl={false}
+        whenCreated={(map) => { mapRef.current = map; }}
       >
         <LayerControl />
         <TileLayer
@@ -196,7 +201,17 @@ function MultipleUserMap() {
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
         {users.map(user => (
-          <Marker key={user.userId} position={user.position} icon={markerIcon}>
+          <Marker
+            key={user.userId}
+            position={user.position}
+            icon={new L.Icon({
+              iconUrl: "../pin.svg",
+              iconSize: [35, 45],
+              iconAnchor: [17, 46],
+              popupAnchor: [3, -46]
+            })}
+            ref={(marker) => { markerRefs.current[user.userId] = marker; }}
+          >
             <Popup>
               Hello World. <br /> Easily customizable.<br />{user.userId}
             </Popup>
@@ -205,13 +220,16 @@ function MultipleUserMap() {
         <SearchControl />
         <RoutingControl isRoutingEnabled={isRoutingEnabled} />
         <ZoomControl />
-      <ContextMenu />
+        <ContextMenu />
       </MapContainer>
       <button 
         className="absolute top-[10px] right-[30%] z-[1300]" 
         onClick={toggleRouting}
       >
         <img src="../route-icon.png" className='w-15 h-8' alt="Routing Icon" />
+      </button>
+      <button className="absolute top-[10px] right-[25%] z-[1300]" onClick={handleShowLocation}>
+        <img src="../target-location.svg" className="w-[45px] h-[45px]" />
       </button>
       <LowerSlideBar />
     </div>
