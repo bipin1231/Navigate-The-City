@@ -11,6 +11,7 @@ import "leaflet-routing-machine";
 import "leaflet-control-geocoder";
 import LowerSlideBar from "./LowerSlideBar";
 import ContextMenu from "./ContextMenu";
+import CurrentUser from './CurrentUser';
 
 const nepalBounds = L.latLngBounds(
   L.latLng(26.347, 80.058), // South-West
@@ -134,15 +135,16 @@ function MultipleUserMap() {
         userId: doc.userId,
         position: [doc.latitude, doc.longitude],
       }));
+      console.log(userLocations);
       const validUserLocations = userLocations.filter(user => user.position !== null);
       setUsers(validUserLocations);
     }
     fetchUserLocation();
   }, []);
-
+  console.log(users)
   const handleShowLocation = () => {
   useEffect(() => {
-    if (status) {
+   
       const watchId = navigator.geolocation.watchPosition(
         (position) => {
           const { latitude, longitude } = position.coords;
@@ -159,10 +161,12 @@ function MultipleUserMap() {
               .bindPopup("You are here")
               .openPopup();
           }
+          if (status) {
           const storeLoc = async () => {
             await service.storeUserLocation({ userId: userData.$id, latitude, longitude });
           }
           storeLoc();
+        }
         },
         (error) => {
           console.error('Error occurred while retrieving location:', error);
@@ -173,7 +177,7 @@ function MultipleUserMap() {
     return () => {
       navigator.geolocation.clearWatch(watchId);
     };
-  }
+  
 }, [status, userData.$id]);
 };
 
@@ -186,7 +190,7 @@ function MultipleUserMap() {
       <MapContainer
         center={defaultPosition}
         zoom={10}
-        scrollWheelZoom={true}
+        scrollWheelZoom={false}
         style={{ height: "100%", width: "100%" }}
         maxZoom={20}
         minZoom={7.5}
@@ -200,12 +204,14 @@ function MultipleUserMap() {
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
+   
         {users.map(user => (
+        
           <Marker
             key={user.userId}
             position={user.position}
             icon={new L.Icon({
-              iconUrl: "../pin.svg",
+              iconUrl: (userData && user.userId===userData.$id)?"https://memes.co.in/Uploads/Media/Jul22/Thu28/674/d983d237.jpg":"../pin.svg",
               iconSize: [35, 45],
               iconAnchor: [17, 46],
               popupAnchor: [3, -46]
@@ -217,6 +223,7 @@ function MultipleUserMap() {
             </Popup>
           </Marker>
         ))}
+        {!status && <CurrentUser/>}
         <SearchControl />
         <RoutingControl isRoutingEnabled={isRoutingEnabled} />
         <ZoomControl />

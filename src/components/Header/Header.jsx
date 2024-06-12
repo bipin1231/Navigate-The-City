@@ -44,9 +44,12 @@ function Header() {
       </div>
       {!status && (
         <Link to="/login">
-          <Button className='ml-auto'>
+          <div>
             Login
-          </Button>
+          </div>
+          {/* <Button className='ml-auto'>
+            Login
+          </Button> */}
         </Link>
       )}
       {status && <Logout />}
