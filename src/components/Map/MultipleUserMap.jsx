@@ -12,6 +12,7 @@ import "leaflet-control-geocoder";
 import LowerSlideBar from "./LowerSlideBar";
 import ContextMenu from "./ContextMenu";
 import CurrentUser from './CurrentUser';
+import { data } from 'autoprefixer';
 
 const nepalBounds = L.latLngBounds(
   L.latLng(26.347, 80.058), // South-West
@@ -120,7 +121,10 @@ function LayerControl() {
 function MultipleUserMap() {
   const status = useSelector(state => state.auth.status);
   const userData = useSelector(state => state.auth.userData);
+  console.log("status is",status)
+ 
   const [users, setUsers] = useState([]);
+  const [position,setPosition]=useState([]);
   const defaultPosition = [27.68167, 84.43007]; // Default location for Bharatpur
   const [isRoutingEnabled, setIsRoutingEnabled] = useState(false);
   const markerRefs = useRef({}); // To store references to user markers
@@ -141,45 +145,41 @@ function MultipleUserMap() {
     }
     fetchUserLocation();
   }, []);
-  console.log(users)
-  const handleShowLocation = () => {
+
   useEffect(() => {
-   
-      const watchId = navigator.geolocation.watchPosition(
+    console.log("inside useeffect");
+    if (navigator.geolocation) {
+      const geoId = navigator.geolocation.watchPosition(
         (position) => {
           const { latitude, longitude } = position.coords;
-          const currentPosition = [latitude, longitude];
-          if (markerRefs.current[userData.$id]) {
-            markerRefs.current[userData.$id].setLatLng(currentPosition);
-          } else {
-            const customMarkerIcon = L.icon({
-              iconUrl: '../pin.svg',
-              iconSize: [45, 60],
-            });
-            markerRefs.current[userData.$id] = L.marker(currentPosition, { icon: customMarkerIcon })
-              .addTo(mapRef.current)
-              .bindPopup("You are here")
-              .openPopup();
-          }
-          if (status) {
-          const storeLoc = async () => {
-            await service.storeUserLocation({ userId: userData.$id, latitude, longitude });
-          }
-          storeLoc();
+          setPosition([latitude, longitude]);
+          if(status){
+            console.log("come inside");
+            
+         const storeLoc=async()=>{ 
+          console.log("storing location");
+          const data=await service.storeUserLocation({userId:userData.$id,latitude,longitude});
+          console.log("performing storing in database",data);
         }
+          
+          storeLoc();
+         }
         },
         (error) => {
           console.error('Error occurred while retrieving location:', error);
         },
         { enableHighAccuracy: true }
       );
-    
-    return () => {
-      navigator.geolocation.clearWatch(watchId);
-    };
   
-}, [status, userData.$id]);
-};
+      return () => {
+        navigator.geolocation.clearWatch(geoId);
+      };
+    } else {
+      console.error('Geolocation is not supported by this browser.');
+    }
+  }, []);
+  
+
 
   const toggleRouting = () => {
     setIsRoutingEnabled((prevState) => !prevState);
@@ -204,7 +204,7 @@ function MultipleUserMap() {
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
-   
+
         {users.map(user => (
         
           <Marker
@@ -235,7 +235,7 @@ function MultipleUserMap() {
       >
         <img src="../route-icon.png" className='w-15 h-8' alt="Routing Icon" />
       </button>
-      <button className="absolute top-[10px] right-[25%] z-[1300]" onClick={handleShowLocation}>
+      <button className="absolute top-[10px] right-[25%] z-[1300]">
         <img src="../target-location.svg" className="w-[45px] h-[45px]" />
       </button>
       <LowerSlideBar />
