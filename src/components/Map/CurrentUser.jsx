@@ -2,18 +2,18 @@ import React, { useState, useEffect } from 'react';
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
-import customIconUrl from "./batman.png";
+import customIconUrl from "../location.svg";
 
 function CurrentUser() {
   const [userPosition, setUserPosition] = useState(null);
   const [userDirection, setUserDirection] = useState(0);
 
-  const markerIcon = new L.Icon({
-    iconUrl: customIconUrl,
-    iconSize: [35, 45],
-    iconAnchor: [17, 46],
-    popupAnchor: [3, -46],
-  });
+  // const markerIcon = new L.Icon({
+  //   iconUrl: customIconUrl,
+  //   iconSize: [35, 45],
+  //   iconAnchor: [17, 46],
+  //   popupAnchor: [3, -46],
+  // });
 
   useEffect(() => {
     if (navigator.geolocation) {
@@ -57,7 +57,6 @@ function CurrentUser() {
     html: `<img src="${customIconUrl}" style="width: 35px; height: 45px; transform: rotate(${userDirection}deg);" />`,
     iconSize: [35, 45],
     iconAnchor: [17, 46],
-    className: '', // Override any default styles
   });
 
   return (
