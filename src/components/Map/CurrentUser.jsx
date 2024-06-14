@@ -2,12 +2,14 @@ import React, { useState, useEffect } from 'react';
 import { Marker, Popup } from 'react-leaflet';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
+import Speedometer from './Speedometer';
 
 function CurrentUser() {
   const [userPosition, setUserPosition] = useState(null);
   const [userDirection, setUserDirection] = useState(0);
   const [selectedIcon, setSelectedIcon] = useState('icon1'); // Default selected icon
   const [bottomPosition, setBottomPosition] = useState(0);
+  const [speed, setSpeed] = useState(0);
 
   const handleButtonClick = () => {
     setBottomPosition(bottomPosition === 0 ? 20 : 0);
@@ -117,7 +119,7 @@ function CurrentUser() {
               </button>
           </div>
           <div>
-          {/* <Speedometer speed={speed} /> */}
+          <Speedometer speed={speed} />
           <select value={selectedIcon} onChange={handleIconChange}>
               <option value="icon1">Tracker</option>
               <option value="icon2">Car</option>
@@ -125,7 +127,7 @@ function CurrentUser() {
             </select>
           </div>
     </div>
-        <Marker position={userPosition} icon={markerIcon}>
+        <Marker position={userPosition} icon={markerIcon} rotationAngle={360 - userDirection}>
           <Popup>
             Current User Hello World. <br /> Easily customizable.
           </Popup>
