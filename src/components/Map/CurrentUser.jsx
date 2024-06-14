@@ -10,7 +10,7 @@ function CurrentUser() {
 
   const markerIcon = new L.DivIcon({
     html: `
-      <div class="transform transition-transform duration-200" style="transform: rotate(${userDirection}deg);">
+      <div class="transform transition-transform duration-200" style="transform: rotate(${userDirection + 135}deg);">
         <img src="../location.svg" class="w-9 h-11 border-none bg-transparent outline-none" />
       </div>
     `,
