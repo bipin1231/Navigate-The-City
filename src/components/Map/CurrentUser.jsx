@@ -75,9 +75,14 @@ function CurrentUser() {
 
     // Define marker icons
     const icon1 = new L.Icon({
-      iconUrl: '../location.svg',
-      iconSize: [35, 45],
-      iconAnchor: [17, 46],
+      className: 'custom-marker',
+    html: `
+      <div class="marker-icon" style="transform: rotate(${360 - userDirection}deg);">
+        <img src="../location.svg" class="w-9 h-11 border-none bg-transparent outline-none" />
+      </div>
+    `,
+    iconSize: [35, 45],
+    iconAnchor: [17, 46],
     });
   
     const icon2 = new L.Icon({
@@ -142,7 +147,7 @@ function CurrentUser() {
               </select>
             </div>
       </div>
-          <Marker position={userPosition} icon={markerIcon} rotationAngle={userDirection}>
+          <Marker position={userPosition} icon={markerIcon}>
             <Popup>
               Current User Hello World. <br /> Easily customizable.
             </Popup>
