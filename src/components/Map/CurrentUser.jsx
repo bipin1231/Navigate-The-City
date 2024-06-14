@@ -109,6 +109,23 @@ function CurrentUser() {
     markerIcon = icon3;
   }
 
+  useEffect(() => {
+    // Watch user's position and update speed
+    const watchId = navigator.geolocation.watchPosition(
+       (position) => {
+         setSpeed(position.coords.speed || 0);
+       },
+       (error) => {
+         console.error("Error getting speed:", error);
+       }
+     );
+ 
+     return () => {
+       // Clean up the watchPosition when component unmounts
+       navigator.geolocation.clearWatch(watchId);
+     };
+   }, []);
+
   return (
     userPosition && (
       <div className='flex flex-col items-center'>
@@ -127,7 +144,7 @@ function CurrentUser() {
             </select>
           </div>
     </div>
-        <Marker position={userPosition} icon={markerIcon} rotationAngle={360 - userDirection}>
+        <Marker position={userPosition} icon={markerIcon}>
           <Popup>
             Current User Hello World. <br /> Easily customizable.
           </Popup>
