@@ -29,37 +29,31 @@ function CurrentUser() {
   }, []);
 
   useEffect(() => {
+    let alphaFiltered = 0;
+    const alphaFilterFactor = 0.2; // Adjust filter factor as needed
+
     const handleOrientation = (event) => {
-      let compassHeading;
+      let alpha;
       if (event.absolute) {
-        compassHeading = event.alpha;
+        alpha = event.alpha;
       } else if (event.webkitCompassHeading) {
-        compassHeading = event.webkitCompassHeading; // For Safari
+        alpha = event.webkitCompassHeading; // For Safari
       } else {
-        compassHeading = 360 - event.alpha; // For other browsers
+        alpha = 360 - event.alpha; // For other browsers
       }
-      setUserDirection(compassHeading);
+
+      alphaFiltered = alphaFiltered * (1 - alphaFilterFactor) + alpha * alphaFilterFactor;
+
+      setUserDirection(alphaFiltered);
     };
 
     if (window.DeviceOrientationEvent) {
-      let timeoutId = null;
-      const throttleTime = 300; // Adjust throttle time as needed
-  
-      const throttledHandleOrientation = (event) => {
-        if (!timeoutId) {
-          timeoutId = setTimeout(() => {
-            handleOrientation(event);
-            timeoutId = null;
-          }, throttleTime);
-        }
-      };
-
-      window.addEventListener('deviceorientationabsolute', throttledHandleOrientation, true);
-      window.addEventListener('deviceorientation', throttledHandleOrientation, true);
+      window.addEventListener('deviceorientationabsolute', handleOrientation, true);
+      window.addEventListener('deviceorientation', handleOrientation, true);
 
       return () => {
-        window.removeEventListener('deviceorientationabsolute', throttledHandleOrientation, true);
-        window.removeEventListener('deviceorientation', throttledHandleOrientation, true);
+        window.removeEventListener('deviceorientationabsolute', handleOrientation, true);
+        window.removeEventListener('deviceorientation', handleOrientation, true);
       };
     } else {
       console.error('Device orientation is not supported by this browser.');
@@ -67,7 +61,7 @@ function CurrentUser() {
   }, []);
 
   const markerIcon = new L.DivIcon({
-    className: 'custom-marker',
+    className: 'transform transition-transform duration-200',
     html: `
       <div class="marker-icon" style="transform: rotate(${360 - userDirection}deg);">
         <img src="../location.svg" class="w-9 h-11 border-none bg-transparent outline-none" />
