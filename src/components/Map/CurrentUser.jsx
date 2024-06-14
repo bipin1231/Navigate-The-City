@@ -3,12 +3,11 @@ import { Marker, Popup } from 'react-leaflet';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import Speedometer from './Speedometer';
-import throttle from 'lodash/throttle';
 
 function CurrentUser() {
   const [userPosition, setUserPosition] = useState(null);
   const [userDirection, setUserDirection] = useState(0);
-  const [selectedIcon, setSelectedIcon] = useState('icon1'); // Default selected icon
+  const [selectedIcon, setSelectedIcon] = useState('icon1');
   const [bottomPosition, setBottomPosition] = useState(0);
   const [speed, setSpeed] = useState(0);
 
@@ -17,23 +16,18 @@ function CurrentUser() {
   };
 
   useEffect(() => {
-    // Function to update user position
-    const updateUserPosition = (position) => {
-      const { latitude, longitude } = position.coords;
-      setUserPosition([latitude, longitude]);
-    };
-
     if (navigator.geolocation) {
-      // Watch for position changes
       const geoId = navigator.geolocation.watchPosition(
-        updateUserPosition,
+        (position) => {
+          const { latitude, longitude } = position.coords;
+          setUserPosition([latitude, longitude]);
+        },
         (error) => {
           console.error('Error occurred while retrieving location:', error);
         },
         { enableHighAccuracy: true }
       );
 
-      // Cleanup function
       return () => {
         navigator.geolocation.clearWatch(geoId);
       };
@@ -42,7 +36,6 @@ function CurrentUser() {
     }
   }, []);
 
-  // Function to handle device orientation and update user direction
   useEffect(() => {
     const handleOrientation = (event) => {
       let compassHeading;
@@ -58,7 +51,7 @@ function CurrentUser() {
 
     if (window.DeviceOrientationEvent) {
       let lastUpdate = Date.now();
-      const throttleTime = 100; // Throttle time in ms
+      const throttleTime = 200; // Throttle time in ms
 
       const throttledHandleOrientation = (event) => {
         const now = Date.now();
@@ -82,19 +75,34 @@ function CurrentUser() {
 
   // Define marker icons
   const icon1 = new L.Icon({
-    iconUrl: '../location.svg',
+    className: 'custom-marker',
+    html: `
+      <div class="marker-icon" style="transform: rotate(${360 - userDirection}deg);">
+        <img src="../location.svg" class="w-9 h-11 border-none bg-transparent outline-none" />
+      </div>
+    `,
     iconSize: [35, 45],
     iconAnchor: [17, 46],
   });
 
   const icon2 = new L.Icon({
-    iconUrl: '../car-marker-icon.jpg',
+    className: 'custom-marker',
+    html: `
+      <div class="marker-icon" style="transform: rotate(${360 - userDirection}deg);">
+        <img src="../car-marker-icon.jpg" class="w-9 h-11 border-none bg-transparent outline-none" />
+      </div>
+    `,
     iconSize: [35, 45],
     iconAnchor: [17, 46],
   });
 
   const icon3 = new L.Icon({
-    iconUrl: '../bike-marker-icon.png',
+    className: 'custom-marker',
+    html: `
+      <div class="marker-icon" style="transform: rotate(${360 - userDirection}deg);">
+        <img src="../bike-marker-icon.png" class="w-9 h-11 border-none bg-transparent outline-none" />
+      </div>
+    `,
     iconSize: [35, 45],
     iconAnchor: [17, 46],
   });
@@ -134,27 +142,27 @@ function CurrentUser() {
   return (
     userPosition && (
       <div className='flex flex-col items-center'>
-        <div className={`fixed ${bottomPosition === 0 ? 'bottom-[-100px]' : 'bottom-0'} duration-200 bg-blue-500 rounded-t-lg w-[500px] h-[100px] z-[1300]`}>
-          <div className='flex justify-center mt-[-30px]'>
-              <button onClick={handleButtonClick}>
-              <img src='../arrow-up.png' className='w-10 h-10' />
-              </button>
-          </div>
-          <div>
-          <Speedometer speed={speed} />
-          <select value={selectedIcon} onChange={handleIconChange}>
-              <option value="icon1">Tracker</option>
-              <option value="icon2">Car</option>
-              <option value="icon3">Bike</option>
-            </select>
-          </div>
+      <div className={`fixed ${bottomPosition === 0 ? 'bottom-[-100px]' : 'bottom-0'} duration-200 bg-blue-500 rounded-t-lg w-[500px] h-[100px] z-[1300]`}>
+        <div className='flex justify-center mt-[-30px]'>
+            <button onClick={handleButtonClick}>
+            <img src='../arrow-up.png' className='w-10 h-10' />
+            </button>
+        </div>
+        <div>
+        <Speedometer speed={speed} />
+        <select value={selectedIcon} onChange={handleIconChange}>
+            <option value="icon1">Tracker</option>
+            <option value="icon2">Car</option>
+            <option value="icon3">Bike</option>
+          </select>
+        </div>
+  </div>
+      <Marker key={'001'} position={userPosition} icon={markerIcon}>
+        <Popup>
+          Current User Hello World. <br /> Easily customizable.
+        </Popup>
+      </Marker>
     </div>
-        <Marker position={userPosition} icon={markerIcon} rotationAngle={userDirection}>
-          <Popup>
-            Current User Hello World. <br /> Easily customizable.
-          </Popup>
-        </Marker>
-      </div>
     )
   );
 }
