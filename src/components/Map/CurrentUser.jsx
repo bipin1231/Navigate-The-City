@@ -73,86 +73,96 @@ function CurrentUser() {
     }
   }, []);
 
-    // Define marker icons
-    const icon1 = new L.Icon({
-      className: 'custom-marker',
+  // Define marker icons
+  const icon1 = new L.DivIcon({
+    className: 'custom-marker',
     html: `
-      <div class="marker-icon" style="transform: rotate(${360 - userDirection}deg);">
+      <div class="marker-icon" style="transform: rotate(${userDirection}deg);">
         <img src="../location.svg" class="w-9 h-11 border-none bg-transparent outline-none" />
       </div>
     `,
     iconSize: [35, 45],
     iconAnchor: [17, 46],
-    });
-  
-    const icon2 = new L.Icon({
-      iconUrl: '../car-marker-icon.jpg',
-      iconSize: [35, 45],
-      iconAnchor: [17, 46],
-    });
-  
-    const icon3 = new L.Icon({
-      iconUrl: '../bike-marker-icon.png',
-      iconSize: [35, 45],
-      iconAnchor: [17, 46],
-    });
-  
-    // Function to handle icon change
-    const handleIconChange = (event) => {
-      setSelectedIcon(event.target.value);
-    };
-  
-    // Determine current marker icon based on selectedIcon state
-    let markerIcon;
-    if (selectedIcon === 'icon1') {
-      markerIcon = icon1;
-    } else if (selectedIcon === 'icon2') {
-      markerIcon = icon2;
-    } else if (selectedIcon === 'icon3') {
-      markerIcon = icon3;
-    }
+  });
+
+  const icon2 = new L.DivIcon({
+    className: 'custom-marker',
+    html: `
+      <div class="marker-icon" style="transform: rotate(${userDirection}deg);">
+        <img src="../car-marker-icon.jpg" class="w-9 h-11 border-none bg-transparent outline-none" />
+      </div>
+    `,
+    iconSize: [35, 45],
+    iconAnchor: [17, 46],
+  });
+
+  const icon3 = new L.DivIcon({
+    className: 'custom-marker',
+    html: `
+      <div class="marker-icon" style="transform: rotate(${userDirection}deg);">
+        <img src="../bike-marker-icon.png" class="w-9 h-11 border-none bg-transparent outline-none" />
+      </div>
+    `,
+    iconSize: [35, 45],
+    iconAnchor: [17, 46],
+  });
+
+  // Function to handle icon change
+  const handleIconChange = (event) => {
+    setSelectedIcon(event.target.value);
+  };
+
+  // Determine current marker icon based on selectedIcon state
+  let markerIcon;
+  if (selectedIcon === 'icon1') {
+    markerIcon = icon1;
+  } else if (selectedIcon === 'icon2') {
+    markerIcon = icon2;
+  } else if (selectedIcon === 'icon3') {
+    markerIcon = icon3;
+  }
 
   useEffect(() => {
     // Watch user's position and update speed
     const watchId = navigator.geolocation.watchPosition(
-       (position) => {
-         setSpeed(position.coords.speed || 0);
-       },
-       (error) => {
-         console.error("Error getting speed:", error);
-       }
-     );
- 
-     return () => {
-       // Clean up the watchPosition when component unmounts
-       navigator.geolocation.clearWatch(watchId);
-     };
-   }, []);
+      (position) => {
+        setSpeed(position.coords.speed || 0);
+      },
+      (error) => {
+        console.error("Error getting speed:", error);
+      }
+    );
+
+    return () => {
+      // Clean up the watchPosition when component unmounts
+      navigator.geolocation.clearWatch(watchId);
+    };
+  }, []);
 
   return (
-      userPosition && (
-        <div className='flex flex-col items-center'>
-          <div className={`fixed ${bottomPosition === 0 ? 'bottom-[-100px]' : 'bottom-0'} duration-200 bg-blue-500 rounded-t-lg w-[500px] h-[100px] z-[1300]`}>
-            <div className='flex justify-center mt-[-30px]'>
-                <button onClick={handleButtonClick}>
-                <img src='../arrow-up.png' className='w-10 h-10' />
-                </button>
-            </div>
-            <div>
+    userPosition && (
+      <div className='flex flex-col items-center'>
+        <div className={`fixed ${bottomPosition === 0 ? 'bottom-[-100px]' : 'bottom-0'} duration-200 bg-blue-500 rounded-t-lg w-[500px] h-[100px] z-[1300]`}>
+          <div className='flex justify-center mt-[-30px]'>
+            <button onClick={handleButtonClick}>
+              <img src='../arrow-up.png' className='w-10 h-10' />
+            </button>
+          </div>
+          <div>
             <Speedometer speed={speed} />
             <select value={selectedIcon} onChange={handleIconChange}>
-                <option value="icon1">Tracker</option>
-                <option value="icon2">Car</option>
-                <option value="icon3">Bike</option>
-              </select>
-            </div>
-      </div>
-          <Marker position={userPosition} icon={markerIcon}>
-            <Popup>
-              Current User Hello World. <br /> Easily customizable.
-            </Popup>
-          </Marker>
+              <option value="icon1">Tracker</option>
+              <option value="icon2">Car</option>
+              <option value="icon3">Bike</option>
+            </select>
+          </div>
         </div>
+        <Marker key={'001'} position={userPosition} icon={markerIcon}>
+          <Popup>
+            Current User Hello World. <br /> Easily customizable.
+          </Popup>
+        </Marker>
+      </div>
     )
   );
 }
