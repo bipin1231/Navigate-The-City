@@ -65,11 +65,10 @@ function CurrentUser() {
     }
   }, []);
 
-  // Update marker icon dynamically based on userDirection
   const markerIcon = new L.DivIcon({
     className: 'custom-marker',
     html: `
-      <div class="transform transition-transform duration-200" style="transform: rotate(${userDirection}deg);">
+      <div class="marker-icon" style="transform: rotate(${360 - userDirection}deg);">
         <img src="../location.svg" class="w-9 h-11 border-none bg-transparent outline-none" />
       </div>
     `,
