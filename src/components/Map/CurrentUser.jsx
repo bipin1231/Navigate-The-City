@@ -42,51 +42,42 @@ function CurrentUser() {
     }
   }, []);
 
+  // Function to handle device orientation and update user direction
   useEffect(() => {
-    let alphaFiltered = 0;
-    const alphaFilterFactor = 0.1; // Adjust filter factor as needed
-
     const handleOrientation = (event) => {
-      let alpha;
+      let compassHeading;
       if (event.absolute) {
-        alpha = event.alpha;
+        compassHeading = event.alpha;
       } else if (event.webkitCompassHeading) {
-        alpha = event.webkitCompassHeading; // For Safari
+        compassHeading = event.webkitCompassHeading; // For Safari
       } else {
-        alpha = 360 - event.alpha; // For other browsers
+        compassHeading = 360 - event.alpha; // For other browsers
       }
-
-      alphaFiltered = alphaFiltered * (1 - alphaFilterFactor) + alpha * alphaFilterFactor;
-
-      // Update userDirection with throttled function
-      updateDirection(alphaFiltered);
+      setUserDirection(compassHeading);
     };
 
-    const throttledOrientationHandler = throttle(handleOrientation, 100); // Throttle to 100ms
-
     if (window.DeviceOrientationEvent) {
-      // Event listeners for device orientation
-      window.addEventListener('deviceorientationabsolute', throttledOrientationHandler, true);
-      window.addEventListener('deviceorientation', throttledOrientationHandler, true);
+      let lastUpdate = Date.now();
+      const throttleTime = 100; // Throttle time in ms
 
-      // Cleanup function
+      const throttledHandleOrientation = (event) => {
+        const now = Date.now();
+        if (now - lastUpdate >= throttleTime) {
+          handleOrientation(event);
+          lastUpdate = now;
+        }
+      };
+
+      window.addEventListener('deviceorientationabsolute', throttledHandleOrientation, true);
+      window.addEventListener('deviceorientation', throttledHandleOrientation, true);
+
       return () => {
-        window.removeEventListener('deviceorientationabsolute', throttledOrientationHandler, true);
-        window.removeEventListener('deviceorientation', throttledOrientationHandler, true);
+        window.removeEventListener('deviceorientationabsolute', throttledHandleOrientation, true);
+        window.removeEventListener('deviceorientation', throttledHandleOrientation, true);
       };
     } else {
       console.error('Device orientation is not supported by this browser.');
     }
-
-    // Function to update user direction with throttling
-    function updateDirection(alpha) {
-      setUserDirection(alpha);
-    }
-
-    // Clean up throttled function
-    return () => {
-      throttledOrientationHandler.cancel();
-    };
   }, []);
 
   // Define marker icons
