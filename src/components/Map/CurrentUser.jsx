@@ -42,14 +42,15 @@ function CurrentUser() {
     };
 
     if (window.DeviceOrientationEvent) {
-      let lastUpdate = Date.now();
-      const throttleTime = 200; // Throttle time in ms
-
+      let timeoutId = null;
+      const throttleTime = 300; // Adjust throttle time as needed
+  
       const throttledHandleOrientation = (event) => {
-        const now = Date.now();
-        if (now - lastUpdate >= throttleTime) {
-          handleOrientation(event);
-          lastUpdate = now;
+        if (!timeoutId) {
+          timeoutId = setTimeout(() => {
+            handleOrientation(event);
+            timeoutId = null;
+          }, throttleTime);
         }
       };
 
