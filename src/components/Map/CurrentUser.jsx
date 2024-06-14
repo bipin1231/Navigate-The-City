@@ -77,7 +77,7 @@ function CurrentUser() {
   const icon1 = new L.DivIcon({
     className: 'custom-marker',
     html: `
-      <div class="marker-icon" style="transform: rotate(${userDirection}deg);">
+      <div class="marker-icon" style="transform: rotate(${360 - userDirection}deg);">
         <img src="../location.svg" class="w-9 h-11 border-none bg-transparent outline-none" />
       </div>
     `,
@@ -88,7 +88,7 @@ function CurrentUser() {
   const icon2 = new L.DivIcon({
     className: 'custom-marker',
     html: `
-      <div class="marker-icon" style="transform: rotate(${userDirection}deg);">
+      <div class="marker-icon" style="transform: rotate(${360 - userDirection}deg);">
         <img src="../car-marker-icon.jpg" class="w-9 h-11 border-none bg-transparent outline-none" />
       </div>
     `,
@@ -99,7 +99,7 @@ function CurrentUser() {
   const icon3 = new L.DivIcon({
     className: 'custom-marker',
     html: `
-      <div class="marker-icon" style="transform: rotate(${userDirection}deg);">
+      <div class="marker-icon" style="transform: rotate(${360 - userDirection}deg);">
         <img src="../bike-marker-icon.png" class="w-9 h-11 border-none bg-transparent outline-none" />
       </div>
     `,
