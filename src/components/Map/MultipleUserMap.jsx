@@ -190,7 +190,7 @@ function MultipleUserMap() {
       <MapContainer
         center={defaultPosition}
         zoom={10}
-        scrollWheelZoom={false}
+        // scrollWheelZoom={false}
         style={{ height: "100%", width: "100%" }}
         maxZoom={20}
         minZoom={7.5}
@@ -238,7 +238,7 @@ function MultipleUserMap() {
       {/* <button className="absolute top-[10px] right-[25%] z-[1300]">
         <img src="../target-location.svg" className="w-[45px] h-[45px]" />
       </button> */}
-      <LowerSlideBar />
+      {/* <LowerSlideBar /> */}
     </div>
   );
 }
