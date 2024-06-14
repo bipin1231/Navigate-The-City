@@ -44,7 +44,7 @@ export class Service{
   // }
   // }
 
-  async storeUserLocation({userId, latitude, longitude}) {
+  async storeUserLocation({userId,name, latitude, longitude}) {
     try {
       // Check if the user document already exists
       const response = await this.databases.listDocuments(
@@ -53,10 +53,12 @@ export class Service{
         [
         Query.equal('userId', userId),
       ]);
+     
   
       if (response.total > 0) {
         // Update the existing document
         const documentId = response.documents[0].$id;
+     
       return await this.databases.updateDocument(
           conf.appwriteDatabaseId, 
           conf.locationCollectionId, 
@@ -68,12 +70,13 @@ export class Service{
        
       } else {
         // Create a new document
+
        return await this.databases.createDocument(conf.appwriteDatabaseId, 
           conf.locationCollectionId, 
           ID.unique(),
           {
           userId,
-        
+        name,
           longitude,
           latitude,
         });
@@ -92,6 +95,7 @@ export class Service{
     }
   
   }
+
 
   async fetchUser(userId){
     try{

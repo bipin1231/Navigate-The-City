@@ -122,6 +122,9 @@ function MultipleUserMap() {
   const status = useSelector(state => state.auth.status);
   const userData = useSelector(state => state.auth.userData);
   console.log("status is",status)
+  console.log(userData);
+
+  const [isLocationStored,setLocationStored]=useState(false);
  
   const [users, setUsers] = useState([]);
   const [position,setPosition]=useState([]);
@@ -133,6 +136,7 @@ function MultipleUserMap() {
 
   useEffect(() => {
     const fetchUserLocation = async () => {
+      console.log("fetching.........");
       const data = await service.fetchUserLocation();
       console.log(data);
       const userLocations = data.documents.map((doc) => ({
@@ -143,27 +147,57 @@ function MultipleUserMap() {
       const validUserLocations = userLocations.filter(user => user.position !== null);
       setUsers(validUserLocations);
     }
-    fetchUserLocation();
+   
+    fetchUserLocation(); // Initial fetch
+
+    const intervalId = setInterval(fetchUserLocation, 10000); // Fetch every 10 seconds
+  
+    return () => clearInterval(intervalId); // Clean up on component unmount
   }, []);
 
-  useEffect(() => {
-    console.log("inside useeffect");
+
+
     if (navigator.geolocation) {
+
       const geoId = navigator.geolocation.watchPosition(
         (position) => {
           const { latitude, longitude } = position.coords;
           setPosition([latitude, longitude]);
-          if(status){
-            console.log("come inside");
-            
+        
+        }, 
+        (error) => {
+          console.error('Error occurred while retrieving location:', error);
+        },
+        { enableHighAccuracy: true }
+  )
+  console.log(position); 
+  }
+
+
+ 
+
+  if(status){
+  useEffect(() => {
+
+    if (navigator.geolocation) {
+      console.log("hey");
+      const geoId = navigator.geolocation.watchPosition(
+        (position) => {
+          const { latitude, longitude } = position.coords;
+ 
+           if(!isLocationStored){
          const storeLoc=async()=>{ 
+          setLocationStored(true);
           console.log("storing location");
-          const data=await service.storeUserLocation({userId:userData.$id,latitude,longitude});
+          const data=await service.storeUserLocation({userId:userData.$id,name:userData.name,latitude,longitude});
           console.log("performing storing in database",data);
+          setLocationStored(false);
+         
         }
           
           storeLoc();
-         }
+      }
+         
         },
         (error) => {
           console.error('Error occurred while retrieving location:', error);
@@ -177,9 +211,17 @@ function MultipleUserMap() {
     } else {
       console.error('Geolocation is not supported by this browser.');
     }
-  }, []);
   
 
+  // storeUser();
+  // const intervalId = setInterval(storeUser, 10000); // Fetch every 10 seconds
+
+  // return () => clearInterval(intervalId); // Clean up on component unmount
+
+  }, [position]);
+  
+ 
+  }
 
   const toggleRouting = () => {
     setIsRoutingEnabled((prevState) => !prevState);
