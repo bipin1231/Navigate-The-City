@@ -62,7 +62,7 @@ function CurrentUser() {
     // Debounced setUserDirection function
     const debouncedSetUserDirection = debounce((value) => {
       setUserDirection(value);
-    }, 100); // Adjust debounce delay as needed
+    }, 50); // Adjust debounce delay as needed (reduced to 50ms for faster updates)
 
     if (window.DeviceOrientationEvent) {
       window.addEventListener('deviceorientationabsolute', handleOrientation, true);
@@ -77,10 +77,12 @@ function CurrentUser() {
     }
   }, []);
 
+  // Define marker icon with correct styling
   const markerIcon = new L.DivIcon({
+    className: 'custom-marker',
     html: `
       <div class="transform transition-transform duration-200" style="transform: rotate(${360 - userDirection}deg);">
-        <img src="../location.svg" class="w-9 h-11 border-none bg-transparent" />
+        <img src="../location.svg" class="w-9 h-11 border-none bg-transparent outline-none" />
       </div>
     `,
     iconSize: [35, 45],
