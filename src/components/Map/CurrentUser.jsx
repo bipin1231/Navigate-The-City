@@ -7,30 +7,24 @@ function CurrentUser() {
   const [userPosition, setUserPosition] = useState(null);
   const [userDirection, setUserDirection] = useState(0);
 
-  // Debounce function to limit updates
-  const debounce = (func, delay) => {
-    let timer;
-    return function (...args) {
-      clearTimeout(timer);
-      timer = setTimeout(() => {
-        func.apply(this, args);
-      }, delay);
-    };
-  };
-
   useEffect(() => {
+    // Function to update user position
+    const updateUserPosition = (position) => {
+      const { latitude, longitude } = position.coords;
+      setUserPosition([latitude, longitude]);
+    };
+
     if (navigator.geolocation) {
+      // Watch for position changes
       const geoId = navigator.geolocation.watchPosition(
-        (position) => {
-          const { latitude, longitude } = position.coords;
-          setUserPosition([latitude, longitude]);
-        },
+        updateUserPosition,
         (error) => {
           console.error('Error occurred while retrieving location:', error);
         },
         { enableHighAccuracy: true }
       );
 
+      // Cleanup function
       return () => {
         navigator.geolocation.clearWatch(geoId);
       };
@@ -41,7 +35,7 @@ function CurrentUser() {
 
   useEffect(() => {
     let alphaFiltered = 0;
-    const alphaFilterFactor = 0.2; // Adjust filter factor as needed
+    const alphaFilterFactor = 0.1; // Adjust filter factor as needed
 
     const handleOrientation = (event) => {
       let alpha;
@@ -55,19 +49,15 @@ function CurrentUser() {
 
       alphaFiltered = alphaFiltered * (1 - alphaFilterFactor) + alpha * alphaFilterFactor;
 
-      // Update userDirection using debounced setUserDirection
-      debouncedSetUserDirection(alphaFiltered);
+      setUserDirection(alphaFiltered);
     };
 
-    // Debounced setUserDirection function
-    const debouncedSetUserDirection = debounce((value) => {
-      setUserDirection(value);
-    }, 50); // Adjust debounce delay as needed (reduced to 50ms for faster updates)
-
     if (window.DeviceOrientationEvent) {
+      // Event listeners for device orientation
       window.addEventListener('deviceorientationabsolute', handleOrientation, true);
       window.addEventListener('deviceorientation', handleOrientation, true);
 
+      // Cleanup function
       return () => {
         window.removeEventListener('deviceorientationabsolute', handleOrientation, true);
         window.removeEventListener('deviceorientation', handleOrientation, true);
@@ -77,12 +67,12 @@ function CurrentUser() {
     }
   }, []);
 
-  // Define marker icon with correct styling
+  // Marker icon definition
   const markerIcon = new L.DivIcon({
     className: 'custom-marker',
     html: `
-      <div class="transform transition-transform duration-200" style="transform: rotate(${360 - userDirection}deg);">
-        <img src="../location.svg" class="w-9 h-11 border-none bg-transparent outline-none" />
+      <div class="marker-icon" style="transform: rotate(${360 - userDirection}deg);">
+        <img src="../location.svg" class="w-9 h-11" style="border: none; background-color: transparent;" />
       </div>
     `,
     iconSize: [35, 45],
@@ -91,7 +81,7 @@ function CurrentUser() {
 
   return (
     userPosition && (
-      <Marker key={'001'} position={userPosition} icon={markerIcon}>
+      <Marker position={userPosition} icon={markerIcon}>
         <Popup>
           Current User Hello World. <br /> Easily customizable.
         </Popup>
