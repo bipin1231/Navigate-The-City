@@ -7,6 +7,17 @@ function CurrentUser() {
   const [userPosition, setUserPosition] = useState(null);
   const [userDirection, setUserDirection] = useState(0);
 
+  // Debounce function to limit updates
+  const debounce = (func, delay) => {
+    let timer;
+    return function (...args) {
+      clearTimeout(timer);
+      timer = setTimeout(() => {
+        func.apply(this, args);
+      }, delay);
+    };
+  };
+
   useEffect(() => {
     if (navigator.geolocation) {
       const geoId = navigator.geolocation.watchPosition(
@@ -44,8 +55,14 @@ function CurrentUser() {
 
       alphaFiltered = alphaFiltered * (1 - alphaFilterFactor) + alpha * alphaFilterFactor;
 
-      setUserDirection(alphaFiltered);
+      // Update userDirection using debounced setUserDirection
+      debouncedSetUserDirection(alphaFiltered);
     };
+
+    // Debounced setUserDirection function
+    const debouncedSetUserDirection = debounce((value) => {
+      setUserDirection(value);
+    }, 100); // Adjust debounce delay as needed
 
     if (window.DeviceOrientationEvent) {
       window.addEventListener('deviceorientationabsolute', handleOrientation, true);
@@ -62,8 +79,8 @@ function CurrentUser() {
 
   const markerIcon = new L.DivIcon({
     html: `
-      <div className: 'transform transition-transform duration-200' style="transform: rotate(${360 - userDirection}deg);">
-        <img src="../location.svg" class="w-9 h-11 border-none bg-transparent outline-none" />
+      <div class="transform transition-transform duration-200" style="transform: rotate(${360 - userDirection}deg);">
+        <img src="../location.svg" class="w-9 h-11 border-none bg-transparent" />
       </div>
     `,
     iconSize: [35, 45],
