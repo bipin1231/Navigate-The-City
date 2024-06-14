@@ -40,21 +40,32 @@ function CurrentUser() {
   }, []);
 
   useEffect(() => {
+    const handleOrientation = (event) => {
+      let compassHeading;
+      if (event.absolute) {
+        compassHeading = event.alpha;
+      } else if (event.webkitCompassHeading) {
+        compassHeading = event.webkitCompassHeading; // For Safari
+      } else {
+        compassHeading = 360 - event.alpha; // For other browsers
+      }
+      setUserDirection(compassHeading);
+    };
+
     if (window.DeviceOrientationEvent) {
-      const handleOrientation = (event) => {
-        let compassHeading;
-        if (event.absolute) {
-          compassHeading = event.alpha;
-        } else if (event.webkitCompassHeading) {
-          compassHeading = event.webkitCompassHeading; // For Safari
-        } else {
-          compassHeading = Math.abs(event.alpha - 360); // For other browsers
+      let lastUpdate = Date.now();
+      const throttleTime = 200; // Throttle time in ms
+
+      const throttledHandleOrientation = (event) => {
+        const now = Date.now();
+        if (now - lastUpdate >= throttleTime) {
+          handleOrientation(event);
+          lastUpdate = now;
         }
-        setUserDirection(compassHeading);
       };
 
-      window.addEventListener('deviceorientationabsolute', handleOrientation, true);
-      window.addEventListener('deviceorientation', handleOrientation, true);
+      window.addEventListener('deviceorientationabsolute', throttledHandleOrientation, true);
+      window.addEventListener('deviceorientation', throttledHandleOrientation, true);
 
       const handleCompassNeedsCalibration = (event) => {
         alert('Your compass needs calibrating! Please wave your device in a figure-eight motion.');
@@ -64,8 +75,8 @@ function CurrentUser() {
       window.addEventListener('compassneedscalibration', handleCompassNeedsCalibration, true);
 
       return () => {
-        window.removeEventListener('deviceorientationabsolute', handleOrientation, true);
-        window.removeEventListener('deviceorientation', handleOrientation, true);
+        window.removeEventListener('deviceorientationabsolute', throttledHandleOrientation, true);
+        window.removeEventListener('deviceorientation', throttledHandleOrientation, true);
         window.removeEventListener('compassneedscalibration', handleCompassNeedsCalibration, true);
       };
     } else {
