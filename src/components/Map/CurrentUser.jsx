@@ -3,6 +3,7 @@ import { Marker, Popup } from 'react-leaflet';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import Speedometer from './Speedometer';
+import throttle from 'lodash/throttle';
 
 function CurrentUser() {
   const [userPosition, setUserPosition] = useState(null);
@@ -57,22 +58,35 @@ function CurrentUser() {
 
       alphaFiltered = alphaFiltered * (1 - alphaFilterFactor) + alpha * alphaFilterFactor;
 
-      setUserDirection(alphaFiltered);
+      // Update userDirection with throttled function
+      updateDirection(alphaFiltered);
     };
+
+    const throttledOrientationHandler = throttle(handleOrientation, 100); // Throttle to 100ms
 
     if (window.DeviceOrientationEvent) {
       // Event listeners for device orientation
-      window.addEventListener('deviceorientationabsolute', handleOrientation, true);
-      window.addEventListener('deviceorientation', handleOrientation, true);
+      window.addEventListener('deviceorientationabsolute', throttledOrientationHandler, true);
+      window.addEventListener('deviceorientation', throttledOrientationHandler, true);
 
       // Cleanup function
       return () => {
-        window.removeEventListener('deviceorientationabsolute', handleOrientation, true);
-        window.removeEventListener('deviceorientation', handleOrientation, true);
+        window.removeEventListener('deviceorientationabsolute', throttledOrientationHandler, true);
+        window.removeEventListener('deviceorientation', throttledOrientationHandler, true);
       };
     } else {
       console.error('Device orientation is not supported by this browser.');
     }
+
+    // Function to update user direction with throttling
+    function updateDirection(alpha) {
+      setUserDirection(alpha);
+    }
+
+    // Clean up throttled function
+    return () => {
+      throttledOrientationHandler.cancel();
+    };
   }, []);
 
   // Define marker icons
@@ -144,7 +158,7 @@ function CurrentUser() {
             </select>
           </div>
     </div>
-        <Marker position={userPosition} icon={markerIcon}>
+        <Marker position={userPosition} icon={markerIcon} rotationAngle={userDirection}>
           <Popup>
             Current User Hello World. <br /> Easily customizable.
           </Popup>
