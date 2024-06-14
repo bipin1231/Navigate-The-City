@@ -1,22 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
-import "leaflet/dist/leaflet.css";
-import L from "leaflet";
+import { Marker, Popup } from 'react-leaflet';
+import L from 'leaflet';
+import 'leaflet/dist/leaflet.css';
 
 function CurrentUser() {
   const [userPosition, setUserPosition] = useState(null);
   const [userDirection, setUserDirection] = useState(0);
-
-  const markerIcon = new L.DivIcon({
-    className: 'custom-marker',
-    html: `
-      <div class="transform transition-transform duration-200" style="transform: rotate(${userDirection}deg);">
-        <img src="../location.svg" class="w-9 h-11 border-none bg-transparent outline-none" />
-      </div>
-    `,
-    iconSize: [35, 45],
-    iconAnchor: [17, 46],
-  });
 
   useEffect(() => {
     if (navigator.geolocation) {
@@ -67,22 +56,26 @@ function CurrentUser() {
       window.addEventListener('deviceorientationabsolute', throttledHandleOrientation, true);
       window.addEventListener('deviceorientation', throttledHandleOrientation, true);
 
-      const handleCompassNeedsCalibration = (event) => {
-        alert('Your compass needs calibrating! Please wave your device in a figure-eight motion.');
-        event.preventDefault();
-      };
-
-      window.addEventListener('compassneedscalibration', handleCompassNeedsCalibration, true);
-
       return () => {
         window.removeEventListener('deviceorientationabsolute', throttledHandleOrientation, true);
         window.removeEventListener('deviceorientation', throttledHandleOrientation, true);
-        window.removeEventListener('compassneedscalibration', handleCompassNeedsCalibration, true);
       };
     } else {
       console.error('Device orientation is not supported by this browser.');
     }
   }, []);
+
+  // Update marker icon dynamically based on userDirection
+  const markerIcon = new L.DivIcon({
+    className: 'custom-marker',
+    html: `
+      <div class="transform transition-transform duration-200" style="transform: rotate(${userDirection}deg);">
+        <img src="../location.svg" class="w-9 h-11 border-none bg-transparent outline-none" />
+      </div>
+    `,
+    iconSize: [35, 45],
+    iconAnchor: [17, 46],
+  });
 
   return (
     userPosition && (
