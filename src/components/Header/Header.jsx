@@ -30,7 +30,7 @@ function Header() {
         </div>
       </Link>
       <div className='flex-1 flex justify-center'>
-        <ul className='flex gap-16 font-medium text-xl'>
+        <ul className='flex gap-16 text-xl'>
           <Link to='/home'>
             <li className='cursor-pointer'>Home</li>
           </Link>

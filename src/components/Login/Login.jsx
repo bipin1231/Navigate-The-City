@@ -84,10 +84,10 @@ function Login() {
     <>
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className='w-full flex mt-10 justify-center h-96'>
-          <Card className='w-[40%] '>
+          <Card className='w-[90%] md:w-[40%] '>
             <CardBody>
               <div className='flex justify-center'>
-                <div className='flex flex-col gap-7 w-[60%]'>
+                <div className='flex flex-col gap-7 w-[95%] md:w-[60%]'>
 
                   <Input
                     variant='underlined'
