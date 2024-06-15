@@ -142,15 +142,16 @@ function CurrentUser() {
   return (
     userPosition && (
       <div className='flex flex-col items-center'>
-        <div className={`fixed ${bottomPosition === 0 ? 'bottom-[-100px]' : 'bottom-0'} duration-200 bg-blue-500 rounded-t-lg w-[300px] h-[70px] md:w-[500px] md:h-[100px] z-[1300]`}>
-          <div className='flex justify-center mt-[-30px]'>
+        <div className={`fixed ${bottomPosition === 0 ? 'bottom-[-70px] md:bottom-[-100px]' : 'bottom-0'} duration-200 bg-[#0328fc] rounded-t-lg w-[300px] h-[70px] md:w-[500px] md:h-[100px] z-[1300]`}>
+          <div className='flex justify-center'>
             <button onClick={handleButtonClick}>
-              <img src='../arrow-up.png' className='w-10 h-10' />
+              <img src='../arrow-up.png' className='w-10 h-10 mt-[-35px]' />
             </button>
           </div>
-          <div>
+          <div className='flex justify-between px-6'>
             <Speedometer speed={speed} />
-            <select value={selectedIcon} onChange={handleIconChange}>
+            <select value={selectedIcon} onChange={handleIconChange} className='my-1 w-[40%]'>
+              <option value="icon1" disabled selected>Choose Icon</option>
               <option value="icon1">Tracker</option>
               <option value="icon2">Car</option>
               <option value="icon3">Bike</option>
