@@ -89,7 +89,7 @@ function CurrentUser() {
     className: 'custom-marker',
     html: `
       <div class="marker-icon" style="transform: rotate(${360 - userDirection}deg);">
-        <img src="../car-marker-icon.jpg" class="w-9 h-11 border-none bg-transparent outline-none" />
+        <img src="../taxi.svg" class="w-9 h-11 border-none bg-transparent outline-none" />
       </div>
     `,
     iconSize: [35, 45],
@@ -142,7 +142,7 @@ function CurrentUser() {
   return (
     userPosition && (
       <div className='flex flex-col items-center'>
-        <div className={`fixed ${bottomPosition === 0 ? 'bottom-[-100px]' : 'bottom-0'} duration-200 bg-blue-500 rounded-t-lg w-[500px] h-[100px] z-[1300]`}>
+        <div className={`fixed ${bottomPosition === 0 ? 'bottom-[-100px]' : 'bottom-0'} duration-200 bg-blue-500 rounded-t-lg w-[300px] h-[70px] md:w-[500px] md:h-[100px] z-[1300]`}>
           <div className='flex justify-center mt-[-30px]'>
             <button onClick={handleButtonClick}>
               <img src='../arrow-up.png' className='w-10 h-10' />

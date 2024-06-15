@@ -9,7 +9,7 @@ import 'leaflet-geosearch/dist/geosearch.css';
 import "leaflet-routing-machine/dist/leaflet-routing-machine.css";
 import "leaflet-routing-machine";
 import "leaflet-control-geocoder";
-import LowerSlideBar from "./LowerSlideBar";
+// import LowerSlideBar from "./LowerSlideBar";
 import ContextMenu from "./ContextMenu";
 import CurrentUser from './CurrentUser';
 import { data } from 'autoprefixer';
@@ -75,6 +75,11 @@ function RoutingControl({ isRoutingEnabled }) {
         removeWaypoints: true,
         geocoder: L.Control.Geocoder.nominatim(),
       }).addTo(map);
+        // Apply Tailwind CSS classes to the routing control
+        const routingControlElement = control.getContainer();
+        if (routingControlElement) {
+          routingControlElement.classList.add('absolute', 'top-12');
+        }
 
       return () => {
         if (map && control) {
@@ -105,7 +110,15 @@ function LayerControl() {
   const map = useMap();
 
   useEffect(() => {
+    // const layerControl = L.control.layers(baseLayers, {}, { position: 'topleft' }).addTo(map);
     const layerControl = L.control.layers(baseLayers, {}, { position: 'topleft' }).addTo(map);
+
+      setTimeout(() => {
+        const layerControlElement = document.querySelector('.leaflet-control-layers');
+        if (layerControlElement) {
+          layerControlElement.classList.add('absolute', 'top-12'); // Adjust the values as needed
+        }
+      }, 0);
 
     // Add the default layer to the map
     baseLayers["Normal"].addTo(map);
@@ -272,10 +285,10 @@ function MultipleUserMap() {
         <ContextMenu />
       </MapContainer>
       <button 
-        className="absolute top-[10px] right-[30%] z-[1300]" 
+        className="absolute top-[10px] left-[11px] z-[1300] bg-white border-2 border-gray-400 rounded-md w-12 h-11" 
         onClick={toggleRouting}
       >
-        <img src="../route-icon.png" className='w-15 h-8' alt="Routing Icon" />
+        <img src="../route-icon.png" className='absolute left-[6px] top-1 w-15 h-8' alt="Routing Icon" />
       </button>
       {/* <button className="absolute top-[10px] right-[25%] z-[1300]">
         <img src="../target-location.svg" className="w-[45px] h-[45px]" />

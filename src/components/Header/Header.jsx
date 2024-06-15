@@ -23,14 +23,14 @@ function Header() {
   }, [dispatch]);
 
   return (
-    <nav className='bg-[#1506B5] text-white flex items-center h-[10vh] text-xl w-full px-4'>
+    <nav className='bg-[#1506B5] text-white flex items-center h-[10vh] text-xl w-full pr-1 md:pr-4 flex justify-between'>
       <Link to='/'>
-        <div className='text-3xl flex items-center cursor-pointer font-semibold'>
-          <img src='../logo.svg' className='w-25 h-12' alt="Logo"/>
+        <div className='flex items-center cursor-pointer'>
+          <img src='../logo.svg' className='w-14 h-8 md:w-24 md:h-12' alt="Logo"/>
         </div>
       </Link>
-      <div className='flex-1 flex justify-center'>
-        <ul className='flex gap-16 text-xl'>
+      <div>
+        <ul className='flex gap-4 md:gap-10 text-base md:text-xl'>
           <Link to='/home'>
             <li className='cursor-pointer'>Home</li>
           </Link>
@@ -44,7 +44,7 @@ function Header() {
       </div>
       {!status && (
         <Link to="/login">
-          <div>
+          <div className='text-base md:text-xl'>
             Login
           </div>
           {/* <Button className='ml-auto'>
