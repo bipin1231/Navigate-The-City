@@ -9,16 +9,6 @@ import service from '../../appwrite/config';
 import authService from '../../appwrite/auth';
 function AddRoute() {
   const selector=useSelector(state=>state.auth.userData);
-  //console.log(selector);
-  
-//   useEffect(()=>{
-// const fetchUser=async()=>{
-// const data=await service.fetchUser(selector.$id)
-// console.log(data);
-
-// }
-// fetchUser();
-// },[])
 
 const {
   register,
@@ -70,7 +60,7 @@ const onSubmit = async(data) => {
               
       
                   <Button type='submit' radius="full" className='w-full font-semibold text-lg'>
-                  Add Bus
+                  Add Route
                   </Button>
       
                 </div>

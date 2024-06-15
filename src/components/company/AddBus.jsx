@@ -68,7 +68,7 @@ const onSubmit = async(data) => {
                   <Input
                     variant='underlined'
                     color='black'
-                    type="password" label="Current Bus No."
+                    type="text" label="Current Bus No."
                     {...register("busNo", {required: true})}
 />
               

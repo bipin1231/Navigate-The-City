@@ -78,7 +78,7 @@ function CurrentUser() {
     className: 'custom-marker',
     html: `
       <div class="marker-icon" style="transform: rotate(${360 - userDirection}deg);">
-        <img src="../location.svg" class="w-9 h-11 border-none bg-transparent outline-none" />
+        <img src="../location.svg" class="w-7 h-7 border-none bg-transparent outline-none" />
       </div>
     `,
     iconSize: [35, 45],
@@ -159,7 +159,8 @@ function CurrentUser() {
         </div>
         <Marker key={'001'} position={userPosition} icon={markerIcon}>
           <Popup>
-            Current User Hello World. <br /> Easily customizable.
+           Speed:{speed}
+           
           </Popup>
         </Marker>
       </div>

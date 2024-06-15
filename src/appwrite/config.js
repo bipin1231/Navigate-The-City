@@ -112,6 +112,28 @@ export class Service{
     }
   }
 
+  async fetchBus(){
+    try{
+      return await this.databases.listDocuments(
+        conf.appwriteDatabaseId,
+        conf.busCollectionId,
+      )
+
+    }catch(error){
+      console.log("error in fetchUser function in config.js",error);
+    }
+  }
+  async fetchRoute(){
+    try{
+      return await this.databases.listDocuments(
+        conf.appwriteDatabaseId,
+        conf.routeCollectionId,
+      )
+
+    }catch(error){
+      console.log("error in fetchUser function in config.js",error);
+    }
+  }
 
 
 

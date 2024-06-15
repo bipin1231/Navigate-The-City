@@ -137,7 +137,7 @@ function Login() {
                     }}
                   /> */}
                
-               <h1 className='text-center'>Dont have an account?
+               <h1 className='text-center'>Don't have an account?
                <Link to={'/signup'}>
                <span className='text-blue-600 cursor-pointer ml-2'>Sign Up</span>  </Link></h1>
                 </div>

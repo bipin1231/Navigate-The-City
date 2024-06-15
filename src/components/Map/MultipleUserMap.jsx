@@ -253,7 +253,7 @@ function MultipleUserMap() {
             key={user.userId}
             position={user.position}
             icon={new L.Icon({
-              iconUrl: (userData && user.userId===userData.$id)?"https://memes.co.in/Uploads/Media/Jul22/Thu28/674/d983d237.jpg":"../pin.svg",
+              iconUrl: (userData && user.userId===userData.$id)?"https://th.bing.com/th/id/R.1de8eab2930bdb0e49b85b2d779e452e?rik=ZvI%2fhcUPJSZQ8A&pid=ImgRaw&r=0":"https://th.bing.com/th/id/R.64c3ad6dc114ad19e08301beacf5c4c9?rik=vajKORzbQuP5nA&pid=ImgRaw&r=0",
               iconSize: [35, 45],
               iconAnchor: [17, 46],
               popupAnchor: [3, -46]
@@ -261,7 +261,8 @@ function MultipleUserMap() {
             ref={(marker) => { markerRefs.current[user.userId] = marker; }}
           >
             <Popup>
-              Hello World. <br /> Easily customizable.<br />{user.userId}
+              BusNo:
+              Speed:
             </Popup>
           </Marker>
         ))}
