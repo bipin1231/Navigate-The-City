@@ -34,7 +34,7 @@ function Header() {
           
           <Link to='/home'>
             <li className='relative group'>
-              <span className='text-white text-3xl w-10 text-center block transition-transform duration-300 group-hover:translate-y-[-20px]'>
+              <span className='text-white text-xl md:text-3xl w-10 text-center block transition-transform duration-300 group-hover:translate-y-[-20px]'>
                   <ion-icon name="home-outline"></ion-icon>
               </span>
               <span className='absolute left-1/2 transform -translate-x-1/2 bottom-0 opacity-0 text-white transition-opacity duration-300 group-hover:opacity-100'>Home</span>
@@ -43,7 +43,7 @@ function Header() {
 
           <Link to='/searchbus'>
             <li className='relative group'>
-                <span className='text-white text-3xl w-10 text-center block transition-transform duration-300 group-hover:translate-y-[-20px]'>
+                <span className='text-white text-xl md:text-3xl w-10 text-center block transition-transform duration-300 group-hover:translate-y-[-20px]'>
                   <ion-icon name="ticket-outline"></ion-icon>
                 </span>
                 <span className='absolute left-1/2 transform -translate-x-1/2 bottom-0 opacity-0 text-white transition-opacity duration-300 group-hover:opacity-100'>Ticket</span>
@@ -52,7 +52,7 @@ function Header() {
 
           <Link to='/route'>
             <li className='relative group'>
-              <span className='text-white text-3xl w-10 text-center block transition-transform duration-300 group-hover:translate-y-[-20px]'>
+              <span className='text-white text-xl md:text-3xl w-10 text-center block transition-transform duration-300 group-hover:translate-y-[-20px]'>
                 <ion-icon name="trending-up-outline"></ion-icon>
               </span>
               <span className='absolute left-1/2 transform -translate-x-1/2 bottom-0 opacity-0 text-white transition-opacity duration-300 group-hover:opacity-100'>Route</span>
@@ -61,7 +61,7 @@ function Header() {
 
           <Link to='/DriverInfo'>
             <li className='relative group'>
-              <span className='text-white text-3xl w-10 text-center block transition-transform duration-300 group-hover:translate-y-[-20px]'>
+              <span className='text-white text-xl md:text-3xl w-10 text-center block transition-transform duration-300 group-hover:translate-y-[-20px]'>
                 <ion-icon name="person-outline"></ion-icon>
               </span>
               <span className='absolute left-1/2 transform -translate-x-1/2 bottom-0 opacity-0 text-white transition-opacity duration-300 group-hover:opacity-100'>Driver</span>
@@ -70,7 +70,7 @@ function Header() {
 
           <Link to='/CompanyInfo'>
             <li className='relative group'>
-              <span className='text-white text-3xl w-10 text-center block transition-transform duration-300 group-hover:translate-y-[-20px]'>
+              <span className='text-white text-xl md:text-3xl w-10 text-center block transition-transform duration-300 group-hover:translate-y-[-20px]'>
                 <ion-icon name="business-outline"></ion-icon>
               </span>
               <span className='absolute left-1/2 transform -translate-x-1/2 bottom-0 opacity-0 text-white transition-opacity duration-300 group-hover:opacity-100'>Company</span>
