@@ -240,6 +240,21 @@ function MultipleUserMap() {
     setIsRoutingEnabled((prevState) => !prevState);
   };
 
+    // Add event listener for resizing
+    useEffect(() => {
+      const handleResize = () => {
+        if (mapRef.current) {
+          mapRef.current.invalidateSize();
+        }
+      };
+  
+      window.addEventListener('resize', handleResize);
+  
+      return () => {
+        window.removeEventListener('resize', handleResize);
+      };
+    }, []);
+
   return (
     <div className='h-[90vh] w-full relative flex flex-col items-center'>
       <MapContainer
@@ -285,7 +300,7 @@ function MultipleUserMap() {
         <ContextMenu />
       </MapContainer>
       <button 
-        className="absolute top-[10px] left-[11px] z-[1300] bg-white border-2 border-gray-400 rounded-md w-12 h-11" 
+        className="absolute top-[10px] left-[11px] z-[1300] bg-white border-2 border-gray-400 rounded-md w-[46px] h-11" 
         onClick={toggleRouting}
       >
         <img src="../route-icon.png" className='absolute left-[6px] top-1 w-15 h-8' alt="Routing Icon" />
