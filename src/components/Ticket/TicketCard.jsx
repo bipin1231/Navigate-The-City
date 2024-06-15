@@ -44,8 +44,8 @@ function TicketCard() {
   }
 
   return (
-    <div className='w-full flex mt-5 justify-center'>
-      <Card className='w-[40%]  flex mt-10 justify-center  '>
+    <div className='w-full flex mt-1 justify-center'>
+      <Card className='w-[90%] md:w-[40%]  flex mt-6 justify-center'>
 
 
         <CardHeader className='align-middle items-center flex  justify-center'>
@@ -139,7 +139,7 @@ function TicketCard() {
             <CardBody>
               <form onSubmit={handleSubmit(onSubmit)}>
                 <div className='flex justify-center'>
-                  <div className='flex flex-col gap-5 w-[60%]'>
+                  <div className='flex flex-col gap-5 w-[90%] md:w-[60%]'>
                     <Input
                       variant='underlined'
                       color='black'

@@ -52,7 +52,7 @@ navigate('/ticketcard',{state:{seatNo:selectedSeat,price:price}});
 
   return (
     <div className='w-full flex mt-5 justify-center gap-4'>
-      <Card className='w-[40%]  flex mt-10 justify-center gap-4 '>
+      <Card className='w-[90%] md:w-[40%] flex justify-center gap-4 '>
 
 
         <CardHeader className='align-middle items-center flex justify-center'>
@@ -66,7 +66,7 @@ navigate('/ticketcard',{state:{seatNo:selectedSeat,price:price}});
 
             </CardHeader>
             <div className='flex flex-col h-auto'>
-              <div className=' flex justify-center gap-14  w-[100%] rounded-xl mt-7 mb-7'>
+              <div className=' flex justify-center gap-14  w-[100%] rounded-xl mb-7 md:my-7'>
                 <div className='flex gap-4'>
                   <div className='flex gap-4 flex-col '>
                     {renderSeat("A")}

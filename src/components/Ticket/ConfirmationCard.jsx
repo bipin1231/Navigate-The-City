@@ -4,7 +4,7 @@ import { Button, ButtonGroup, Input } from "@nextui-org/react";
 function ConfirmationCard() {
   return (
     <div className='w-full flex mt-5 justify-center'>
-      <Card className='w-[40%]  flex mt-10 justify-center  '>
+      <Card className='w-[90%] md:w-[40%]  flex mt-10 justify-center  '>
 
 
         <CardHeader className='align-middle items-center flex  justify-center'>
