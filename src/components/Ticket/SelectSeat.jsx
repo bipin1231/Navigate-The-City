@@ -52,7 +52,7 @@ navigate('/ticketcard',{state:{seatNo:selectedSeat,price:price}});
 
   return (
     <div className='w-full flex mt-5 justify-center gap-4'>
-      <Card className='w-[90%] md:w-[40%] flex justify-center gap-4 '>
+      <Card className='w-[90%] md:w-[50%] flex justify-center gap-4 '>
 
 
         <CardHeader className='align-middle items-center flex justify-center'>
@@ -61,8 +61,8 @@ navigate('/ticketcard',{state:{seatNo:selectedSeat,price:price}});
         <CardBody className='flex  justify-center'>
 
           <Card className=''>
-            <CardHeader className=' flex flex-col justify-start'>
-              <p>Seats</p>
+            <CardHeader className="flex flex-col justify-start">
+            {/* <CardHeader className="flex flex-col justify-start bg-[url('../')]"> */}
 
             </CardHeader>
             <div className='flex flex-col h-auto'>

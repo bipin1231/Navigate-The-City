@@ -47,10 +47,10 @@ const onSubmit = async(data) => {
     <>
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className='w-full flex mt-10 justify-center gap-4 h-96'>
-          <Card className='w-[40%] '>
+          <Card className='w-[90%] md:w-[40%] '>
             <CardBody>
               <div className='flex justify-center'>
-                <div className='flex flex-col gap-5 w-[60%]'>
+                <div className='flex flex-col gap-5 w-[95%] md:w-[60%]'>
                   <Input
                     variant='underlined'
                     color='black'

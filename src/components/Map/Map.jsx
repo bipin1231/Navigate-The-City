@@ -5,7 +5,7 @@ import 'leaflet-geosearch/dist/geosearch.css';
 import 'leaflet-compass/dist/leaflet-compass.min.css';
 import 'leaflet-compass';
 import { GeoSearchControl, OpenStreetMapProvider } from 'leaflet-geosearch';
-import RoutingMachine from './RoutingMachine'; 
+// import RoutingMachine from './RoutingMachine'; 
 import service from '../../appwrite/config';
 import { useSelector } from 'react-redux';
 import ContextMenu from "./ContextMenu";

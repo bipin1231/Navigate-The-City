@@ -58,6 +58,24 @@ function Header() {
               <span className='absolute left-1/2 transform -translate-x-1/2 bottom-0 opacity-0 text-white transition-opacity duration-300 group-hover:opacity-100'>Route</span>
             </li>
           </Link>
+
+          <Link to='/DriverInfo'>
+            <li className='relative group'>
+              <span className='text-white text-3xl w-10 text-center block transition-transform duration-300 group-hover:translate-y-[-20px]'>
+                <ion-icon name="person-outline"></ion-icon>
+              </span>
+              <span className='absolute left-1/2 transform -translate-x-1/2 bottom-0 opacity-0 text-white transition-opacity duration-300 group-hover:opacity-100'>Driver</span>
+            </li>
+          </Link>
+
+          <Link to='/CompanyInfo'>
+            <li className='relative group'>
+              <span className='text-white text-3xl w-10 text-center block transition-transform duration-300 group-hover:translate-y-[-20px]'>
+                <ion-icon name="business-outline"></ion-icon>
+              </span>
+              <span className='absolute left-1/2 transform -translate-x-1/2 bottom-0 opacity-0 text-white transition-opacity duration-300 group-hover:opacity-100'>Company</span>
+            </li>
+          </Link>
         </ul>
       </div>
       {!status && (
