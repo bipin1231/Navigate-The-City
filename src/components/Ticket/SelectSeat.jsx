@@ -51,23 +51,23 @@ navigate('/ticketcard',{state:{seatNo:selectedSeat,price:price}});
 
 
   return (
-    <div className='w-full flex mt-5 justify-center gap-4'>
-      <Card className='w-[90%] md:w-[50%] flex justify-center gap-4 '>
+    <div className='w-full flex mt-3 justify-center'>
+      <Card className='w-[90%] md:w-[50%] flex justify-center'>
 
 
-        <CardHeader className='align-middle items-center flex justify-center'>
+        <CardHeader className='items-center flex justify-center p-1'>
           <h1>Choose your seat</h1>
         </CardHeader>
-        <CardBody className='flex  justify-center'>
+        <CardBody className='flex justify-center'>
 
           <Card className=''>
-            <CardHeader className="flex flex-col justify-start">
+            <CardHeader className="flex flex-col">
             {/* <CardHeader className="flex flex-col justify-start bg-[url('../')]"> */}
 
             </CardHeader>
             <div className='flex flex-col h-auto'>
-              <div className=' flex justify-center gap-14  w-[100%] rounded-xl mb-7 md:my-7'>
-                <div className='flex gap-4'>
+              <div className=' flex justify-center gap-10 w-[100%] mb-7'>
+                <div className='flex gap-2'>
                   <div className='flex gap-4 flex-col '>
                     {renderSeat("A")}
                   </div>
@@ -77,7 +77,7 @@ navigate('/ticketcard',{state:{seatNo:selectedSeat,price:price}});
 
 
                 </div>
-                <div className='flex gap-4'>
+                <div className='flex gap-2'>
                   <div className='flex gap-4 flex-col '>
                     {renderSeat("C")}
                   </div>
@@ -91,29 +91,35 @@ navigate('/ticketcard',{state:{seatNo:selectedSeat,price:price}});
             </div>
           </Card>
 
-          <CardFooter className='align-middle items-center flex flex-col gap-5 justify-center'>
+          <CardFooter className='align-middle items-center flex flex-col gap-5 justify-center pb-0'>
             <div className='align-middle items-center flex  gap-4 justify-center'>
               <div className='flex gap-3 align-middle justify-center text-center items-center'>
-                <div className='w-5 h-5 bg-blue-600 rounded-md'></div>
+                <div className='w-5 h-5'>
+                  <img src='../selectedSeat.png' />
+                </div>
                 <span>Choosen</span>
               </div>
 
               <div className='flex gap-2 align-middle justify-center text-center items-center'>
-                <div className='w-5 h-5 bg-gray-500 rounded-md'></div>
+                <div className='w-5 h-5'>
+                  <img src='../availableSeat.png' />
+                </div>
                 <span>Available</span>
               </div>
 
               <div className='flex  gap-2 align-middle justify-center text-center items-center'>
-                <div className='w-5 h-5 bg-yellow-500 rounded-md'></div>
+                <div className='w-5 h-5'>
+                  <img src='../bookedSeat.png' />
+                </div>
                 <span>Booked</span>
               </div>
             </div>
-            <div className='flex items-start justify-start w-[58%] '>
+            <div className='flex items-start justify-start w-full '>
               {selectedSeat.length > 0 && (
                 <p>Selected Seats: {selectedSeat.join(', ')}</p>
               )}
             </div>
-            <div className='flex items-start justify-start w-[58%] '>
+            <div className='flex items-start justify-start w-full '>
               {selectedSeat.length > 0 && (
                 <p>Price: {(selectedSeat.length) * price}</p>
               )}
