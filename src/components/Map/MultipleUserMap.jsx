@@ -247,7 +247,7 @@ function MultipleUserMap() {
         zoom={10}
         // scrollWheelZoom={false}
         style={{ height: "100%", width: "100%" }}
-        maxZoom={20}
+        maxZoom={18}
         minZoom={7.5}
         maxBounds={nepalBounds}
         maxBoundsViscosity={0.8}
