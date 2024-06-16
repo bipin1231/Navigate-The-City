@@ -12,7 +12,6 @@ function BusSeat({id,selected,onSelect}) {
     className={`w-12 h-12 flex items-center justify-center cursor-pointer`}
     onClick={handleClick}
   >
-    {/* Replace with dynamic SVG loading */}
     <img src={`../${selected ? 'selectedSeat.png' : 'availableSeat.png'}`} alt={`Seat ${id}`} />
   </div>
 

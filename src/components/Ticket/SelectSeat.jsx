@@ -62,8 +62,6 @@ navigate('/ticketcard',{state:{seatNo:selectedSeat,price:price}});
 
           <Card className=''>
             <CardHeader className="flex flex-col">
-            {/* <CardHeader className="flex flex-col justify-start bg-[url('../')]"> */}
-
             </CardHeader>
             <div className='flex flex-col h-auto'>
               <div className=' flex justify-center gap-10 w-[100%] mb-7'>
