@@ -73,55 +73,6 @@ function CurrentUser() {
     }
   }, []);
 
-  // Define marker icons
-  const icon1 = new L.DivIcon({
-    className: 'custom-marker',
-    html: `
-      <div class="marker-icon" style="transform: rotate(${360 - userDirection}deg);">
-        <img src="../location.svg" class="w-7 h-7 border-none bg-transparent outline-none" />
-      </div>
-    `,
-    iconSize: [35, 45],
-    iconAnchor: [17, 46],
-  });
-
-  const icon2 = new L.DivIcon({
-    className: 'custom-marker',
-    html: `
-      <div class="marker-icon" style="transform: rotate(${360 - userDirection}deg);">
-        <img src="../taxi.svg" class="w-9 h-11 border-none bg-transparent outline-none" />
-      </div>
-    `,
-    iconSize: [35, 45],
-    iconAnchor: [17, 46],
-  });
-
-  const icon3 = new L.DivIcon({
-    className: 'custom-marker',
-    html: `
-      <div class="marker-icon" style="transform: rotate(${360 - userDirection}deg);">
-        <img src="../bike-marker-icon.png" class="w-9 h-11 border-none bg-transparent outline-none" />
-      </div>
-    `,
-    iconSize: [35, 45],
-    iconAnchor: [17, 46],
-  });
-
-  // Function to handle icon change
-  const handleIconChange = (event) => {
-    setSelectedIcon(event.target.value);
-  };
-
-  // Determine current marker icon based on selectedIcon state
-  let markerIcon;
-  if (selectedIcon === 'icon1') {
-    markerIcon = icon1;
-  } else if (selectedIcon === 'icon2') {
-    markerIcon = icon2;
-  } else if (selectedIcon === 'icon3') {
-    markerIcon = icon3;
-  }
-
   useEffect(() => {
     // Watch user's position and update speed
     const watchId = navigator.geolocation.watchPosition(
@@ -139,6 +90,50 @@ function CurrentUser() {
     };
   }, []);
 
+  // Function to create custom marker icon based on selected icon and user direction
+  const createCustomIcon = (selectedIcon, userDirection) => {
+    let iconUrl;
+    switch (selectedIcon) {
+      case 'icon1':
+        iconUrl = '../location.svg';
+        break;
+      case 'icon2':
+        iconUrl = '../car.svg';
+        break;
+      case 'icon3':
+        iconUrl = '../taxi.svg';
+        break;
+      case 'icon4':
+        iconUrl = '../bus.png';
+        break;
+      case 'icon5':
+        iconUrl = '../bike.svg';
+        break;
+      default:
+        iconUrl = '../location.svg';
+    }
+
+    return new L.DivIcon({
+      className: 'custom-marker',
+      html: `
+        <div class="marker-icon" style="transform: rotate(${360 - userDirection}deg);">
+          <img src="${iconUrl}" class="w-9 h-11 border-none bg-transparent outline-none" />
+        </div>
+      `,
+      iconSize: [30, 40],
+      iconAnchor: [17, 46],
+      popupAnchor: [3, -46]
+    });
+  };
+
+  // Determine current marker icon based on selectedIcon state
+  const markerIcon = createCustomIcon(selectedIcon, userDirection);
+
+  // Function to handle icon change
+  const handleIconChange = (event) => {
+    setSelectedIcon(event.target.value);
+  };
+
   return (
     userPosition && (
       <div className='flex flex-col items-center'>
@@ -149,19 +144,21 @@ function CurrentUser() {
             </button>
           </div>
           <div className='flex justify-between px-6'>
-            <Speedometer speed={speed} />
+            <div className='text-white'>
+              <Speedometer speed={speed} />
+            </div>
             <select value={selectedIcon} onChange={handleIconChange} className='my-1 w-[40%]'>
-              <option value="icon1" disabled selected>Choose Icon</option>
               <option value="icon1">Tracker</option>
               <option value="icon2">Car</option>
-              <option value="icon3">Bike</option>
+              <option value="icon3">Taxi</option>
+              <option value="icon4">Bus</option>
+              <option value="icon5">Bike</option>
             </select>
           </div>
         </div>
         <Marker key={'001'} position={userPosition} icon={markerIcon}>
           <Popup>
-           Speed:{speed}
-           
+            <Speedometer speed={speed} />
           </Popup>
         </Marker>
       </div>

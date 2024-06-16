@@ -13,6 +13,7 @@ import "leaflet-control-geocoder";
 import ContextMenu from "./ContextMenu";
 import CurrentUser from './CurrentUser';
 import { data } from 'autoprefixer';
+import Speedometer from './Speedometer';
 
 const nepalBounds = L.latLngBounds(
   L.latLng(26.347, 80.058), // South-West
@@ -145,7 +146,8 @@ function MultipleUserMap() {
   const [isRoutingEnabled, setIsRoutingEnabled] = useState(false);
   const markerRefs = useRef({}); // To store references to user markers
   const mapRef = useRef(null); // To store reference to the map
-  const [showLocation, setShowLocation] = useState(false);
+  // const [showLocation, setShowLocation] = useState(false);
+  const [speed, setSpeed] = useState(0);
 
   useEffect(() => {
     const fetchUserLocation = async () => {
@@ -275,7 +277,7 @@ function MultipleUserMap() {
           >
             <Popup>
               BusNo:
-              Speed:
+              <Speedometer speed={speed} />
             </Popup>
           </Marker>
         ))}
