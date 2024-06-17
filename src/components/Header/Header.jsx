@@ -5,23 +5,36 @@ import Logout from './Logout';
 import { useSelector, useDispatch } from 'react-redux';
 import authService from '../../appwrite/auth';
 import { login } from '../../ticketStore/authSlice';
-
+import service from '../../appwrite/config';
 function Header() {
   const dispatch = useDispatch();
   const status = useSelector(state => state.auth.status);
+
   console.log(status);
+
 
   useEffect(() => {
     const getData = async () => {
       const data = await authService.getCurrentUser();
       console.log(data);
       if (data) {
+        console.log("hey",data);
         dispatch(login(data));
       }
     };
     getData();
   }, [dispatch]);
 
+// if(userData){
+//   useEffect(() => {
+//     const setStatus = async () => {
+//       const data = await service.storeUserLocation({userId:userData,status:true});
+//       console.log("helloooooo");
+    
+//     };
+//     setStatus();
+//   }, []);
+// }
   return (
     <nav className='bg-[#1506B5] text-white flex items-center h-[10vh] text-xl w-full pr-1 md:pr-4 flex justify-between'>
       <Link to='/'>

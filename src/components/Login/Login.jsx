@@ -21,7 +21,7 @@ import { login as authLogin } from '../../ticketStore/authSlice';
 
 import { GoogleLogin, useGoogleLogin } from '@react-oauth/google';
 import { jwtDecode } from "jwt-decode";
-
+import service from '../../appwrite/config';
 function Login() {
 
   const [password, setPassword] = useState("");
@@ -53,6 +53,7 @@ function Login() {
         const userData = await authService.getCurrentUser()
         if (userData) {
           dispatch(authLogin(userData));
+          await service.storeUserLocation({userId:userData.$id,status:true});
           navigate("/")
           console.log(userData);
         }
