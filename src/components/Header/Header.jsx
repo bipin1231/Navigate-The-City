@@ -72,7 +72,7 @@ function Header() {
             </li>
           </Link>
 
-          <Link to='/DriverInfo'>
+          {/* <Link to='/DriverInfo'>
             <li className='relative group'>
               <span className='text-white text-xl md:text-3xl w-10 text-center block transition-transform duration-300 group-hover:translate-y-[-20px]'>
                 <ion-icon name="person-outline"></ion-icon>
@@ -88,7 +88,7 @@ function Header() {
               </span>
               <span className='absolute left-1/2 transform -translate-x-1/2 bottom-0 opacity-0 text-white transition-opacity duration-300 group-hover:opacity-100'>Company</span>
             </li>
-          </Link>
+          </Link> */}
         </ul>
       </div>
       {!status && (

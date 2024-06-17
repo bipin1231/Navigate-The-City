@@ -191,9 +191,9 @@ function MultipleUserMap() {
 
  
 
-  if(status){
-  useEffect(() => {
 
+  useEffect(() => {
+    if(status){
     if (navigator.geolocation) {
       console.log("hey");
       const geoId = navigator.geolocation.watchPosition(
@@ -232,11 +232,11 @@ function MultipleUserMap() {
   // const intervalId = setInterval(storeUser, 10000); // Fetch every 10 seconds
 
   // return () => clearInterval(intervalId); // Clean up on component unmount
-
+  }
   }, [position]);
   
  
-  }
+  
 
   const toggleRouting = () => {
     setIsRoutingEnabled((prevState) => !prevState);
@@ -268,7 +268,7 @@ function MultipleUserMap() {
             key={user.userId}
             position={user.position}
             icon={new L.Icon({
-              iconUrl: (userData && user.userId===userData.$id)?"https://th.bing.com/th/id/R.1de8eab2930bdb0e49b85b2d779e452e?rik=ZvI%2fhcUPJSZQ8A&pid=ImgRaw&r=0":"https://th.bing.com/th/id/R.64c3ad6dc114ad19e08301beacf5c4c9?rik=vajKORzbQuP5nA&pid=ImgRaw&r=0",
+              iconUrl: (userData && user.userId===userData.$id)?"../location.svg":"https://th.bing.com/th/id/R.64c3ad6dc114ad19e08301beacf5c4c9?rik=vajKORzbQuP5nA&pid=ImgRaw&r=0",
               iconSize: [35, 45],
               iconAnchor: [17, 46],
               popupAnchor: [3, -46]
