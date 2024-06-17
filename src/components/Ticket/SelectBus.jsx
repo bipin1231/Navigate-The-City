@@ -27,7 +27,7 @@ function SelectBus() {
   console.log(info);
   return (
     <div className='w-full flex mt-10 justify-center gap-4'>
-        <Card className='w-[40%] '>
+        <Card className='w-[90%] md:w-[40%] '>
       <CardBody>
        
       <div className='w-full flex justify-center cursor-pointer '>

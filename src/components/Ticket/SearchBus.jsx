@@ -89,7 +89,7 @@ function SearchBus() {
     <>
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className='w-full flex mt-10 justify-center gap-4 h-96'>
-          <Card className='w-[40%] '>
+          <Card className='w-[90%] md:w-[40%] '>
             <CardBody>
               <div className='flex gap-7 justify-center flex-col items-center'>
                 <Controller
@@ -98,7 +98,7 @@ function SearchBus() {
                   rules={{ required: true }}
                   render={({ field }) => (
                     <Select
-                      className="basic-single w-[60%] mt-7 cursor-text"
+                      className="basic-single w-[90%] mt-7 cursor-text"
                       // classNamePrefix="From"
                       placeholder="From"
                       // isDisabled={isDisabled}
@@ -120,7 +120,7 @@ function SearchBus() {
                   rules={{ required: true }}
                   render={({ field }) => (
                     <Select
-                      className="basic-single w-[60%] cursor-text"
+                      className="basic-single w-[90%] cursor-text"
                       // classNamePrefix="From"
                       placeholder="To"
                       // isDisabled={isDisabled}
@@ -136,14 +136,14 @@ function SearchBus() {
                   )}
                 />
 
-                <div className='className= w-[60%]'>
+                <div className='className= w-[90%]'>
                   <DatePicker label="Date"
                     value={value}
                     onChange={setValue}
                     {...register("date")}
                   />
                 </div>
-                <div className='flex gap-3 justify-start w-[60%]'>
+                <div className='flex gap-3 justify-center w-[90%]'>
                   <Button color="primary" onClick={todayDate}>
                     Today
                   </Button>

@@ -36,6 +36,8 @@ import DriverSignup from './components/Login/DriverSignup.jsx'
 import AddBus from './components/company/AddBus.jsx'
 import AddRoute from './components/company/AddRoute.jsx'
 import ViewBusList from './components/company/ViewBusList.jsx'
+import DriverInfo from './components/User/DriverInfo.jsx'
+import CompanyInfo from './components/User/CompanyInfo.jsx'
 let persistor=persistStore(store)
 
 const router=createBrowserRouter(
@@ -59,6 +61,8 @@ const router=createBrowserRouter(
       <Route path='addbus' element={<AddBus/>}/>
       <Route path='addroute' element={<AddRoute/>}/>
       <Route path='viewbuslist' element={<ViewBusList/>}/>
+      <Route path='DriverInfo' element={<DriverInfo/>}/>
+      <Route path='CompanyInfo' element={<CompanyInfo/>}/>
     </Route>
   )
 )
