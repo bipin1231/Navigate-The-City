@@ -262,7 +262,7 @@ function MultipleUserMap() {
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
 
-        {users.map(user => (
+        {users && users.map(user => (
         
           <Marker
             key={user.userId}
