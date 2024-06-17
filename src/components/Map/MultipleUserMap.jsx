@@ -262,13 +262,13 @@ function MultipleUserMap() {
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
 
-        {users.map(user => (
+        {users && users.map(user => (
         
           <Marker
             key={user.userId}
             position={user.position}
             icon={new L.Icon({
-              iconUrl: (userData && user.userId===userData.$id)?"../location.svg":"https://th.bing.com/th/id/R.64c3ad6dc114ad19e08301beacf5c4c9?rik=vajKORzbQuP5nA&pid=ImgRaw&r=0",
+              iconUrl: (userData && user.userId===userData.$id)?"../location.svg":"../bus.png",
               iconSize: [35, 45],
               iconAnchor: [17, 46],
               popupAnchor: [3, -46]
