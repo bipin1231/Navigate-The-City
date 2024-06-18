@@ -268,8 +268,8 @@ function MultipleUserMap() {
             key={user.userId}
             position={user.position}
             icon={new L.Icon({
-              iconUrl: (userData && user.userId===userData.$id)?"../location.svg":"../bus.png",
-              iconSize: [35, 45],
+              iconUrl: (userData && user.userId===userData.$id)?"../marker-gif.gif":"bus.png",
+              iconSize: [25, 45],
               iconAnchor: [17, 46],
               popupAnchor: [3, -46]
             })}

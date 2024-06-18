@@ -47,8 +47,8 @@ function Header() {
           
           <Link to='/home'>
             <li className='relative group'>
-              <span className='text-white text-xl md:text-3xl w-10 text-center block transition-transform duration-300 group-hover:translate-y-[-20px]'>
-                  <ion-icon name="home-outline"></ion-icon>
+              <span className='w-10 text-center block transition-transform duration-300 group-hover:translate-y-[-20px]'>
+                  <img src='../home-icon.svg' className='w-6 h-6 md:w-8 md:h-8' />
               </span>
               <span className='absolute left-1/2 transform -translate-x-1/2 bottom-0 opacity-0 text-white transition-opacity duration-300 group-hover:opacity-100'>Home</span>
             </li>
@@ -56,8 +56,8 @@ function Header() {
 
           <Link to='/searchbus'>
             <li className='relative group'>
-                <span className='text-white text-xl md:text-3xl w-10 text-center block transition-transform duration-300 group-hover:translate-y-[-20px]'>
-                  <ion-icon name="ticket-outline"></ion-icon>
+                <span className='w-10 text-center block transition-transform duration-300 group-hover:translate-y-[-20px]'>
+                <img src='../ticket-icon.svg' className='w-6 h-6 md:w-8 md:h-8' />
                 </span>
                 <span className='absolute left-1/2 transform -translate-x-1/2 bottom-0 opacity-0 text-white transition-opacity duration-300 group-hover:opacity-100'>Ticket</span>
               </li>
@@ -65,8 +65,8 @@ function Header() {
 
           <Link to='/route'>
             <li className='relative group'>
-              <span className='text-white text-xl md:text-3xl w-10 text-center block transition-transform duration-300 group-hover:translate-y-[-20px]'>
-                <ion-icon name="trending-up-outline"></ion-icon>
+              <span className='t w-10 text-center block transition-transform duration-300 group-hover:translate-y-[-20px]'>
+              <img src='../route-icon.svg' className='w-6 h-6 md:w-8 md:h-8' />
               </span>
               <span className='absolute left-1/2 transform -translate-x-1/2 bottom-0 opacity-0 text-white transition-opacity duration-300 group-hover:opacity-100'>Route</span>
             </li>
@@ -94,8 +94,8 @@ function Header() {
       {!status && (
         <Link to="/login">
           <div className='relative group mt-6'>
-              <span className='text-white text-3xl w-10 text-center block transition-transform duration-300 group-hover:translate-y-[-20px]'>
-                <ion-icon name="log-in-outline"></ion-icon>
+              <span className='w-10 text-center block transition-transform duration-300 group-hover:translate-y-[-20px]'>
+                <img src='../login-icon.svg' className='w-6 h-6 md:w-8 md:h-8' />
               </span>
               <span className='absolute left-1/2 transform -translate-x-1/2 bottom-0 opacity-0 text-white transition-opacity duration-300 group-hover:opacity-100'>Login</span>
             </div>
