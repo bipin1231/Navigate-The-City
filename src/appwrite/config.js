@@ -64,6 +64,7 @@ export class Service{
           conf.locationCollectionId, 
           documentId,
           {
+            name,
           latitude,
           longitude,
           status,
