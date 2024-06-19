@@ -37,7 +37,7 @@ function Header() {
 // }
   return (
     // <nav className='bg-[#1506B5] flex items-center h-[10vh] text-xl w-full pr-1 md:pr-4 flex justify-between'>
-    <nav className='fixed w-full h-[12vh] flex justify-center bg-transparent z-[1500]'>
+    <nav className='fixed w-full h-[10vh] flex justify-center bg-transparent z-[1500]'>
       <Link to='/'>
         <div className='absolute left-[1%] md:left-[5%] flex items-center cursor-pointer'>
           <img src='../logo.svg' className='w-14 h-8 md:w-24 md:h-12' alt="Logo"/>
@@ -48,17 +48,17 @@ function Header() {
       style={{
         clipPath: 'polygon(0% 0%, 100% 0%, 90% 100%, 10% 100%)',
         position: 'relative',
-        top: '-9vh',
+        top: '-7vh',
       }}
       onMouseEnter={(e) => {
         e.currentTarget.style.top = '0';
       }}
       onMouseLeave={(e) => {
-        e.currentTarget.style.top = '-9vh';
+        e.currentTarget.style.top = '-7vh';
       }}
     >
       <div>
-        <ul className='flex mt-6 pb-6 gap-4 md:gap-10 text-sm md:text-xl'>
+        <ul className='flex mt-6 pb-8 gap-4 md:gap-10 text-sm md:text-xl'>
           
           <Link to='/home'>
             <li className='relative group'>

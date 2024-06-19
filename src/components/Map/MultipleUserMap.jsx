@@ -42,6 +42,30 @@ const baseLayers = {
   ),
 };
 
+function LayerControl() {
+  const map = useMap();
+
+  useEffect(() => {
+    // const layerControl = L.control.layers(baseLayers, {}, { position: 'topleft' }).addTo(map);
+    const layerControl = L.control.layers(baseLayers, {}, { position: 'topleft' }).addTo(map);
+
+      setTimeout(() => {
+        const layerControlElement = document.querySelector('.leaflet-control-layers');
+        if (layerControlElement) {
+          layerControlElement.classList.add('absolute', 'top-12'); // Adjust the values as needed
+        }
+      }, 0);
+
+    // Add the default layer to the map
+    baseLayers["Normal"].addTo(map);
+
+    return () => {
+      map.removeControl(layerControl);
+    };
+  }, [map]);
+
+  return null;
+}
 function SearchControl() {
   const map = useMap();
 
@@ -53,13 +77,13 @@ function SearchControl() {
       style: 'button',
       autoClose: true,
       keepResult: true,
-      position: 'topleft',
+      position: 'topright',
     });
     map.addControl(searchControl);
 
     const searchControlContainer = searchControl.getContainer();
     if (searchControlContainer) {
-      searchControlContainer.classList.add('absolute', 'top-2', 'left-2', 'scale-[1.3]');
+      searchControlContainer.classList.add('absolute', 'top-[50px]', 'right-14', 'scale-[1.3]', 'pointer-events-auto');
     }
 
     return () => map.removeControl(searchControl);
@@ -84,7 +108,7 @@ function RoutingControl({ isRoutingEnabled }) {
         // Apply Tailwind CSS classes to the routing control
         const routingControlElement = control.getContainer();
         if (routingControlElement) {
-          routingControlElement.classList.add('absolute', 'top-24');
+          routingControlElement.classList.add('absolute', 'top-16');
         }
 
       return () => {
@@ -102,7 +126,7 @@ function ZoomControl() {
   const map = useMap();
 
   useEffect(() => {
-    const zoomControl = L.control.zoom({ position: 'bottomright' }).addTo(map);
+    const zoomControl = L.control.zoom({ position: 'bottomleft' }).addTo(map);
 
     return () => {
       map.removeControl(zoomControl);
@@ -112,30 +136,6 @@ function ZoomControl() {
   return null;
 }
 
-function LayerControl() {
-  const map = useMap();
-
-  useEffect(() => {
-    // const layerControl = L.control.layers(baseLayers, {}, { position: 'topleft' }).addTo(map);
-    const layerControl = L.control.layers(baseLayers, {}, { position: 'topleft' }).addTo(map);
-
-      setTimeout(() => {
-        const layerControlElement = document.querySelector('.leaflet-control-layers');
-        if (layerControlElement) {
-          layerControlElement.classList.add('absolute', 'top-28'); // Adjust the values as needed
-        }
-      }, 0);
-
-    // Add the default layer to the map
-    baseLayers["Normal"].addTo(map);
-
-    return () => {
-      map.removeControl(layerControl);
-    };
-  }, [map]);
-
-  return null;
-}
 
 function MultipleUserMap() {
   const status = useSelector(state => state.auth.status);
@@ -293,7 +293,7 @@ function MultipleUserMap() {
         <ContextMenu />
       </MapContainer>
       <button 
-        className="absolute top-[55px] right-[10px] z-[1300] bg-white border-2 border-gray-400 rounded-md w-[46px] h-11" 
+        className="absolute top-[55px] right-[10px] z-[1600] bg-white border-2 border-gray-400 rounded-md w-[46px] h-11" 
         onClick={toggleRouting}
       >
         <img src="../route-icon.png" className='absolute left-[6px] top-1 w-15 h-8' alt="Routing Icon" />
