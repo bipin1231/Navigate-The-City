@@ -53,7 +53,7 @@ function Login() {
         const userData = await authService.getCurrentUser()
         if (userData) {
           dispatch(authLogin(userData));
-          await service.storeUserLocation({userId:userData.$id,status:true});
+          await service.storeUserLocation({userId:userData.$id,name:userData.name,status:true});
           navigate("/")
           console.log(userData);
         }
