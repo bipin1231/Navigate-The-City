@@ -37,24 +37,30 @@ function Header() {
 // }
   return (
     // <nav className='bg-[#1506B5] flex items-center h-[10vh] text-xl w-full pr-1 md:pr-4 flex justify-between'>
-    <nav className='fixed w-full h-[10vh] flex justify-center bg-transparent z-[1500]'>
+    <nav className='fixed w-full h-[7vh] md:h-[10vh] flex justify-center bg-transparent z-[1500]'>
       <Link to='/'>
         <div className='absolute left-[1%] md:left-[5%] flex items-center cursor-pointer'>
           <img src='../logo.svg' className='w-14 h-8 md:w-24 md:h-12' alt="Logo"/>
         </div>
       </Link>
       <div
-      className='bg-[#1506B5] items-center flex justify-center w-[75%] md:w-[70%] transition-all duration-400'
+      className='bg-[#1506B5] items-center flex justify-center top-[-5vh] md:top-[-7vh] w-[75%] md:w-[70%] transition-all duration-400'
       style={{
         clipPath: 'polygon(0% 0%, 100% 0%, 90% 100%, 10% 100%)',
         position: 'relative',
-        top: '-7vh',
+        // top: '-7vh',
       }}
       onMouseEnter={(e) => {
         e.currentTarget.style.top = '0';
       }}
       onMouseLeave={(e) => {
-        e.currentTarget.style.top = '-7vh';
+        // For mobile devices (small screens)
+        e.currentTarget.style.top = '-4vh';
+        
+        // For laptops and larger screens (using responsive styles inline)
+        if (window.innerWidth >= 768) {
+          e.currentTarget.style.top = '-7vh';
+        }
       }}
     >
       <div>
