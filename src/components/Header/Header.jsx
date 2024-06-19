@@ -36,72 +36,89 @@ function Header() {
 //   }, []);
 // }
   return (
-    <nav className='bg-[#1506B5] flex items-center h-[10vh] text-xl w-full pr-1 md:pr-4 flex justify-between'>
+    // <nav className='bg-[#1506B5] flex items-center h-[10vh] text-xl w-full pr-1 md:pr-4 flex justify-between'>
+    <nav className='fixed w-full h-[12vh] flex justify-center bg-transparent z-[1500]'>
       <Link to='/'>
-        <div className='flex items-center cursor-pointer'>
+        <div className='absolute left-[1%] md:left-[5%] flex items-center cursor-pointer'>
           <img src='../logo.svg' className='w-14 h-8 md:w-24 md:h-12' alt="Logo"/>
         </div>
       </Link>
+      <div
+      className='bg-[#1506B5] items-center flex justify-center w-[75%] md:w-[70%] transition-all duration-400'
+      style={{
+        clipPath: 'polygon(0% 0%, 100% 0%, 90% 100%, 10% 100%)',
+        position: 'relative',
+        top: '-9vh',
+      }}
+      onMouseEnter={(e) => {
+        e.currentTarget.style.top = '0';
+      }}
+      onMouseLeave={(e) => {
+        e.currentTarget.style.top = '-9vh';
+      }}
+    >
       <div>
-        <ul className='flex mt-6 gap-4 md:gap-10 text-base md:text-xl'>
+        <ul className='flex mt-6 pb-6 gap-4 md:gap-10 text-sm md:text-xl'>
           
           <Link to='/home'>
             <li className='relative group'>
-              <span className='w-10 text-center block transition-transform duration-300 group-hover:translate-y-[-20px]'>
+              <span className='w-10 text-center block transition-transform duration-300 group-hover:translate-y-[-12px]'>
                   <img src='../home-icon.svg' className='w-6 h-6 md:w-8 md:h-8' />
               </span>
-              <span className='absolute left-1/2 transform -translate-x-1/2 bottom-0 opacity-0 text-white transition-opacity duration-300 group-hover:opacity-100'>Home</span>
+              <span className='absolute left-1/2 transform -translate-x-1/2 -bottom-3 opacity-0 text-white transition-opacity duration-300 group-hover:opacity-100'>Home</span>
             </li>
           </Link>
 
           <Link to='/searchbus'>
             <li className='relative group'>
-                <span className='w-10 text-center block transition-transform duration-300 group-hover:translate-y-[-20px]'>
+                <span className='w-10 text-center block transition-transform duration-300 group-hover:translate-y-[-12px]'>
                 <img src='../ticket-icon.svg' className='w-6 h-6 md:w-8 md:h-8' />
                 </span>
-                <span className='absolute left-1/2 transform -translate-x-1/2 bottom-0 opacity-0 text-white transition-opacity duration-300 group-hover:opacity-100'>Ticket</span>
+                <span className='absolute left-1/2 transform -translate-x-1/2 -bottom-3 opacity-0 text-white transition-opacity duration-300 group-hover:opacity-100'>Ticket</span>
               </li>
           </Link>
 
           <Link to='/route'>
             <li className='relative group'>
-              <span className='t w-10 text-center block transition-transform duration-300 group-hover:translate-y-[-20px]'>
+              <span className='t w-10 text-center block transition-transform duration-300 group-hover:translate-y-[-12px]'>
               <img src='../route-icon.svg' className='w-6 h-6 md:w-8 md:h-8' />
               </span>
-              <span className='absolute left-1/2 transform -translate-x-1/2 bottom-0 opacity-0 text-white transition-opacity duration-300 group-hover:opacity-100'>Route</span>
+              <span className='absolute left-1/2 transform -translate-x-1/2 -bottom-3 opacity-0 text-white transition-opacity duration-300 group-hover:opacity-100'>Route</span>
             </li>
           </Link>
 
           {/* <Link to='/DriverInfo'>
             <li className='relative group'>
-              <span className='text-white text-xl md:text-3xl w-10 text-center block transition-transform duration-300 group-hover:translate-y-[-20px]'>
+              <span className='text-white text-xl md:text-3xl w-10 text-center block transition-transform duration-300 group-hover:translate-y-[-12px]'>
                 <ion-icon name="person-outline"></ion-icon>
               </span>
-              <span className='absolute left-1/2 transform -translate-x-1/2 bottom-0 opacity-0 text-white transition-opacity duration-300 group-hover:opacity-100'>Driver</span>
+              <span className='absolute left-1/2 transform -translate-x-1/2 -bottom-3 opacity-0 text-white transition-opacity duration-300 group-hover:opacity-100'>Driver</span>
             </li>
           </Link>
 
           <Link to='/CompanyInfo'>
             <li className='relative group'>
-              <span className='text-white text-xl md:text-3xl w-10 text-center block transition-transform duration-300 group-hover:translate-y-[-20px]'>
+              <span className='text-white text-xl md:text-3xl w-10 text-center block transition-transform duration-300 group-hover:translate-y-[-12px]'>
                 <ion-icon name="business-outline"></ion-icon>
               </span>
-              <span className='absolute left-1/2 transform -translate-x-1/2 bottom-0 opacity-0 text-white transition-opacity duration-300 group-hover:opacity-100'>Company</span>
+              <span className='absolute left-1/2 transform -translate-x-1/2 -bottom-3 opacity-0 text-white transition-opacity duration-300 group-hover:opacity-100'>Company</span>
             </li>
           </Link> */}
-        </ul>
-      </div>
       {!status && (
         <Link to="/login">
-          <div className='relative group mt-6'>
-              <span className='w-10 text-center block transition-transform duration-300 group-hover:translate-y-[-20px]'>
+          <li className='relative group'>
+              <span className='w-10 text-center block transition-transform duration-300 group-hover:translate-y-[-12px]'>
                 <img src='../login-icon.svg' className='w-6 h-6 md:w-8 md:h-8' />
               </span>
-              <span className='absolute left-1/2 transform -translate-x-1/2 bottom-0 opacity-0 text-white transition-opacity duration-300 group-hover:opacity-100'>Login</span>
-            </div>
+              <span className='absolute left-1/2 transform -translate-x-1/2 -bottom-3 opacity-0 text-white transition-opacity duration-300 group-hover:opacity-100'>Login</span>
+            </li>
         </Link>
       )}
       {status && <Logout />}
+        </ul>
+      </div>
+
+      </div>
     </nav>
   );
 }

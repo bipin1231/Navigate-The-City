@@ -51,8 +51,8 @@ navigate('/ticketcard',{state:{seatNo:selectedSeat,price:price}});
 
 
   return (
-    <div className='w-full flex mt-3 justify-center'>
-      <Card className='w-[90%] md:w-[50%] flex justify-center'>
+    <div className='w-full flex justify-center'>
+      <Card className='w-[90%] md:w-[50%] mt-10 flex justify-center'>
 
 
         <CardHeader className='items-center flex justify-center p-1'>

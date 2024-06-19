@@ -3,7 +3,7 @@ import { Card, CardHeader, CardBody, CardFooter, Divider } from "@nextui-org/rea
 import { Button, ButtonGroup, Input } from "@nextui-org/react";
 function ConfirmationCard() {
   return (
-    <div className='w-full flex mt-5 justify-center'>
+    <div className='w-full flex justify-center'>
       <Card className='w-[90%] md:w-[40%]  flex mt-10 justify-center  '>
 
 

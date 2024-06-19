@@ -84,8 +84,8 @@ function Login() {
 
     <>
       <form onSubmit={handleSubmit(onSubmit)}>
-        <div className='w-full flex mt-10 justify-center h-96'>
-          <Card className='w-[90%] md:w-[40%] '>
+        <div className='w-full flex justify-center h-96'>
+          <Card className='w-[90%] md:w-[40%] mt-10 '>
             <CardBody>
               <div className='flex justify-center'>
                 <div className='flex flex-col gap-7 w-[95%] md:w-[60%]'>

@@ -44,8 +44,8 @@ function TicketCard() {
   }
 
   return (
-    <div className='w-full flex mt-1 justify-center'>
-      <Card className='w-[90%] md:w-[40%]  flex mt-6 justify-center'>
+    <div className='w-full flex justify-center'>
+      <Card className='w-[90%] md:w-[40%] flex mt-6 justify-center'>
 
 
         <CardHeader className='align-middle items-center flex  justify-center'>

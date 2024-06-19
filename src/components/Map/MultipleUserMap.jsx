@@ -50,12 +50,17 @@ function SearchControl() {
 
     const searchControl = new GeoSearchControl({
       provider: provider,
-      style: 'bar',
+      style: 'button',
       autoClose: true,
       keepResult: true,
+      position: 'topleft',
     });
-
     map.addControl(searchControl);
+
+    const searchControlContainer = searchControl.getContainer();
+    if (searchControlContainer) {
+      searchControlContainer.classList.add('absolute', 'top-2', 'left-2', 'scale-[1.3]');
+    }
 
     return () => map.removeControl(searchControl);
   }, [map]);
@@ -79,7 +84,7 @@ function RoutingControl({ isRoutingEnabled }) {
         // Apply Tailwind CSS classes to the routing control
         const routingControlElement = control.getContainer();
         if (routingControlElement) {
-          routingControlElement.classList.add('absolute', 'top-12');
+          routingControlElement.classList.add('absolute', 'top-24');
         }
 
       return () => {
@@ -117,7 +122,7 @@ function LayerControl() {
       setTimeout(() => {
         const layerControlElement = document.querySelector('.leaflet-control-layers');
         if (layerControlElement) {
-          layerControlElement.classList.add('absolute', 'top-12'); // Adjust the values as needed
+          layerControlElement.classList.add('absolute', 'top-28'); // Adjust the values as needed
         }
       }, 0);
 
@@ -243,7 +248,7 @@ function MultipleUserMap() {
   };
 
   return (
-    <div className='h-[90vh] w-full relative flex flex-col items-center'>
+    <div className='h-[100vh] w-full relative flex flex-col items-center'>
       <MapContainer
         center={defaultPosition}
         zoom={10}
@@ -288,7 +293,7 @@ function MultipleUserMap() {
         <ContextMenu />
       </MapContainer>
       <button 
-        className="absolute top-[10px] left-[11px] z-[1300] bg-white border-2 border-gray-400 rounded-md w-[46px] h-11" 
+        className="absolute top-[55px] right-[10px] z-[1300] bg-white border-2 border-gray-400 rounded-md w-[46px] h-11" 
         onClick={toggleRouting}
       >
         <img src="../route-icon.png" className='absolute left-[6px] top-1 w-15 h-8' alt="Routing Icon" />
