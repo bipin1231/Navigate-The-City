@@ -46,13 +46,12 @@ function LayerControl() {
   const map = useMap();
 
   useEffect(() => {
-    // const layerControl = L.control.layers(baseLayers, {}, { position: 'topleft' }).addTo(map);
     const layerControl = L.control.layers(baseLayers, {}, { position: 'topleft' }).addTo(map);
 
       setTimeout(() => {
         const layerControlElement = document.querySelector('.leaflet-control-layers');
         if (layerControlElement) {
-          layerControlElement.classList.add('absolute', 'top-12'); // Adjust the values as needed
+          layerControlElement.classList.add('absolute', 'top-12');
         }
       }, 0);
 
@@ -153,6 +152,7 @@ function MultipleUserMap() {
   const mapRef = useRef(null); // To store reference to the map
   // const [showLocation, setShowLocation] = useState(false);
   const [speed, setSpeed] = useState(0);
+  const [userDirection, setUserDirection] = useState(0);
 
   useEffect(() => {
     const fetchUserLocation = async () => {
@@ -255,6 +255,44 @@ function MultipleUserMap() {
     setIsRoutingEnabled((prevState) => !prevState);
   };
 
+  const handleOrientation = (event) => {
+    let compassHeading;
+    if (event.absolute) {
+      compassHeading = event.alpha;
+    } else if (event.webkitCompassHeading) {
+      compassHeading = event.webkitCompassHeading; // For Safari
+    } else {
+      compassHeading = 360 - event.alpha; // For other browsers
+    }
+    setUserDirection(compassHeading);
+  };
+
+  useEffect(() => {
+    if (window.DeviceOrientationEvent) {
+      let lastUpdate = Date.now();
+      const throttleTime = 200; // Throttle time in ms
+
+      const throttledHandleOrientation = (event) => {
+        const now = Date.now();
+        if (now - lastUpdate >= throttleTime) {
+          handleOrientation(event);
+          lastUpdate = now;
+        }
+      };
+
+      window.addEventListener('deviceorientationabsolute', throttledHandleOrientation, true);
+      window.addEventListener('deviceorientation', throttledHandleOrientation, true);
+
+      return () => {
+        window.removeEventListener('deviceorientationabsolute', throttledHandleOrientation, true);
+        window.removeEventListener('deviceorientation', throttledHandleOrientation, true);
+      };
+    } else {
+      console.error('Device orientation is not supported by this browser.');
+    }
+  }, []);
+
+
   return (
     <div className='h-[100vh] w-full relative flex flex-col items-center'>
       <MapContainer
@@ -285,14 +323,14 @@ function MultipleUserMap() {
           return (
 
             <Marker
-            key={user.userId}
-            position={user.position}
-            icon={new L.Icon({
-              iconUrl: (userData && user.userId===userData.$id)?"../marker-gif.gif":"bus.png",
-              iconSize: [25, 45],
-              iconAnchor: [17, 46],
-              popupAnchor: [3, -46]
-            })}
+              key={user.userId}
+              position={user.position}
+              icon={L.divIcon({
+                className: 'custom-icon',
+                html: `<div style="transform: rotate(${user.userId === userData.$id ? 360 - userDirection : 0}deg)">
+                         <img src="${user.userId === userData.$id ? 'your-icon-url-for-current-user' : 'bus.png'}" />
+                       </div>`,
+              })}
             ref={(marker) => { markerRefs.current[user.userId] = marker; }}
           >
             <Popup>
@@ -314,10 +352,6 @@ function MultipleUserMap() {
       >
         <img src="../route-icon.png" className='absolute left-[6px] top-1 w-15 h-8' alt="Routing Icon" />
       </button>
-      {/* <button className="absolute top-[10px] right-[25%] z-[1300]">
-        <img src="../target-location.svg" className="w-[45px] h-[45px]" />
-      </button> */}
-      {/* <LowerSlideBar /> */}
     </div>
   );
 }

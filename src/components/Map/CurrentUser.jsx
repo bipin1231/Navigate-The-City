@@ -44,7 +44,7 @@ function CurrentUser() {
       } else if (event.webkitCompassHeading) {
         compassHeading = event.webkitCompassHeading; // For Safari
       } else {
-        compassHeading = 360 - event.alpha; // For other browsers
+        compassHeading = event.alpha; // For other browsers
       }
       setUserDirection(compassHeading);
     };
@@ -116,7 +116,7 @@ function CurrentUser() {
     return new L.DivIcon({
       className: 'custom-marker',
       html: `
-        <div class="marker-icon" style="transform: rotate(${360 - userDirection}deg);">
+        <div class="marker-icon" style="transform: rotate(${userDirection}deg);">
           <img src="${iconUrl}" class="w-9 h-11 border-none bg-transparent outline-none" />
         </div>
       `,
