@@ -362,7 +362,7 @@ function MultipleUserMap() {
       position={{ lat, lng }}
       icon={L.divIcon({
         className: 'custom-icon',
-        html: `<div style="transform: rotate(${user.userId === userData?.['$id'] ? 360 - userDirection : 0}deg)">
+        html: `<div style="transform: rotate(${user.userId === userData?.['$id'] ? 0 : 360 - userDirection}deg)">
                  <img src="${user.userId === userData?.['$id'] ? 'location.svg' : 'car.svg'}" />
                </div>`,
         iconSize: [30, 40],
