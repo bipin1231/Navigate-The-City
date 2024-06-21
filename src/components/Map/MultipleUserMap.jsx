@@ -330,6 +330,8 @@ function MultipleUserMap() {
                 html: `<div style="transform: rotate(${user.userId === userData.$id ? 360 - userDirection : 0}deg)">
                          <img src="${user.userId === userData.$id ? 'your-icon-url-for-current-user' : 'bus.png'}" />
                        </div>`,
+                       iconSize: [30, 40],
+                        iconAnchor: [17, 46]
               })}
             ref={(marker) => { markerRefs.current[user.userId] = marker; }}
           >
