@@ -42,71 +42,6 @@ const baseLayers = {
   ),
 };
 
-function SearchControl() {
-  const map = useMap();
-
-  useEffect(() => {
-    const provider = new OpenStreetMapProvider();
-
-    const searchControl = new GeoSearchControl({
-      provider: provider,
-      style: 'bar',
-      autoClose: true,
-      keepResult: true,
-    });
-
-    map.addControl(searchControl);
-
-    return () => map.removeControl(searchControl);
-  }, [map]);
-
-  return null;
-}
-
-function RoutingControl({ isRoutingEnabled }) {
-  const map = useMap();
-
-  useEffect(() => {
-    let control;
-    if (map && isRoutingEnabled) {
-      control = L.Routing.control({
-        waypoints: [],
-        routeWhileDragging: true,
-        draggableWaypoints: true,
-        removeWaypoints: true,
-        geocoder: L.Control.Geocoder.nominatim(),
-      }).addTo(map);
-        // Apply Tailwind CSS classes to the routing control
-        const routingControlElement = control.getContainer();
-        if (routingControlElement) {
-          routingControlElement.classList.add('absolute', 'top-12');
-        }
-
-      return () => {
-        if (map && control) {
-          map.removeControl(control);
-        }
-      };
-    }
-  }, [map, isRoutingEnabled]);
-
-  return null;
-}
-
-function ZoomControl() {
-  const map = useMap();
-
-  useEffect(() => {
-    const zoomControl = L.control.zoom({ position: 'bottomright' }).addTo(map);
-
-    return () => {
-      map.removeControl(zoomControl);
-    };
-  }, [map]);
-
-  return null;
-}
-
 function LayerControl() {
   const map = useMap();
 
@@ -131,6 +66,76 @@ function LayerControl() {
 
   return null;
 }
+function SearchControl() {
+  const map = useMap();
+
+  useEffect(() => {
+    const provider = new OpenStreetMapProvider();
+
+    const searchControl = new GeoSearchControl({
+      provider: provider,
+      style: 'button',
+      autoClose: true,
+      keepResult: true,
+      position: 'topright',
+    });
+    map.addControl(searchControl);
+
+    const searchControlContainer = searchControl.getContainer();
+    if (searchControlContainer) {
+      searchControlContainer.classList.add('absolute', 'top-[50px]', 'right-14', 'scale-[1.3]', 'pointer-events-auto');
+    }
+
+    return () => map.removeControl(searchControl);
+  }, [map]);
+
+  return null;
+}
+
+function RoutingControl({ isRoutingEnabled }) {
+  const map = useMap();
+
+  useEffect(() => {
+    let control;
+    if (map && isRoutingEnabled) {
+      control = L.Routing.control({
+        waypoints: [],
+        routeWhileDragging: true,
+        draggableWaypoints: true,
+        removeWaypoints: true,
+        geocoder: L.Control.Geocoder.nominatim(),
+      }).addTo(map);
+        // Apply Tailwind CSS classes to the routing control
+        const routingControlElement = control.getContainer();
+        if (routingControlElement) {
+          routingControlElement.classList.add('absolute', 'top-16');
+        }
+
+      return () => {
+        if (map && control) {
+          map.removeControl(control);
+        }
+      };
+    }
+  }, [map, isRoutingEnabled]);
+
+  return null;
+}
+
+function ZoomControl() {
+  const map = useMap();
+
+  useEffect(() => {
+    const zoomControl = L.control.zoom({ position: 'bottomleft' }).addTo(map);
+
+    return () => {
+      map.removeControl(zoomControl);
+    };
+  }, [map]);
+
+  return null;
+}
+
 
 function MultipleUserMap() {
   const status = useSelector(state => state.auth.status);
@@ -165,7 +170,7 @@ function MultipleUserMap() {
    
     fetchUserLocation(); // Initial fetch
 
-    const intervalId = setInterval(fetchUserLocation, 10000); // Fetch every 10 seconds
+    const intervalId = setInterval(fetchUserLocation, 5000); // Fetch every 5 seconds
   
     return () => clearInterval(intervalId); // Clean up on component unmount
   }, []);
@@ -251,7 +256,7 @@ function MultipleUserMap() {
   };
 
   return (
-    <div className='h-[90vh] w-full relative flex flex-col items-center'>
+    <div className='h-[100vh] w-full relative flex flex-col items-center'>
       <MapContainer
         center={defaultPosition}
         zoom={10}
@@ -271,7 +276,7 @@ function MultipleUserMap() {
         />
 
 {users.map(user => {
-  console.log("user position ",user.position);
+ 
           if (user.position[0]==null) {
             console.error(`Invalid position for user: ${user.userId}`, user.position);
             return null;
@@ -280,21 +285,21 @@ function MultipleUserMap() {
           return (
 
             <Marker
-              key={user.userId}
-              position={user.position}
-              icon={new L.Icon({
-                iconUrl: (userData && user.userId === userData.$id) ? "../location.svg" : "https://th.bing.com/th/id/R.64c3ad6dc114ad19e08301beacf5c4c9?rik=vajKORzbQuP5nA&pid=ImgRaw&r=0",
-                iconSize: [35, 45],
-                iconAnchor: [17, 46],
-                popupAnchor: [3, -46]
-              })}
-              ref={(marker) => { markerRefs.current[user.userId] = marker; }}
-            >
-              <Popup>
-                BusNo:
-                <Speedometer speed={speed} />
-              </Popup>
-            </Marker>
+            key={user.userId}
+            position={user.position}
+            icon={new L.Icon({
+              iconUrl: (userData && user.userId===userData.$id)?"../marker-gif.gif":"bus.png",
+              iconSize: [25, 45],
+              iconAnchor: [17, 46],
+              popupAnchor: [3, -46]
+            })}
+            ref={(marker) => { markerRefs.current[user.userId] = marker; }}
+          >
+            <Popup>
+              BusNo:
+              <Speedometer speed={speed} />
+            </Popup>
+          </Marker>
           );
         })}
         {!status && <CurrentUser/>}
@@ -304,7 +309,7 @@ function MultipleUserMap() {
         <ContextMenu />
       </MapContainer>
       <button 
-        className="absolute top-[10px] left-[11px] z-[1300] bg-white border-2 border-gray-400 rounded-md w-[46px] h-11" 
+        className="absolute top-[55px] right-[10px] z-[1600] bg-white border-2 border-gray-400 rounded-md w-[46px] h-11" 
         onClick={toggleRouting}
       >
         <img src="../route-icon.png" className='absolute left-[6px] top-1 w-15 h-8' alt="Routing Icon" />

@@ -88,8 +88,8 @@ function SearchBus() {
   return (
     <>
       <form onSubmit={handleSubmit(onSubmit)}>
-        <div className='w-full flex mt-10 justify-center gap-4 h-96'>
-          <Card className='w-[90%] md:w-[40%] '>
+        <div className='w-full flex justify-center gap-4'>
+          <Card className='w-[90%] md:w-[40%] mt-16'>
             <CardBody>
               <div className='flex gap-7 justify-center flex-col items-center'>
                 <Controller

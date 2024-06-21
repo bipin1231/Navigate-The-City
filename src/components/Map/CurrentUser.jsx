@@ -95,7 +95,7 @@ function CurrentUser() {
     let iconUrl;
     switch (selectedIcon) {
       case 'icon1':
-        iconUrl = '../location.svg';
+        iconUrl = '../marker-gif.gif';
         break;
       case 'icon2':
         iconUrl = '../car.svg';
