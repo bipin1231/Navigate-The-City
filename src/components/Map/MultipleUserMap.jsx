@@ -197,48 +197,76 @@ function MultipleUserMap() {
  
 
 
+  // useEffect(() => {
+  //   if(status){
+  //   if (navigator.geolocation) {
+  //     console.log("hey");
+  //     const geoId = navigator.geolocation.watchPosition(
+  //       (position) => {
+  //         const { latitude, longitude } = position.coords;
+ 
+  //          if(!isLocationStored){
+  //        const storeLoc=async()=>{ 
+  //         setLocationStored(true);
+  //         console.log("storing location");
+  //         const data=await service.storeUserLocation({userId:userData.$id,name:userData.name,latitude,longitude});
+  //         console.log("performing storing in database",data);
+  //         setLocationStored(false);
+         
+  //       }
+          
+  //         storeLoc();
+  //     }
+         
+  //       },
+  //       (error) => {
+  //         console.error('Error occurred while retrieving location:', error);
+  //       },
+  //       { enableHighAccuracy: true }
+  //     );
+  
+  //     return () => {
+  //       navigator.geolocation.clearWatch(geoId);
+  //     };
+  //   } else {
+  //     console.error('Geolocation is not supported by this browser.');
+  //   }
+  
+
+  // // storeUser();
+  // // const intervalId = setInterval(storeUser, 10000); // Fetch every 10 seconds
+
+  // // return () => clearInterval(intervalId); // Clean up on component unmount
+  // }
+  // }, [position]);
+
+
   useEffect(() => {
-    if(status){
-    if (navigator.geolocation) {
-      console.log("hey");
+    if (status && userData && navigator.geolocation) {
       const geoId = navigator.geolocation.watchPosition(
         (position) => {
           const { latitude, longitude } = position.coords;
- 
-           if(!isLocationStored){
-         const storeLoc=async()=>{ 
-          setLocationStored(true);
-          console.log("storing location");
-          const data=await service.storeUserLocation({userId:userData.$id,name:userData.name,latitude,longitude});
-          console.log("performing storing in database",data);
-          setLocationStored(false);
-         
-        }
-          
-          storeLoc();
-      }
-         
+          setPosition([latitude, longitude]);
+          if (!isLocationStored) {
+            const storeLoc = async () => {
+              setLocationStored(true);
+              await service.storeUserLocation({ userId: userData.$id, name: userData.name, latitude, longitude });
+              setLocationStored(false);
+            };
+            storeLoc();
+          }
         },
         (error) => {
           console.error('Error occurred while retrieving location:', error);
         },
         { enableHighAccuracy: true }
       );
-  
+
       return () => {
         navigator.geolocation.clearWatch(geoId);
       };
-    } else {
-      console.error('Geolocation is not supported by this browser.');
     }
-  
-
-  // storeUser();
-  // const intervalId = setInterval(storeUser, 10000); // Fetch every 10 seconds
-
-  // return () => clearInterval(intervalId); // Clean up on component unmount
-  }
-  }, [position]);
+  }, [position, status, isLocationStored, userData]);
   
  let checkLat;
   users.map(user => {
@@ -313,33 +341,40 @@ function MultipleUserMap() {
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
 
-{users.map(user => {
- 
-          if (user.position[0]==null) {
-            console.error(`Invalid position for user: ${user.userId}`, user.position);
-            return null;
-          }
+        {users.map(user => {
+  if (!user.position || user.position.length !== 2) {
+    console.error(`Invalid position for user: ${user.userId}`, user.position);
+    checkLat = null;
+    return null;
+  }
 
-          return (
+  const [lat, lng] = user.position;
 
-            <Marker
-              key={user.userId}
-              position={user.position}
-              icon={L.divIcon({
-                className: 'custom-icon',
-                html: `<div style="transform: rotate(${user.userId === userData.$id ? 360 - userDirection : 0}deg)">
-                         <img src="${user.userId === userData.$id ? 'your-icon-url-for-current-user' : 'bus.png'}" />
-                       </div>`,
-                       iconSize: [30, 40],
-                        iconAnchor: [17, 46]
-              })}
-            ref={(marker) => { markerRefs.current[user.userId] = marker; }}
-          >
-            <Popup>
-              BusNo:
-              <Speedometer speed={speed} />
-            </Popup>
-          </Marker>
+  // Check if lat and lng are valid numbers
+  if (typeof lat !== 'number' || typeof lng !== 'number') {
+    console.error(`Invalid latitude or longitude for user: ${user.userId}`, user.position);
+    return null;
+  }
+
+  return (
+    <Marker
+      key={user.userId}
+      position={{ lat, lng }}
+      icon={L.divIcon({
+        className: 'custom-icon',
+        html: `<div style="transform: rotate(${user.userId === userData?.['$id'] ? 360 - userDirection : 0}deg)">
+                 <img src="${user.userId === userData?.['$id'] ? 'location.svg' : 'car.svg'}" />
+               </div>`,
+        iconSize: [30, 40],
+        iconAnchor: [17, 46]
+      })}
+      ref={(marker) => { markerRefs.current[user.userId] = marker; }}
+    >
+      <Popup>
+        BusNo:
+        <Speedometer speed={speed} />
+      </Popup>
+    </Marker>
           );
         })}
         {!status && <CurrentUser/>}
