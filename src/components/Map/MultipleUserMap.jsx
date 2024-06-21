@@ -235,7 +235,15 @@ function MultipleUserMap() {
   }
   }, [position]);
   
- 
+ let checkLat;
+  users.map(user => {
+  if(!user.position || user.position.length !== 2) {
+    console.error(`Invalid position for user: ${user.userId}`, user.position);
+    checkLat=null;
+    return null;  
+    
+    }
+})
   
 
   const toggleRouting = () => {
@@ -262,25 +270,33 @@ function MultipleUserMap() {
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
 
-        {users.map(user => (
-        
-          <Marker
-            key={user.userId}
-            position={user.position}
-            icon={new L.Icon({
-              iconUrl: (userData && user.userId===userData.$id)?"../marker-gif.gif":"bus.png",
-              iconSize: [25, 45],
-              iconAnchor: [17, 46],
-              popupAnchor: [3, -46]
-            })}
-            ref={(marker) => { markerRefs.current[user.userId] = marker; }}
-          >
-            <Popup>
-              BusNo:
-              <Speedometer speed={speed} />
-            </Popup>
-          </Marker>
-        ))}
+{users.map(user => {
+  console.log("user position ",user.position);
+          if (user.position[0]==null) {
+            console.error(`Invalid position for user: ${user.userId}`, user.position);
+            return null;
+          }
+
+          return (
+
+            <Marker
+              key={user.userId}
+              position={user.position}
+              icon={new L.Icon({
+                iconUrl: (userData && user.userId === userData.$id) ? "../location.svg" : "https://th.bing.com/th/id/R.64c3ad6dc114ad19e08301beacf5c4c9?rik=vajKORzbQuP5nA&pid=ImgRaw&r=0",
+                iconSize: [35, 45],
+                iconAnchor: [17, 46],
+                popupAnchor: [3, -46]
+              })}
+              ref={(marker) => { markerRefs.current[user.userId] = marker; }}
+            >
+              <Popup>
+                BusNo:
+                <Speedometer speed={speed} />
+              </Popup>
+            </Marker>
+          );
+        })}
         {!status && <CurrentUser/>}
         <SearchControl />
         <RoutingControl isRoutingEnabled={isRoutingEnabled} />
