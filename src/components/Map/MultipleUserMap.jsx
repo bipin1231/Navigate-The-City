@@ -251,18 +251,6 @@ function MultipleUserMap() {
   };
   useEffect(() => {
     if (users.length > 0) {
-      setAngles(prevAngles => {
-        const newAngles = {};
-        users.forEach(user => {
-          const prevPos = previousPositions[user.userId];
-          console.log("prevPos",prevPos);
-          const newPos = user.position;
-          console.log("newPos",newPos);
-          const angle = prevPos ? calculateAngle(prevPos, newPos) : 0;
-          newAngles[user.userId] = angle;
-        });
-        return newAngles;
-      });
 
       setPreviousPositions(prev => {
         const newPos = {};
@@ -271,8 +259,24 @@ function MultipleUserMap() {
         });
         return newPos;
       });
+
+
+      setAngles(prevAngles => {
+        const newAngles = {};
+        users.forEach(user => {
+          const prevPos = previousPositions[user.userId];
+        
+          const newPos = user.position;
+    
+          const angle = prevPos ? calculateAngle(prevPos, newPos) : 0;
+          newAngles[user.userId] = angle;
+        });
+        return newAngles;
+      });
+
+    
     }
-  }, [users, previousPositions]);
+  }, [users]);
   console.log("position previous of multiple user",previousPositions);
 
   const calculateAngle = (prevPos, newPos) => {
