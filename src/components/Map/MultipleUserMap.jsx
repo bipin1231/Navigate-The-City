@@ -326,7 +326,7 @@ console.log("angle is ......",angle);
             key={user.userId}
             position={user.position}
             icon={new L.divIcon({
-              html: `<img src="(${userData} && ${user.userId}===${userData.$id})?"../marker-gif.gif":"bus.png"" style="transform: rotate(${angle}deg);/>`,
+              html: `<img src="(${userData} && ${user.userId}===${userData.$id})?"../marker-gif.gif":"bus.png"" style="transform: rotate(${angles[user.userId]}deg);/>`,
             //  html: `<img src="bus.png" style="transform: rotate(${angle}deg);/>`,
 
             // iconUrl:"bus.png",
