@@ -320,22 +320,25 @@ function MultipleUserMap() {
           // Calculate the angle of rotation
           const angle = angles[user.userId] || 0;
 console.log("angle is ......",angle);
+
+const isCurrentUser = userData && user.userId === userData.$id;
+const iconSrc = isCurrentUser ? '../marker-gif.gif' : 'bus.png';
           return (
 
             <Marker
             key={user.userId}
             position={user.position}
             icon={new L.divIcon({
-              html: `<img src="(${userData} && ${user.userId}===${userData.$id})?"../marker-gif.gif":"bus.png"" style="transform: rotate(${angles[user.userId]}deg);/>`,
+             // html: `<img src="${iconSrc}" style="transform: rotate(${angles[user.userId]}deg);/>`,
             //  html: `<img src="bus.png" style="transform: rotate(${angle}deg);/>`,
 
             // iconUrl:"bus.png",
             //   iconSize: [25, 45],
             //   iconAnchor: [17, 46],
             //   popupAnchor: [3, -46],
-            // html: `<div style="transform: rotate(${angles[user.userId]}deg);">
-            //      <img src="bus.png" style="width: 25px; height: 45px;" alt="Bus Icon"/>
-            //    </div>`,
+             html: `<div style="transform: rotate(${angles[user.userId]}deg);">
+                  <img src="${iconSrc}" style="width: 25px; height: 45px;" alt="Bus Icon"/>
+                </div>`,
               className: "leaflet-marker-icon",
             })}
             ref={(marker) => { markerRefs.current[user.userId] = marker; }}
