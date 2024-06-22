@@ -273,6 +273,7 @@ function MultipleUserMap() {
       });
     }
   }, [users, previousPositions]);
+  console.log("position previous of multiple user",previousPositions);
 
   const calculateAngle = (prevPos, newPos) => {
     const [lat1, lon1] = prevPos;
