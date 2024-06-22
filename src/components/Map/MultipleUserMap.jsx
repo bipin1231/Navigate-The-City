@@ -153,6 +153,9 @@ function MultipleUserMap() {
   const mapRef = useRef(null); // To store reference to the map
   // const [showLocation, setShowLocation] = useState(false);
   const [speed, setSpeed] = useState(0);
+  const [previousPositions, setPreviousPositions] = useState({});
+  const [angles, setAngles] = useState({}); // Store angles for each user
+
 
   useEffect(() => {
     const fetchUserLocation = async () => {
@@ -164,7 +167,7 @@ function MultipleUserMap() {
         position: [doc.latitude, doc.longitude],
       }));
       console.log(userLocations);
-      const validUserLocations = userLocations.filter(user => user.position !== null);
+      const validUserLocations = userLocations.filter(user => user.position[0] !== null);
       setUsers(validUserLocations);
     }
    
@@ -240,20 +243,47 @@ function MultipleUserMap() {
   }
   }, [position]);
   
- let checkLat;
-  users.map(user => {
-  if(!user.position || user.position.length !== 2) {
-    console.error(`Invalid position for user: ${user.userId}`, user.position);
-    checkLat=null;
-    return null;  
-    
-    }
-})
+ 
   
 
   const toggleRouting = () => {
     setIsRoutingEnabled((prevState) => !prevState);
   };
+  useEffect(() => {
+    if (users.length > 0) {
+      setAngles(prevAngles => {
+        const newAngles = {};
+        users.forEach(user => {
+          const prevPos = previousPositions[user.userId];
+          console.log("prevPos",prevPos);
+          const newPos = user.position;
+          console.log("newPos",newPos);
+          const angle = prevPos ? calculateAngle(prevPos, newPos) : 0;
+          newAngles[user.userId] = angle;
+        });
+        return newAngles;
+      });
+
+      setPreviousPositions(prev => {
+        const newPos = {};
+        users.forEach(user => {
+          newPos[user.userId] = user.position;
+        });
+        return newPos;
+      });
+    }
+  }, [users, previousPositions]);
+
+  const calculateAngle = (prevPos, newPos) => {
+    const [lat1, lon1] = prevPos;
+    const [lat2, lon2] = newPos;
+    const deltaLon = lon2 - lon1;
+    const y = Math.sin(deltaLon) * Math.cos(lat2);
+    const x = Math.cos(lat1) * Math.sin(lat2) - Math.sin(lat1) * Math.cos(lat2) * Math.cos(deltaLon);
+    const angle = Math.atan2(y, x) * (180 / Math.PI);
+    return (angle + 360) % 360; // Normalize to 0-360 degrees
+  };
+  console.log("multiple angles ......",angles);
 
   return (
     <div className='h-[100vh] w-full relative flex flex-col items-center'>
@@ -282,16 +312,26 @@ function MultipleUserMap() {
             return null;
           }
 
+          // Calculate the angle of rotation
+          const angle = angles[user.userId] || 0;
+console.log("angle is ......",angle);
           return (
 
             <Marker
             key={user.userId}
             position={user.position}
-            icon={new L.Icon({
-              iconUrl: (userData && user.userId===userData.$id)?"../marker-gif.gif":"bus.png",
-              iconSize: [25, 45],
-              iconAnchor: [17, 46],
-              popupAnchor: [3, -46]
+            icon={new L.divIcon({
+             // html: `<img src="(${userData} && ${user.userId}===${userData.$id})?"../marker-gif.gif":"bus.png"" style="transform: rotate(${angle}deg);/>`,
+            //  html: `<img src="bus.png" style="transform: rotate(${angle}deg);/>`,
+
+            // iconUrl:"bus.png",
+            //   iconSize: [25, 45],
+            //   iconAnchor: [17, 46],
+            //   popupAnchor: [3, -46],
+            html: `<div style="transform: rotate(${angles[user.userId]}deg);">
+                 <img src="bus.png" style="width: 25px; height: 45px;" alt="Bus Icon"/>
+               </div>`,
+              className: "leaflet-marker-icon",
             })}
             ref={(marker) => { markerRefs.current[user.userId] = marker; }}
           >
