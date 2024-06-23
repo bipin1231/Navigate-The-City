@@ -95,23 +95,25 @@ function CurrentUser() {
     let iconUrl;
     switch (selectedIcon) {
       case 'icon1':
-         iconUrl = '../marker-gif.gif';
-       // iconUrl = '../location.svg';
-        break;
-      case 'icon2':
-        iconUrl = '../car.svg';
-        break;
-      case 'icon3':
-        iconUrl = '../taxi.svg';
-        break;
+        //  iconUrl = '../marker-gif.gif';
+      //  iconUrl = '../location.svg';
+       iconUrl = '../navigator.svg';
+       break;
+       case 'icon2':
+         iconUrl = '../car.svg';
+         break;
+         case 'icon3':
+           iconUrl = '../taxi.svg';
+           break;
       case 'icon4':
         iconUrl = '../bus.png';
         break;
-      case 'icon5':
-        iconUrl = '../bike.svg';
-        break;
-      default:
-        iconUrl = '../location.svg';
+        case 'icon5':
+          iconUrl = '../bike.svg';
+          break;
+          default:
+        iconUrl = '../navigator.svg';
+        // iconUrl = '../location.svg';
     }
 
     return new L.DivIcon({
