@@ -337,7 +337,7 @@ const iconSrc = isCurrentUser ? '../navigator.svg' : 'bus.png';
             //   iconSize: [25, 45],
             //   iconAnchor: [17, 46],
             //   popupAnchor: [3, -46],
-             html: `<div style="transform: rotate(${angles[user.userId]}deg);">
+             html: `<div style="transform: rotate(${360 - angles[user.userId]}deg);">
                   <img src="${iconSrc}" style="width: 25px; height: 45px;" alt="Bus Icon"/>
                 </div>`,
               className: "leaflet-marker-icon",
