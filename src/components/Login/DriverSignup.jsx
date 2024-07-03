@@ -67,7 +67,7 @@ const [found,setFound]=useState(false);
   return (
     <>
       <form onSubmit={handleSubmit(onSubmit)}>
-        <div className='w-full flex justify-center gap-4 h-96'>
+        <div className='w-full flex justify-center gap-4'>
           <Card className='w-[90%] md:w-[40%] mt-10 '>
             <CardBody>
               <div className='flex justify-center'>
