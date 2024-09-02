@@ -106,7 +106,7 @@ function Login() {
                 </div>
               </div>
               {loading && (
-                <div className='fixed inset-0 flex items-center justify-center'>
+                <div className='fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50'>
                   <img src="../loading.gif" alt="Loading..." className='w-30 h-30' />
                 </div>
               )}
