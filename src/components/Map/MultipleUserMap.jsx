@@ -14,6 +14,7 @@ import ContextMenu from "./ContextMenu";
 import CurrentUser from './CurrentUser';
 import { data } from 'autoprefixer';
 import Speedometer from './Speedometer';
+import BusStop from '../BusRoute/BusStop';
 
 const nepalBounds = L.latLngBounds(
   L.latLng(26.347, 80.058), // South-West
@@ -196,10 +197,6 @@ function MultipleUserMap() {
   console.log(position); 
   }
 
-
- 
-
-
   useEffect(() => {
     if(status){
     if (navigator.geolocation) {
@@ -215,9 +212,7 @@ function MultipleUserMap() {
           const data=await service.storeUserLocation({userId:userData.$id,name:userData.name,latitude,longitude});
           console.log("performing storing in database",data);
           setLocationStored(false);
-         
         }
-          
           storeLoc();
       }
          
@@ -242,9 +237,6 @@ function MultipleUserMap() {
   // return () => clearInterval(intervalId); // Clean up on component unmount
   }
   }, [position]);
-  
- 
-  
 
   const toggleRouting = () => {
     setIsRoutingEnabled((prevState) => !prevState);
@@ -356,11 +348,11 @@ const iconSrc = isCurrentUser ? '../navigator.svg' : 'bus.png';
         <RoutingControl isRoutingEnabled={isRoutingEnabled} />
         <ZoomControl />
         <ContextMenu />
+        <BusStop />
       </MapContainer>
       <button 
         className="absolute top-[55px] right-[10px] z-[1600] bg-white border-2 border-gray-400 rounded-md w-[46px] h-11" 
-        onClick={toggleRouting}
-      >
+        onClick={toggleRouting}>
         <img src="../route-icon.png" className='absolute left-[6px] top-1 w-15 h-8' alt="Routing Icon" />
       </button>
       {/* <button className="absolute top-[10px] right-[25%] z-[1300]">
