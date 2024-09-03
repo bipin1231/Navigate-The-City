@@ -1,6 +1,7 @@
 // BusStop.js
 import React, { useEffect, useState, useRef } from 'react';
-import { Circle, Popup, useMap } from 'react-leaflet';
+import { Circle, Popup, useMap, Marker } from 'react-leaflet';
+import L from 'leaflet'; // Import leaflet to create custom div icons
 
 const BusStop = ({ busPositions }) => {
   const busStops = [
@@ -81,24 +82,40 @@ const BusStop = ({ busPositions }) => {
     }));
   };
 
+  const createDivIcon = (text) => {
+    return L.divIcon({
+      className: 'custom-div-icon',
+      html: `<div style="background-color:rgba(255, 255, 255, 0.8);padding:2px 4px;border-radius:4px;">${text}</div>`,
+      iconSize: [30, 15],
+    });
+  };
+
   return (
     <>
       {showBusStops &&
         busStops.map((stop, index) => (
-          <Circle
-            key={index}
-            center={stop.position}
-            radius={10}
-            color="blue"
-            fillColor="blue"
-            fillOpacity={0.5}
-          >
-            <Popup>
-              <span>{stop.popupText}</span>
-              <br />
-              {timers[index] !== null ? `Countdown: ${timers[index]}s` : 'No bus nearby'}
-            </Popup>
-          </Circle>
+          <>
+            <Circle
+              key={`circle-${index}`}
+              center={stop.position}
+              radius={10}
+              color="blue"
+              fillColor="blue"
+              fillOpacity={0.5}
+            >
+              <Popup>
+                <span>{stop.popupText}</span>
+              </Popup>
+            </Circle>
+            {timers[index] !== null && (
+              <Marker
+                key={`timer-${index}`}
+                position={stop.position}
+                icon={createDivIcon(`Countdown: ${timers[index]}s`)}
+                interactive={false} // Make marker non-interactive
+              />
+            )}
+          </>
         ))}
     </>
   );
