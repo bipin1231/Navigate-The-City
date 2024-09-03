@@ -120,12 +120,12 @@ function CurrentUser() {
       className: 'custom-marker',
       html: `
         <div class="marker-icon" style="transform: rotate(${360 - userDirection}deg);">
-          <img src="${iconUrl}" class="w-9 h-11 border-none bg-transparent outline-none" />
+          <img src="${iconUrl}" class="w-4 h-4 border-none bg-transparent outline-none" />
         </div>
       `,
-      iconSize: [30, 40],
+      iconSize: [15, 25],
       iconAnchor: [17, 46],
-      popupAnchor: [3, -46]
+      popupAnchor: [0, -46]
     });
   };
 

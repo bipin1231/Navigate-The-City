@@ -157,6 +157,7 @@ function MultipleUserMap() {
   const [previousPositions, setPreviousPositions] = useState({});
   const [angles, setAngles] = useState({}); // Store angles for each user
 
+  const [busPositions, setBusPositions] = useState([]);
 
   useEffect(() => {
     const fetchUserLocation = async () => {
@@ -282,6 +283,23 @@ function MultipleUserMap() {
   };
   console.log("multiple angles ......",angles);
 
+//bus stop functionality
+  useEffect(() => {
+    const fetchBusPositions = async () => {
+      // Fetch or update bus positions here
+      // For example, update the state with current bus positions
+      const positions = users.map(user => user.position); // Example based on your existing users array
+      setBusPositions(positions);
+    };
+
+    fetchBusPositions();
+    const intervalId = setInterval(fetchBusPositions, 5000); // Update every 5 seconds
+    return () => clearInterval(intervalId);
+  }, [users]);
+
+
+
+
   return (
     <div className='h-[100vh] w-full relative flex flex-col items-center'>
       <MapContainer
@@ -330,7 +348,7 @@ const iconSrc = isCurrentUser ? '../navigator.svg' : 'bus.png';
             //   iconAnchor: [17, 46],
             //   popupAnchor: [3, -46],
              html: `<div style="transform: rotate(${360 - angles[user.userId]}deg);">
-                  <img src="${iconSrc}" style="width: 25px; height: 45px;" alt="Bus Icon"/>
+                  <img src="${iconSrc}" style="width: 15px; height: 25px;" alt="Bus Icon"/>
                 </div>`,
               className: "leaflet-marker-icon",
             })}
@@ -348,7 +366,7 @@ const iconSrc = isCurrentUser ? '../navigator.svg' : 'bus.png';
         <RoutingControl isRoutingEnabled={isRoutingEnabled} />
         <ZoomControl />
         <ContextMenu />
-        <BusStop />
+        <BusStop busPositions={busPositions}/>
       </MapContainer>
       <button 
         className="absolute top-[55px] right-[10px] z-[1600] bg-white border-2 border-gray-400 rounded-md w-[46px] h-11" 
