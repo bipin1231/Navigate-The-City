@@ -8,9 +8,10 @@ const BusStop = ({ busPositions }) => {
     { position: [27.61582, 84.54965], popupText: 'Jyamire Bus Stop' },
     { position: [27.62146, 84.51585], popupText: 'Tandi Bus Stop' },
     { position: [27.62273, 84.51230], popupText: 'Sauraha Bus Stop' },
-    { position: [27.62953, 84.55358], popupText: 'temp Bus Stop' },
+    // { position: [27.62953, 84.55358], popupText: 'temp Bus Stop' },
     { position: [27.62974, 84.55343], popupText: 'temp Bus Stop' },
     { position: [27.62962, 84.55348], popupText: 'temp Bus Stop' },
+    { position: [27.62962, 84.55332], popupText: 'temp Bus Stop' },
     { position: [27.65048, 84.53134], popupText: 'temp Bus Stop' },
   ];
 
@@ -88,7 +89,7 @@ const BusStop = ({ busPositions }) => {
       className: 'custom-div-icon',
       html: `<div>${text}</div>`,
       // html: `<div style="background-color:rgba(255, 255, 255, 0.8);">${text}</div>`,
-      iconSize: [30, 15],
+      // iconSize: [30, 15],
       iconAnchor: [0, 15],
     });
   };
