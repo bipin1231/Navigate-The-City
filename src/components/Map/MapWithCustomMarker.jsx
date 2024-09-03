@@ -173,7 +173,7 @@ function MultipleUserMap() {
   const markerIcon = new L.Icon({
     iconUrl: "../pin.svg",
     iconSize: [35, 45],
-    iconAnchor: [17, 46],
+    // iconAnchor: [17, 46],
     popupAnchor: [3, -46]
   });
 

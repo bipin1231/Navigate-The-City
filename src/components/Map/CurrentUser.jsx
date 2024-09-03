@@ -124,7 +124,7 @@ function CurrentUser() {
         </div>
       `,
       iconSize: [15, 25],
-      iconAnchor: [17, 46],
+      // iconAnchor: [17, 46],
       popupAnchor: [0, -46]
     });
   };
