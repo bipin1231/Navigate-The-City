@@ -16,7 +16,8 @@ const BusStop = ({ busPositions }) => {
 
   const map = useMap();
   const [showBusStops, setShowBusStops] = useState(false);
-  const [timers, setTimers] = useState({}); // Timers for each bus stop
+  const [timers, setTimers] = useState({}); // Countdown for each bus stop
+  const [presenceTimers, setPresenceTimers] = useState({}); // Timeout for presence check
   const countdownRefs = useRef({}); // Refs to handle intervals
 
   useEffect(() => {
@@ -31,9 +32,8 @@ const BusStop = ({ busPositions }) => {
     };
   }, [map]);
 
+  // Monitor bus positions and handle countdown initiation/reset
   useEffect(() => {
-    const currentCountdowns = { ...countdownRefs.current };
-
     busStops.forEach((stop, index) => {
       let busInCircle = false;
 
@@ -42,31 +42,34 @@ const BusStop = ({ busPositions }) => {
 
         if (distance <= 12) { // Bus enters the circle
           busInCircle = true;
-          if (!timers[index] && !currentCountdowns[index]) { // No active countdown
-            currentCountdowns[index] = setTimeout(() => {
-              startCountdown(index);
-            }, 5000); // Start countdown if bus stays for 5 seconds
+          if (!presenceTimers[index] && !countdownRefs.current[index]) { // No active timeout or countdown
+            const timerId = setTimeout(() => startCountdown(index), 5000); // Set timeout for 5 seconds
+            setPresenceTimers((prevTimers) => ({ ...prevTimers, [index]: timerId }));
           }
         }
       });
 
       if (!busInCircle) { // Bus leaves the circle
-        if (currentCountdowns[index]) { // Clear pending timeout if bus leaves before 5 seconds
-          clearTimeout(currentCountdowns[index]);
-          delete currentCountdowns[index];
+        if (presenceTimers[index]) { // Clear pending timeout if bus leaves before 5 seconds
+          clearTimeout(presenceTimers[index]);
+          setPresenceTimers((prevTimers) => {
+            const newTimers = { ...prevTimers };
+            delete newTimers[index];
+            return newTimers;
+          });
         }
-        if (timers[index] !== null && timers[index] !== undefined) {
+        if (timers[index] !== null && timers[index] !== undefined) { // Reset countdown if it was started
           resetCountdown(index);
         }
       }
     });
 
-    countdownRefs.current = currentCountdowns;
-
     return () => {
-      Object.values(countdownRefs.current).forEach(clearTimeout);
+      // Cleanup on component unmount or on dependency change
+      Object.values(presenceTimers).forEach(clearTimeout);
+      Object.values(countdownRefs.current).forEach(clearInterval);
     };
-  }, [busPositions, timers, map]);
+  }, [busPositions, map, presenceTimers, timers]);
 
   const startCountdown = (index) => {
     setTimers((prevTimers) => ({
@@ -74,7 +77,7 @@ const BusStop = ({ busPositions }) => {
       [index]: 180 // 3 minutes in seconds
     }));
 
-    countdownRefs.current[index] = setInterval(() => {
+    const countdownInterval = setInterval(() => {
       setTimers((prevTimers) => {
         if (prevTimers[index] > 0) {
           return {
@@ -82,7 +85,7 @@ const BusStop = ({ busPositions }) => {
             [index]: prevTimers[index] - 1
           };
         } else {
-          clearInterval(countdownRefs.current[index]);
+          clearInterval(countdownInterval);
           delete countdownRefs.current[index];
           return {
             ...prevTimers,
@@ -91,6 +94,15 @@ const BusStop = ({ busPositions }) => {
         }
       });
     }, 1000);
+
+    countdownRefs.current[index] = countdownInterval;
+
+    // Clear the presence timeout once the countdown starts
+    setPresenceTimers((prevTimers) => {
+      const newTimers = { ...prevTimers };
+      delete newTimers[index];
+      return newTimers;
+    });
   };
 
   const resetCountdown = (index) => {
@@ -106,7 +118,7 @@ const BusStop = ({ busPositions }) => {
     return L.divIcon({
       className: 'custom-div-icon',
       html: `<div style="background-color:rgba(255, 255, 255, 0.8);padding:2px 4px;border-radius:4px;">${text}</div>`,
-      iconSize: [60, 15], // Adjusted size for better visibility
+      iconSize: [60, 15],
     });
   };
 
@@ -132,7 +144,7 @@ const BusStop = ({ busPositions }) => {
                 key={`timer-${index}`}
                 position={stop.position}
                 icon={createDivIcon(`Countdown: ${timers[index]}s`)}
-                interactive={false} // Make marker non-interactive
+                interactive={false}
               />
             )}
           </>
