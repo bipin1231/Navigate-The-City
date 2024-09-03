@@ -8,7 +8,6 @@ const BusStop = ({ busPositions }) => {
     { position: [27.61582, 84.54965], popupText: 'Jyamire Bus Stop' },
     { position: [27.62146, 84.51585], popupText: 'Tandi Bus Stop' },
     { position: [27.62273, 84.51230], popupText: 'Sauraha Bus Stop' },
-    // { position: [27.62953, 84.55358], popupText: 'temp Bus Stop' },
     { position: [27.62974, 84.55343], popupText: 'temp Bus Stop' },
     { position: [27.62962, 84.55348], popupText: 'temp Bus Stop' },
     { position: [27.62962, 84.55332], popupText: 'temp Bus Stop' },
@@ -18,7 +17,7 @@ const BusStop = ({ busPositions }) => {
   const map = useMap();
   const [showBusStops, setShowBusStops] = useState(false);
   const [timers, setTimers] = useState({}); // Timers for each bus stop
-  const countdownRefs = useRef({}); // Refs to handle countdowns
+  const countdownRefs = useRef({}); // Refs to handle intervals
 
   useEffect(() => {
     const handleZoom = () => {
@@ -32,7 +31,6 @@ const BusStop = ({ busPositions }) => {
     };
   }, [map]);
 
-  // Detect if bus enters or leaves the circle
   useEffect(() => {
     const currentCountdowns = { ...countdownRefs.current };
 
@@ -41,8 +39,6 @@ const BusStop = ({ busPositions }) => {
 
       busPositions.forEach((busPos) => {
         const distance = map.distance(stop.position, busPos);
-        console.log('Bus Positions:', busPositions);
-console.log('Distance:', distance);
 
         if (distance <= 12) { // Bus enters the circle
           busInCircle = true;
@@ -59,7 +55,7 @@ console.log('Distance:', distance);
           clearTimeout(currentCountdowns[index]);
           delete currentCountdowns[index];
         }
-        if (timers[index]) {
+        if (timers[index] !== null && timers[index] !== undefined) {
           resetCountdown(index);
         }
       }
@@ -78,18 +74,23 @@ console.log('Distance:', distance);
       [index]: 180 // 3 minutes in seconds
     }));
 
-    const countdownInterval = setInterval(() => {
+    countdownRefs.current[index] = setInterval(() => {
       setTimers((prevTimers) => {
-        const newTime = prevTimers[index] - 1;
-        if (newTime <= 0) {
-          clearInterval(countdownInterval);
-          return { ...prevTimers, [index]: 0 };
+        if (prevTimers[index] > 0) {
+          return {
+            ...prevTimers,
+            [index]: prevTimers[index] - 1
+          };
+        } else {
+          clearInterval(countdownRefs.current[index]);
+          delete countdownRefs.current[index];
+          return {
+            ...prevTimers,
+            [index]: 0
+          };
         }
-        return { ...prevTimers, [index]: newTime };
       });
     }, 1000);
-
-    countdownRefs.current[index] = countdownInterval;
   };
 
   const resetCountdown = (index) => {
