@@ -8,7 +8,8 @@ const BusStop = ({ busPositions }) => {
     { position: [27.62146, 84.51585], popupText: 'Tandi Bus Stop' },
     { position: [27.62273, 84.51230], popupText: 'Sauraha Bus Stop' },
     { position: [27.62953, 84.55358], popupText: 'temp Bus Stop' },
-    { position: [27.65048, 84.53134], popupText: 'temp1 Bus Stop' },
+    { position: [27.62974, 84.55343], popupText: 'temp Bus Stop' },
+    { position: [27.65048, 84.53134], popupText: 'temp Bus Stop' },
   ];
 
   const map = useMap();
