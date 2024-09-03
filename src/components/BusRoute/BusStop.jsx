@@ -11,6 +11,7 @@ const BusStop = ({ busPositions }) => {
     { position: [27.62974, 84.55343], popupText: 'temp Bus Stop' },
     { position: [27.62962, 84.55348], popupText: 'temp Bus Stop' },
     { position: [27.62962, 84.55332], popupText: 'temp Bus Stop' },
+    { position: [27.62967, 84.55323], popupText: 'temp Bus Stop' },
     { position: [27.65048, 84.53134], popupText: 'temp Bus Stop' },
   ];
 
