@@ -1,7 +1,7 @@
 // BusStop.js
 import React, { useEffect, useState, useRef } from 'react';
 import { Circle, Popup, useMap, Marker } from 'react-leaflet';
-import L from 'leaflet'; // Import leaflet to create custom div icons
+import L from 'leaflet';
 
 const BusStop = ({ busPositions }) => {
   const busStops = [
@@ -34,22 +34,35 @@ const BusStop = ({ busPositions }) => {
 
   // Detect if bus enters or leaves the circle
   useEffect(() => {
+    const currentCountdowns = { ...countdownRefs.current };
+
     busStops.forEach((stop, index) => {
+      let busInCircle = false;
+
       busPositions.forEach((busPos) => {
         const distance = map.distance(stop.position, busPos);
         if (distance <= 5) { // Bus enters the circle
-          if (!timers[index]) {
-            countdownRefs.current[index] = setTimeout(() => {
+          busInCircle = true;
+          if (!timers[index] && !currentCountdowns[index]) { // No active countdown
+            currentCountdowns[index] = setTimeout(() => {
               startCountdown(index);
             }, 5000); // Start countdown if bus stays for 5 seconds
           }
-        } else { // Bus leaves the circle
-          if (timers[index]) {
-            resetCountdown(index);
-          }
         }
       });
+
+      if (!busInCircle) { // Bus leaves the circle
+        if (currentCountdowns[index]) { // Clear pending timeout if bus leaves before 5 seconds
+          clearTimeout(currentCountdowns[index]);
+          delete currentCountdowns[index];
+        }
+        if (timers[index]) {
+          resetCountdown(index);
+        }
+      }
     });
+
+    countdownRefs.current = currentCountdowns;
 
     return () => {
       Object.values(countdownRefs.current).forEach(clearTimeout);
@@ -82,15 +95,14 @@ const BusStop = ({ busPositions }) => {
       ...prevTimers,
       [index]: null
     }));
+    delete countdownRefs.current[index];
   };
 
   const createDivIcon = (text) => {
     return L.divIcon({
       className: 'custom-div-icon',
-      html: `<div>${text}</div>`,
-      // html: `<div style="background-color:rgba(255, 255, 255, 0.8);">${text}</div>`,
-      // iconSize: [30, 15],
-      iconAnchor: [0, 15],
+      html: `<div style="background-color:rgba(255, 255, 255, 0.8);padding:2px 4px;border-radius:4px;">${text}</div>`,
+      iconSize: [60, 15], // Adjusted size for better visibility
     });
   };
 
@@ -111,7 +123,7 @@ const BusStop = ({ busPositions }) => {
                 <span>{stop.popupText}</span>
               </Popup>
             </Circle>
-            {timers[index] !== null && (
+            {timers[index] !== null && timers[index] !== undefined && (
               <Marker
                 key={`timer-${index}`}
                 position={stop.position}
