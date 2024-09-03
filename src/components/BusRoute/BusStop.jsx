@@ -86,9 +86,9 @@ const BusStop = ({ busPositions }) => {
   const createDivIcon = (text) => {
     return L.divIcon({
       className: 'custom-div-icon',
-      html: `<div style="background-color:rgba(255, 255, 255, 0.8);">${text}</div>`,
+      // html: `<div style="background-color:rgba(255, 255, 255, 0.8);">${text}</div>`,
       iconSize: [30, 15],
-      iconAnchor: [0, 5],
+      iconAnchor: [0, 15],
     });
   };
 
