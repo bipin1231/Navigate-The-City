@@ -41,7 +41,10 @@ const BusStop = ({ busPositions }) => {
 
       busPositions.forEach((busPos) => {
         const distance = map.distance(stop.position, busPos);
-        if (distance <= 5) { // Bus enters the circle
+        console.log('Bus Positions:', busPositions);
+console.log('Distance:', distance);
+
+        if (distance <= 12) { // Bus enters the circle
           busInCircle = true;
           if (!timers[index] && !currentCountdowns[index]) { // No active countdown
             currentCountdowns[index] = setTimeout(() => {
