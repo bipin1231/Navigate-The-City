@@ -88,6 +88,7 @@ const BusStop = ({ busPositions }) => {
       className: 'custom-div-icon',
       html: `<div style="background-color:rgba(255, 255, 255, 0.8);padding:2px 4px;border-radius:4px;">${text}</div>`,
       iconSize: [30, 15],
+      iconAnchor: [0, -45],
     });
   };
 

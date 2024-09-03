@@ -288,7 +288,7 @@ function MultipleUserMap() {
     const fetchBusPositions = async () => {
       // Fetch or update bus positions here
       // For example, update the state with current bus positions
-      const positions = users.map(user => user.position); // Example based on your existing users array
+      const positions = users.map(user => user.position);
       setBusPositions(positions);
     };
 
