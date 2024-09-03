@@ -287,9 +287,19 @@ function MultipleUserMap() {
   useEffect(() => {
     const fetchBusPositions = async () => {
       // Fetch or update bus positions here
-      // For example, update the state with current bus positions
-      const positions = users.map(user => user.position);
-      setBusPositions(positions);
+      // const positions = users.map(user => user.position);
+      // setBusPositions(positions);
+
+      console.log("fetching.........");
+      const data = await service.fetchBusPositions();
+      console.log(data);
+      const busLocations = data.documents.map((doc) => ({
+        userId: doc.userId,
+        position: [doc.latitude, doc.longitude],
+      }));
+      console.log(busLocations);
+      const validBusLocations = busLocations.filter(user => user.position[0] !== null);
+      setBusPositions(validBusLocations);
     };
 
     fetchBusPositions();
@@ -298,6 +308,29 @@ function MultipleUserMap() {
   }, [users]);
 
 
+
+
+//2nd method for bus functionality
+  // useEffect(() => {
+  //   const fetchUserLocation = async () => {
+  //     console.log("fetching.........");
+  //     const data = await service.fetchUserLocation();
+  //     console.log(data);
+  //     const userLocations = data.documents.map((doc) => ({
+  //       userId: doc.userId,
+  //       position: [doc.latitude, doc.longitude],
+  //     }));
+  //     console.log(userLocations);
+  //     const validUserLocations = userLocations.filter(user => user.position[0] !== null);
+  //     setUsers(validUserLocations);
+  //   }
+   
+  //   fetchUserLocation(); // Initial fetch
+
+  //   const intervalId = setInterval(fetchUserLocation, 5000); // Fetch every 5 seconds
+  
+  //   return () => clearInterval(intervalId); // Clean up on component unmount
+  // }, []);
 
 
   return (
