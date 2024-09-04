@@ -140,7 +140,7 @@ function CurrentUser() {
   return (
     userPosition && (
       <div className='flex flex-col items-center'>
-        <div className={`fixed ${bottomPosition === 0 ? 'bottom-[-70px] md:bottom-[-100px]' : 'bottom-0'} duration-200 bg-[#0328fc] rounded-t-lg w-[300px] h-[70px] md:w-[500px] md:h-[100px] z-[1300]`}>
+        {/* <div className={`fixed ${bottomPosition === 0 ? 'bottom-[-70px] md:bottom-[-100px]' : 'bottom-0'} duration-200 bg-[#0328fc] rounded-t-lg w-[300px] h-[70px] md:w-[500px] md:h-[100px] z-[1300]`}>
           <div className='flex justify-center'>
             <button onClick={handleButtonClick}>
               <img src='../arrow-up.png' className='w-10 h-10 mt-[-35px]' />
@@ -158,7 +158,7 @@ function CurrentUser() {
               <option value="icon5">Bike</option>
             </select>
           </div>
-        </div>
+        </div> */}
         <Marker key={'001'} position={userPosition} icon={markerIcon}>
           <Popup>
             <Speedometer speed={speed} />

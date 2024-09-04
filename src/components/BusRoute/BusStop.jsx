@@ -1,4 +1,3 @@
-// BusStop.js
 import React, { useEffect, useState, useRef } from 'react';
 import { Circle, Popup, useMap, Marker } from 'react-leaflet';
 import L from 'leaflet';
@@ -35,6 +34,9 @@ const BusStop = ({ busPositions }) => {
 
   // Monitor bus positions and handle countdown initiation/reset
   useEffect(() => {
+    const updatedPresenceTimers = { ...presenceTimers };
+    const updatedCountdowns = { ...countdownRefs.current };
+
     busStops.forEach((stop, index) => {
       let busInCircle = false;
 
@@ -43,21 +45,17 @@ const BusStop = ({ busPositions }) => {
 
         if (distance <= 12) { // Bus enters the circle
           busInCircle = true;
-          if (!presenceTimers[index] && !countdownRefs.current[index]) { // No active timeout or countdown
+          if (!updatedPresenceTimers[index] && !updatedCountdowns[index]) { // No active timeout or countdown
             const timerId = setTimeout(() => startCountdown(index), 5000); // Set timeout for 5 seconds
-            setPresenceTimers((prevTimers) => ({ ...prevTimers, [index]: timerId }));
+            updatedPresenceTimers[index] = timerId;
           }
         }
       });
 
       if (!busInCircle) { // Bus leaves the circle
-        if (presenceTimers[index]) { // Clear pending timeout if bus leaves before 5 seconds
-          clearTimeout(presenceTimers[index]);
-          setPresenceTimers((prevTimers) => {
-            const newTimers = { ...prevTimers };
-            delete newTimers[index];
-            return newTimers;
-          });
+        if (updatedPresenceTimers[index]) { // Clear pending timeout if bus leaves before 5 seconds
+          clearTimeout(updatedPresenceTimers[index]);
+          delete updatedPresenceTimers[index];
         }
         if (timers[index] !== null && timers[index] !== undefined) { // Reset countdown if it was started
           resetCountdown(index);
@@ -65,12 +63,15 @@ const BusStop = ({ busPositions }) => {
       }
     });
 
+    setPresenceTimers(updatedPresenceTimers);
+    countdownRefs.current = updatedCountdowns;
+
     return () => {
       // Cleanup on component unmount or on dependency change
-      Object.values(presenceTimers).forEach(clearTimeout);
-      Object.values(countdownRefs.current).forEach(clearInterval);
+      Object.values(updatedPresenceTimers).forEach(clearTimeout);
+      Object.values(updatedCountdowns).forEach(clearInterval);
     };
-  }, [busPositions, map, presenceTimers, timers]);
+  }, [busPositions, map]);
 
   const startCountdown = (index) => {
     setTimers((prevTimers) => ({
@@ -80,19 +81,15 @@ const BusStop = ({ busPositions }) => {
 
     const countdownInterval = setInterval(() => {
       setTimers((prevTimers) => {
-        if (prevTimers[index] > 0) {
-          return {
-            ...prevTimers,
-            [index]: prevTimers[index] - 1
-          };
+        const newTimers = { ...prevTimers };
+        if (newTimers[index] > 0) {
+          newTimers[index] -= 1;
         } else {
           clearInterval(countdownInterval);
           delete countdownRefs.current[index];
-          return {
-            ...prevTimers,
-            [index]: 0
-          };
+          newTimers[index] = 0;
         }
+        return newTimers;
       });
     }, 1000);
 
@@ -108,11 +105,11 @@ const BusStop = ({ busPositions }) => {
 
   const resetCountdown = (index) => {
     clearInterval(countdownRefs.current[index]);
+    delete countdownRefs.current[index];
     setTimers((prevTimers) => ({
       ...prevTimers,
       [index]: null
     }));
-    delete countdownRefs.current[index];
   };
 
   const createDivIcon = (text) => {

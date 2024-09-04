@@ -9,7 +9,7 @@ import 'leaflet-geosearch/dist/geosearch.css';
 import "leaflet-routing-machine/dist/leaflet-routing-machine.css";
 import "leaflet-routing-machine";
 import "leaflet-control-geocoder";
-// import LowerSlideBar from "./LowerSlideBar";
+import LowerSlideBar from "./LowerSlideBar";
 import ContextMenu from "./ContextMenu";
 import CurrentUser from './CurrentUser';
 import { data } from 'autoprefixer';
@@ -397,7 +397,7 @@ const iconSrc = isCurrentUser ? '../navigator.svg' : 'bus.png';
       {/* <button className="absolute top-[10px] right-[25%] z-[1300]">
         <img src="../target-location.svg" className="w-[45px] h-[45px]" />
       </button> */}
-      {/* <LowerSlideBar /> */}
+      <LowerSlideBar />
     </div>
   );
 }
