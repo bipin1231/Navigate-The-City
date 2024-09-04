@@ -31,8 +31,13 @@ function CurrentUser() {
   }, []);
 
   useEffect(() => {
+    const lowPassFilter = (alpha, prevValue, newValue) => {
+      return alpha * newValue + (1 - alpha) * prevValue;
+    };
+
     const handleOrientation = (event) => {
       let compassHeading;
+      let smoothedCompassHeading = userDirection;
 
       if (event.webkitCompassHeading) {
         compassHeading = event.webkitCompassHeading;
@@ -59,11 +64,14 @@ function CurrentUser() {
         if (compassHeading >= 360) {
           compassHeading -= 360;
         }
+
+        // Apply low-pass filter to smooth out the changes
+        smoothedCompassHeading = lowPassFilter(0.1, smoothedCompassHeading, compassHeading);
       } else {
         compassHeading = 0;
       }
 
-      setUserDirection(compassHeading);
+      setUserDirection(smoothedCompassHeading);
     };
 
     if (window.DeviceOrientationEvent) {
@@ -75,7 +83,7 @@ function CurrentUser() {
     } else {
       console.error('Device orientation is not supported by this browser.');
     }
-  }, []);
+  }, [userDirection]);
 
   useEffect(() => {
     const watchId = navigator.geolocation.watchPosition(
