@@ -11,10 +11,6 @@ function CurrentUser() {
   const [bottomPosition, setBottomPosition] = useState(0);
   const [speed, setSpeed] = useState(0);
 
-  const handleButtonClick = () => {
-    setBottomPosition(bottomPosition === 0 ? 20 : 0);
-  };
-
   useEffect(() => {
     if (navigator.geolocation) {
       const geoId = navigator.geolocation.watchPosition(
@@ -39,34 +35,49 @@ function CurrentUser() {
   useEffect(() => {
     const handleOrientation = (event) => {
       let compassHeading;
-      if (event.absolute) {
-        compassHeading = event.alpha;
-      } else if (event.webkitCompassHeading) {
-        compassHeading = event.webkitCompassHeading; // For Safari
+
+      if (event.webkitCompassHeading) {
+        // For Safari on iOS
+        compassHeading = event.webkitCompassHeading;
+      } else if (event.alpha !== null) {
+        // For other devices
+        const alpha = event.alpha;
+        const beta = event.beta;
+        const gamma = event.gamma;
+
+        if (typeof window.orientation !== 'undefined') {
+          if (window.orientation === 0) {
+            compassHeading = alpha;
+          } else if (window.orientation === 90) {
+            compassHeading = alpha - 90;
+          } else if (window.orientation === -90) {
+            compassHeading = alpha + 90;
+          } else {
+            compassHeading = alpha + 180;
+          }
+        } else {
+          compassHeading = alpha;
+        }
+
+        // Normalize the compass heading to a 0-360 range
+        if (compassHeading < 0) {
+          compassHeading += 360;
+        }
+        if (compassHeading >= 360) {
+          compassHeading -= 360;
+        }
       } else {
-        compassHeading = 360 - event.alpha; // For other browsers
+        compassHeading = 0; // Default to 0 if no orientation data is available
       }
+
       setUserDirection(compassHeading);
     };
 
     if (window.DeviceOrientationEvent) {
-      let lastUpdate = Date.now();
-      const throttleTime = 200; // Throttle time in ms
-
-      const throttledHandleOrientation = (event) => {
-        const now = Date.now();
-        if (now - lastUpdate >= throttleTime) {
-          handleOrientation(event);
-          lastUpdate = now;
-        }
-      };
-
-      window.addEventListener('deviceorientationabsolute', throttledHandleOrientation, true);
-      window.addEventListener('deviceorientation', throttledHandleOrientation, true);
+      window.addEventListener('deviceorientation', handleOrientation, true);
 
       return () => {
-        window.removeEventListener('deviceorientationabsolute', throttledHandleOrientation, true);
-        window.removeEventListener('deviceorientation', throttledHandleOrientation, true);
+        window.removeEventListener('deviceorientation', handleOrientation, true);
       };
     } else {
       console.error('Device orientation is not supported by this browser.');
@@ -74,7 +85,6 @@ function CurrentUser() {
   }, []);
 
   useEffect(() => {
-    // Watch user's position and update speed
     const watchId = navigator.geolocation.watchPosition(
       (position) => {
         setSpeed(position.coords.speed || 0);
@@ -85,35 +95,30 @@ function CurrentUser() {
     );
 
     return () => {
-      // Clean up the watchPosition when component unmounts
       navigator.geolocation.clearWatch(watchId);
     };
   }, []);
 
-  // Function to create custom marker icon based on selected icon and user direction
   const createCustomIcon = (selectedIcon, userDirection) => {
     let iconUrl;
     switch (selectedIcon) {
       case 'icon1':
-        //  iconUrl = '../marker-gif.gif';
-      //  iconUrl = '../location.svg';
-       iconUrl = '../navigator.svg';
-       break;
-       case 'icon2':
-         iconUrl = '../car.svg';
-         break;
-         case 'icon3':
-           iconUrl = '../taxi.svg';
-           break;
+        iconUrl = '../navigator.svg';
+        break;
+      case 'icon2':
+        iconUrl = '../car.svg';
+        break;
+      case 'icon3':
+        iconUrl = '../taxi.svg';
+        break;
       case 'icon4':
         iconUrl = '../bus.png';
         break;
-        case 'icon5':
-          iconUrl = '../bike.svg';
-          break;
-          default:
+      case 'icon5':
+        iconUrl = '../bike.svg';
+        break;
+      default:
         iconUrl = '../navigator.svg';
-        // iconUrl = '../location.svg';
     }
 
     return new L.DivIcon({
@@ -124,15 +129,12 @@ function CurrentUser() {
         </div>
       `,
       iconSize: [15, 25],
-      // iconAnchor: [17, 46],
       popupAnchor: [0, -46]
     });
   };
 
-  // Determine current marker icon based on selectedIcon state
   const markerIcon = createCustomIcon(selectedIcon, userDirection);
 
-  // Function to handle icon change
   const handleIconChange = (event) => {
     setSelectedIcon(event.target.value);
   };
@@ -140,25 +142,6 @@ function CurrentUser() {
   return (
     userPosition && (
       <div className='flex flex-col items-center'>
-        {/* <div className={`fixed ${bottomPosition === 0 ? 'bottom-[-70px] md:bottom-[-100px]' : 'bottom-0'} duration-200 bg-[#0328fc] rounded-t-lg w-[300px] h-[70px] md:w-[500px] md:h-[100px] z-[1300]`}>
-          <div className='flex justify-center'>
-            <button onClick={handleButtonClick}>
-              <img src='../arrow-up.png' className='w-10 h-10 mt-[-35px]' />
-            </button>
-          </div>
-          <div className='flex justify-between px-6'>
-            <div className='text-white'>
-              <Speedometer speed={speed} />
-            </div>
-            <select value={selectedIcon} onChange={handleIconChange} className='my-1 w-[40%]'>
-              <option value="icon1">Tracker</option>
-              <option value="icon2">Car</option>
-              <option value="icon3">Taxi</option>
-              <option value="icon4">Bus</option>
-              <option value="icon5">Bike</option>
-            </select>
-          </div>
-        </div> */}
         <Marker key={'001'} position={userPosition} icon={markerIcon}>
           <Popup>
             <Speedometer speed={speed} />
