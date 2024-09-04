@@ -54,6 +54,19 @@ function CurrentUser() {
     };
   }, []);
 
+  useEffect(() => {
+    const handleOrientation = (event) => {
+      const alpha = event.alpha; // Device's rotation around the z-axis
+      setUserDirection((prevDirection) => prevDirection + alpha);
+    };
+
+    window.addEventListener('deviceorientation', handleOrientation);
+
+    return () => {
+      window.removeEventListener('deviceorientation', handleOrientation);
+    };
+  }, []);
+
   const calculateAngle = (prevPos, newPos) => {
     const [lat1, lon1] = prevPos;
     const [lat2, lon2] = newPos;
