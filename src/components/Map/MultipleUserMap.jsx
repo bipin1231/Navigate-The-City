@@ -354,7 +354,8 @@ console.log("angle is ......",angle);
 
 const isCurrentUser = userData && user.userId === userData.$id;
 // const iconSrc = isCurrentUser ? '../marker-gif.gif' : 'bus.png';
-const iconSrc = isCurrentUser ? '../navigator.svg' : 'bus.png';
+const iconSrc = isCurrentUser ? '../car.svg' : 'bus.png';
+// const iconSrc = isCurrentUser ? '../navigator.svg' : 'bus.png';
           return (
 
             <Marker
