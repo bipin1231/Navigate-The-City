@@ -6,7 +6,6 @@ import Speedometer from './Speedometer';
 
 function CurrentUser() {
   const [userPosition, setUserPosition] = useState(null);
-  const [previousPosition, setPreviousPosition] = useState(null);
   const [userDirection, setUserDirection] = useState(0);
   const [speed, setSpeed] = useState(0);
 
@@ -16,13 +15,6 @@ function CurrentUser() {
         (position) => {
           const { latitude, longitude } = position.coords;
           const newPos = [latitude, longitude];
-          
-          if (previousPosition) {
-            const angle = calculateAngle(previousPosition, newPos);
-            setUserDirection(angle);
-          }
-
-          setPreviousPosition(newPos);
           setUserPosition(newPos);
         },
         (error) => {
@@ -37,7 +29,7 @@ function CurrentUser() {
     } else {
       console.error('Geolocation is not supported by this browser.');
     }
-  }, [previousPosition]);
+  }, []);
 
   useEffect(() => {
     const watchId = navigator.geolocation.watchPosition(
@@ -57,7 +49,7 @@ function CurrentUser() {
   useEffect(() => {
     const handleOrientation = (event) => {
       const alpha = event.alpha; // Device's rotation around the z-axis
-      setUserDirection((prevDirection) => prevDirection + alpha);
+      setUserDirection(alpha);
     };
 
     window.addEventListener('deviceorientation', handleOrientation);
@@ -66,16 +58,6 @@ function CurrentUser() {
       window.removeEventListener('deviceorientation', handleOrientation);
     };
   }, []);
-
-  const calculateAngle = (prevPos, newPos) => {
-    const [lat1, lon1] = prevPos;
-    const [lat2, lon2] = newPos;
-    const deltaLon = lon2 - lon1;
-    const y = Math.sin(deltaLon) * Math.cos(lat2);
-    const x = Math.cos(lat1) * Math.sin(lat2) - Math.sin(lat1) * Math.cos(lat2) * Math.cos(deltaLon);
-    const angle = Math.atan2(y, x) * (180 / Math.PI);
-    return (angle + 360) % 360; // Normalize to 0-360 degrees
-  };
 
   return (
     userPosition && (
