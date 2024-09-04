@@ -69,8 +69,8 @@ function CurrentUser() {
             new L.DivIcon({
               className: 'custom-marker',
               html: `
-                <div class="marker-icon" style="transform: rotate(${360 - userDirection}dg);">
-                  <img src="../navigator.svg" class="w-4 h-4 border-none bg-transparent outline-none" />
+                <div class="marker-icon" style="transform: rotate(${360 - userDirection}deg);">
+                  <img src="../bike.svg" class="w-4 h-4 border-none bg-transparent outline-none" />
                 </div>
               `,
               iconSize: [15, 25],
