@@ -6,6 +6,7 @@ import Speedometer from './Speedometer';
 
 function CurrentUser() {
   const [userPosition, setUserPosition] = useState(null);
+  const [previousPosition, setPreviousPosition] = useState(null);
   const [userDirection, setUserDirection] = useState(0);
   const [speed, setSpeed] = useState(0);
 
@@ -14,7 +15,15 @@ function CurrentUser() {
       const geoId = navigator.geolocation.watchPosition(
         (position) => {
           const { latitude, longitude } = position.coords;
-          setUserPosition([latitude, longitude]);
+          const newPos = [latitude, longitude];
+          
+          if (previousPosition) {
+            const angle = calculateAngle(previousPosition, newPos);
+            setUserDirection(angle);
+          }
+
+          setPreviousPosition(newPos);
+          setUserPosition(newPos);
         },
         (error) => {
           console.error('Error occurred while retrieving location:', error);
@@ -28,62 +37,7 @@ function CurrentUser() {
     } else {
       console.error('Geolocation is not supported by this browser.');
     }
-  }, []);
-
-  useEffect(() => {
-    const lowPassFilter = (alpha, prevValue, newValue) => {
-      return alpha * newValue + (1 - alpha) * prevValue;
-    };
-
-    const handleOrientation = (event) => {
-      let compassHeading;
-      let smoothedCompassHeading = userDirection;
-
-      if (event.webkitCompassHeading) {
-        compassHeading = event.webkitCompassHeading;
-      } else if (event.alpha !== null) {
-        const alpha = event.alpha;
-
-        if (typeof window.orientation !== 'undefined') {
-          if (window.orientation === 0) {
-            compassHeading = alpha;
-          } else if (window.orientation === 90) {
-            compassHeading = alpha - 90;
-          } else if (window.orientation === -90) {
-            compassHeading = alpha + 90;
-          } else {
-            compassHeading = alpha + 180;
-          }
-        } else {
-          compassHeading = alpha;
-        }
-
-        if (compassHeading < 0) {
-          compassHeading += 360;
-        }
-        if (compassHeading >= 360) {
-          compassHeading -= 360;
-        }
-
-        // Apply low-pass filter to smooth out the changes
-        smoothedCompassHeading = lowPassFilter(0.1, smoothedCompassHeading, compassHeading);
-      } else {
-        compassHeading = 0;
-      }
-
-      setUserDirection(smoothedCompassHeading);
-    };
-
-    if (window.DeviceOrientationEvent) {
-      window.addEventListener('deviceorientation', handleOrientation, true);
-
-      return () => {
-        window.removeEventListener('deviceorientation', handleOrientation, true);
-      };
-    } else {
-      console.error('Device orientation is not supported by this browser.');
-    }
-  }, [userDirection]);
+  }, [previousPosition]);
 
   useEffect(() => {
     const watchId = navigator.geolocation.watchPosition(
@@ -99,6 +53,16 @@ function CurrentUser() {
       navigator.geolocation.clearWatch(watchId);
     };
   }, []);
+
+  const calculateAngle = (prevPos, newPos) => {
+    const [lat1, lon1] = prevPos;
+    const [lat2, lon2] = newPos;
+    const deltaLon = lon2 - lon1;
+    const y = Math.sin(deltaLon) * Math.cos(lat2);
+    const x = Math.cos(lat1) * Math.sin(lat2) - Math.sin(lat1) * Math.cos(lat2) * Math.cos(deltaLon);
+    const angle = Math.atan2(y, x) * (180 / Math.PI);
+    return (angle + 360) % 360; // Normalize to 0-360 degrees
+  };
 
   return (
     userPosition && (
