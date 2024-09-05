@@ -95,6 +95,29 @@ function BusRoute() {
   };
 
   return (
+// <<<<<<< bipin
+   
+//   <div className='w-full flex justify-center gap-4 mt-20'>
+//         <Card className='w-[90%] md:w-[40%] mt-10'>
+     
+//         {routeInfo.map((r,index)=>(
+//           <div key={index}>
+//                  <CardBody>
+//               <div  className='w-full flex justify-center'>
+//               <Card className='w-[90%]  bg-neutral-900 text-white'>
+//             <CardHeader>
+//             <h1><span>{r.from} To {r.to}</span></h1>
+//             </CardHeader>
+//             <Divider/>
+//             <CardHeader>
+//             {/* <p>Total Bus : 5</p> */}
+//             </CardHeader>
+//           </Card>
+//          </div>
+//          </CardBody>
+//          </div>
+//         ))}
+// =======
     <>
       <div className="flex items-center flex-col pt-4 md:pt-8">
         <h1 className="text-2xl font-semibold md:text-3xl md:font-bold">
@@ -104,6 +127,7 @@ function BusRoute() {
           Select on below route list to view in map
         </h1>
       </div>
+
       
       <div className="w-full h-full flex flex-col md:flex-row md:justify-center pt-4 md:pt-10 px-4">
         <div className="w-full md:w-[50%] flex items-center flex-col px-4">
