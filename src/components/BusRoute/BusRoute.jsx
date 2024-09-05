@@ -96,38 +96,39 @@ function BusRoute() {
 
   return (
     <>
-      <div className="flex items-center flex-col pt-8">
-        <h1 className=" text-3xl font-bold">
+      <div className="flex items-center flex-col pt-4 md:pt-8">
+        <h1 className="text-2xl font-semibold md:text-3xl md:font-bold">
           Route
         </h1>
         <h1 className=" text-lg font-medium">
           Select on below route list to view in map
         </h1>
       </div>
-      <div className="w-full h-full flex justify-center pt-10 px-4">
-        <div className="w-[50%] flex items-center flex-col px-4">
-          <button className="mb-4 bg-blue-900 text-white w-[60%] border-2 border-blue-900 rounded duration-200 hover:bg-blue-100 hover:text-black" onClick={() => handleWaypointClick("Kathmandu", "Chitwan")}>
-            <h1 className=" py-2 px-4">Kathmandu to Chitwan</h1>
+      
+      <div className="w-full h-full flex flex-col md:flex-row md:justify-center pt-4 md:pt-10 px-4">
+        <div className="w-full md:w-[50%] flex items-center flex-col px-4">
+          <button className="mb-2 md:mb-4 bg-blue-900 text-white w-[80%] md:w-[60%] border-2 border-blue-900 rounded duration-200 hover:bg-blue-100 hover:text-black" onClick={() => handleWaypointClick("Kathmandu", "Chitwan")}>
+            <h1 className="py-1 md:py-2 px-4">Kathmandu to Chitwan</h1>
           </button>
-          <button className="mb-4 bg-blue-900 text-white w-[60%] border-2 border-blue-900 rounded duration-200 hover:bg-blue-100 hover:text-black" onClick={() => handleWaypointClick("Chitwan", "Pokhara")}>
-          <h1 className=" py-2 px-4">Chitwan to Pokhara</h1>
+          <button className="mb-2 md:mb-4 bg-blue-900 text-white w-[80%] md:w-[60%] border-2 border-blue-900 rounded duration-200 hover:bg-blue-100 hover:text-black" onClick={() => handleWaypointClick("Chitwan", "Pokhara")}>
+          <h1 className="py-1 md:py-2 px-4">Chitwan to Pokhara</h1>
           </button>
-          <button className="mb-4 bg-blue-900 text-white w-[60%] border-2 border-blue-900 rounded duration-200 hover:bg-blue-100 hover:text-black" onClick={() => handleWaypointClick("Pokhara", "Lumbini")}>
-          <h1 className=" py-2 px-4">Pokhara to Lumbini</h1>
+          <button className="mb-2 md:mb-4 bg-blue-900 text-white w-[80%] md:w-[60%] border-2 border-blue-900 rounded duration-200 hover:bg-blue-100 hover:text-black" onClick={() => handleWaypointClick("Pokhara", "Lumbini")}>
+          <h1 className="py-1 md:py-2 px-4">Pokhara to Lumbini</h1>
           </button>
         </div>
 
         {/* Route map info section */}
-        <div className="w-[50%] bg-red-600">
+        <div className="w-full md:w-[50%]">
           <MapContainer
             center={[27.68167, 84.43007]}
-            zoom={10}
+            zoom={8}
             scrollWheelZoom={true}
             maxZoom={18}
             minZoom={6.5}
             maxBounds={nepalBounds}
             maxBoundsViscosity={0.8}
-            style={{ height: "70vh", width: "100%" }}
+            className="h-[50vh] md:h-[70vh] w-full"
           >
             <TileLayer
               attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
