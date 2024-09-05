@@ -9,11 +9,12 @@ import 'leaflet-geosearch/dist/geosearch.css';
 import "leaflet-routing-machine/dist/leaflet-routing-machine.css";
 import "leaflet-routing-machine";
 import "leaflet-control-geocoder";
-// import LowerSlideBar from "./LowerSlideBar";
+import LowerSlideBar from "./LowerSlideBar";
 import ContextMenu from "./ContextMenu";
 import CurrentUser from './CurrentUser';
 import { data } from 'autoprefixer';
 import Speedometer from './Speedometer';
+import BusStop from '../BusRoute/BusStop';
 
 const nepalBounds = L.latLngBounds(
   L.latLng(26.347, 80.058), // South-West
@@ -156,6 +157,7 @@ function MultipleUserMap() {
   const [previousPositions, setPreviousPositions] = useState({});
   const [angles, setAngles] = useState({}); // Store angles for each user
 
+  const [busPositions, setBusPositions] = useState([]);
 
   useEffect(() => {
     const fetchUserLocation = async () => {
@@ -196,10 +198,6 @@ function MultipleUserMap() {
   console.log(position); 
   }
 
-
- 
-
-
   useEffect(() => {
     if(status){
     if (navigator.geolocation) {
@@ -215,9 +213,7 @@ function MultipleUserMap() {
           const data=await service.storeUserLocation({userId:userData.$id,name:userData.name,latitude,longitude});
           console.log("performing storing in database",data);
           setLocationStored(false);
-         
         }
-          
           storeLoc();
       }
          
@@ -242,9 +238,6 @@ function MultipleUserMap() {
   // return () => clearInterval(intervalId); // Clean up on component unmount
   }
   }, [position]);
-  
- 
-  
 
   const toggleRouting = () => {
     setIsRoutingEnabled((prevState) => !prevState);
@@ -290,6 +283,44 @@ function MultipleUserMap() {
   };
   console.log("multiple angles ......",angles);
 
+//bus stop functionality
+  // useEffect(() => {
+  //   const fetchBusPositions = async () => {
+  //     console.log("fetching.........");
+  //     const data = await service.fetchBusPositions();
+  //     console.log(data);
+  //     const busLocations = data.documents.map((doc) => ({
+  //       userId: doc.userId,
+  //       position: [doc.latitude, doc.longitude],
+  //     }));
+  //     console.log(busLocations);
+  //     const validBusLocations = busLocations.filter(user => user.position[0] !== null);
+  //     setBusPositions(validBusLocations);
+  //   };
+
+  //   fetchBusPositions();
+  //   const intervalId = setInterval(fetchBusPositions, 5000); // Update every 5 seconds
+  //   return () => clearInterval(intervalId);
+  // }, [users]);
+
+
+
+
+//2nd method for bus functionality
+useEffect(() => {
+  const fetchBusPositions = async () => {
+    // Fetch or update bus positions here
+    // For example, update the state with current bus positions
+    const positions = users.map(user => user.position); // Example based on your existing users array
+    setBusPositions(positions);
+  };
+
+  fetchBusPositions();
+  const intervalId = setInterval(fetchBusPositions, 5000); // Update every 5 seconds
+  return () => clearInterval(intervalId);
+}, [users]);
+
+
   return (
     <div className='h-[100vh] w-full relative flex flex-col items-center mt-20'>
       <MapContainer
@@ -322,7 +353,7 @@ function MultipleUserMap() {
 console.log("angle is ......",angle);
 
 const isCurrentUser = userData && user.userId === userData.$id;
-const iconSrc = isCurrentUser ? '../marker-gif.gif' : 'bus.png';
+const iconSrc = isCurrentUser ? '../navigator.svg' : 'bus.png';
           return (
 
             <Marker
@@ -336,8 +367,8 @@ const iconSrc = isCurrentUser ? '../marker-gif.gif' : 'bus.png';
             //   iconSize: [25, 45],
             //   iconAnchor: [17, 46],
             //   popupAnchor: [3, -46],
-             html: `<div style="transform: rotate(${angles[user.userId]}deg);">
-                  <img src="${iconSrc}" style="width: 25px; height: 45px;" alt="Bus Icon"/>
+             html: `<div style="transform: rotate(${360 - angles[user.userId]}deg);">
+                  <img src="${iconSrc}" style="width: 15px; height: 25px;" alt="Bus Icon"/>
                 </div>`,
               className: "leaflet-marker-icon",
             })}
@@ -355,17 +386,17 @@ const iconSrc = isCurrentUser ? '../marker-gif.gif' : 'bus.png';
         <RoutingControl isRoutingEnabled={isRoutingEnabled} />
         <ZoomControl />
         <ContextMenu />
+        <BusStop busPositions={busPositions}/>
       </MapContainer>
       <button 
         className="absolute top-[55px] right-[10px] z-[1600] bg-white border-2 border-gray-400 rounded-md w-[46px] h-11" 
-        onClick={toggleRouting}
-      >
+        onClick={toggleRouting}>
         <img src="../route-icon.png" className='absolute left-[6px] top-1 w-15 h-8' alt="Routing Icon" />
       </button>
       {/* <button className="absolute top-[10px] right-[25%] z-[1300]">
         <img src="../target-location.svg" className="w-[45px] h-[45px]" />
       </button> */}
-      {/* <LowerSlideBar /> */}
+      <LowerSlideBar />
     </div>
   );
 }
