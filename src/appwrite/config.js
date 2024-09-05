@@ -22,6 +22,7 @@ export class Service{
          userId,
           lattitude,
           longitude,
+      
         }
       )
     }catch(error){
@@ -44,7 +45,7 @@ export class Service{
   // }
   // }
 
-  async storeUserLocation({userId,name, latitude, longitude,BusNo,Speed,userType,status}) {
+  async storeUserLocation({userId,name, latitude, longitude,BusNo,Speed,userType,status,heading}) {
     try {
       // Check if the user document already exists
       const response = await this.databases.listDocuments(
@@ -68,7 +69,8 @@ export class Service{
           latitude,
           longitude,
           status,
-          Speed
+          Speed,
+          heading
         });
        
       } else {
@@ -85,7 +87,8 @@ export class Service{
           BusNo,
           Speed,
           userType,
-          status
+          status,
+          heading
         });
       }
     } catch (error) {
