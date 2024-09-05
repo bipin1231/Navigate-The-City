@@ -42,7 +42,7 @@ console.log("info",routeInfo);
 console.log("buss",busInfo);
   return (
    
-  <div className='w-full flex justify-center gap-4'>
+  <div className='w-full flex justify-center gap-4 mt-20'>
         <Card className='w-[90%] md:w-[40%] mt-10'>
      
         {routeInfo.map((r,index)=>(

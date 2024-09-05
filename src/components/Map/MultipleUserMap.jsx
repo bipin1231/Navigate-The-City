@@ -291,7 +291,7 @@ function MultipleUserMap() {
   console.log("multiple angles ......",angles);
 
   return (
-    <div className='h-[100vh] w-full relative flex flex-col items-center'>
+    <div className='h-[100vh] w-full relative flex flex-col items-center mt-20'>
       <MapContainer
         center={defaultPosition}
         zoom={10}
