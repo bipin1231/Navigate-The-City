@@ -38,13 +38,19 @@ import AddRoute from './components/company/AddRoute.jsx'
 import ViewBusList from './components/company/ViewBusList.jsx'
 import DriverInfo from './components/User/DriverInfo.jsx'
 import CompanyInfo from './components/User/CompanyInfo.jsx'
+import LandingPage from './components/LandingPage/LandingPage.jsx'
+import LoginPage from './components/LandingPage/LoginPage.jsx'
+import SignUpPage from './components/LandingPage/SignupPage.jsx'
+import ContactPage from './components/LandingPage/ContactPage.jsx'
+
+
 let persistor=persistStore(store)
 
 const router=createBrowserRouter(
   createRoutesFromElements(
     <Route path='/' element={<Layout/>}>
-      <Route path='/' element={<Home/>}/>
-      <Route path='home' element={<Home/>}/>
+      <Route path='/' element={<LandingPage/>}/>
+      <Route path='home' element={<LandingPage/>}/>
       <Route path='searchbus' element={<SearchBus/>}/>
       <Route path='selectbus' element={<SelectBus/>}/>
       <Route path='selectseat' element={<SelectSeat/>}/>
@@ -52,12 +58,16 @@ const router=createBrowserRouter(
       <Route path='confirmationcard' element={<ConfirmationCard/>}/>
       <Route path='route' element={<BusRoute/>}/>
       <Route path='login' element={<Login/>}/>
+      <Route path='loginpage' element={<LoginPage/>}/>
       <Route path='signup' element={<Signup/>}/>
+      <Route path='signuppage' element={<SignUpPage/>}/>
+      <Route path='contact' element={<ContactPage/>}/>
+
       <Route path='companysignup' element={<CompanySignup/>}/>
       <Route path='driversignup' element={<DriverSignup/>}/>
  
       {/* <Route path='map' element={<Map/>}/> */}
-      <Route path='multipleusermap' element={<MultipleUserMap/>}/>
+      <Route path='map' element={<MultipleUserMap/>}/>
       <Route path='addbus' element={<AddBus/>}/>
       <Route path='addroute' element={<AddRoute/>}/>
       <Route path='viewbuslist' element={<ViewBusList/>}/>
@@ -74,8 +84,8 @@ ReactDOM.createRoot(document.getElementById('root')).render(
         <NextUIProvider>
        <PersistGate persistor={persistor}>
        <GoogleOAuthProvider clientId="577751632897-bb8suvilk3crnlfr4lpcvbs3k4jcdsif.apps.googleusercontent.com">
-   <RouterProvider router={router}/>
-              
+     <RouterProvider router={router}/> 
+    {/* <LandingPage/> */}
    </GoogleOAuthProvider>
    </PersistGate>
    </NextUIProvider>
