@@ -55,7 +55,7 @@ console.log(position);
     // iconUrl:customIconUrl,
      iconUrl: "https://th.bing.com/th/id/OIP.RVrT1OISI4rmKKMxADYN4wHaHa?rs=1&pid=ImgDetMain",
     iconSize:[35,45],
-    iconAnchor:[17,46],
+    // iconAnchor:[17,46],
     popupAnchor:[3,-46]
   })
 
