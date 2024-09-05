@@ -13,6 +13,7 @@
     "start": "vite start"
   },
   "dependencies": {
+    "@heroicons/react": "^2.1.5",
     "@mui/x-date-pickers": "^7.3.1",
     "@nextui-org/button": "^2.0.31",
     "@nextui-org/card": "^2.0.28",

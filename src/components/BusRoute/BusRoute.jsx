@@ -96,10 +96,10 @@ function BusRoute() {
 
   return (
    
-  <div className='w-full flex justify-center gap-4 mt-20'>
-        <Card className='w-[90%] md:w-[40%] mt-10'>
+//   <div className='w-full flex justify-center gap-4 mt-20'>
+//         <Card className='w-[90%] md:w-[40%] mt-10'>
      
-//         {routeInfo.map((r,index)=>(
+// //         {routeInfo.map((r,index)=>(
 //           <div key={index}>
 //                  <CardBody>
 //               <div  className='w-full flex justify-center'>
