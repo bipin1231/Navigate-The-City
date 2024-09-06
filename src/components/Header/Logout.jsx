@@ -6,19 +6,22 @@ import { useDispatch } from 'react-redux';
 import service from '../../appwrite/config';
 function Logout() {
   const [loading, setLoading] = useState(false);
-  const userData = useSelector(state => state.auth.userData);
+ 
   const dispatch=useDispatch()
+
+
+  
 
   const logoutHandler = async() => {
     setLoading(true);
-    console.log(userData);
+    console.log("dispatchhhh",dispatch);
     const data = await authService.getCurrentUser();
     console.log(data);
 
     if (data) {
       try {
        
-        await service.storeUserLocation({ userId: userData.$id, status: false });
+        await service.storeUserLocation({ userId: data.$id, status: false });
         await authService.logout();
          dispatch(logout());
         console.log("Logging out");
@@ -42,7 +45,7 @@ function Logout() {
 
     // authService.logout();
     // dispatch(logout());
-   // if (!userData) return null;
+    // if (!userData) return null;
    
 
   

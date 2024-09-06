@@ -71,7 +71,7 @@ function Header() {
           </Link>
 
 <div className='mt-4 lg:mt-0'>
-          {(!statusLog && !status) && (
+          {(!status) && (
             <Link to='/loginpage' className="block lg:inline-block duration-200 hover:scale-[0.9]">
               <span className="bg-blue-600 text-white px-4 py-2 rounded-md font-semibold hover:bg-blue-700">
                 Sign Up
@@ -79,7 +79,7 @@ function Header() {
             </Link>
           )}
 
-          {(statusLog || status) && <Logout/>}
+          {(status) && <Logout/>}
           </div>
         </nav>
       </div>

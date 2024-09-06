@@ -439,8 +439,8 @@ useEffect(() => {
 console.log("angle is ......",angle);
 
 const isCurrentUser = userData && user.userId === userData.$id;
-//const iconSrc = isCurrentUser ? '../navigator.svg' : 'bus.png';
-const iconSrc ='bus.png';
+const iconSrc = isCurrentUser ? '../navigator.svg' : 'bus.png';
+// const iconSrc ='bus.png';
           return (
 
             <Marker
