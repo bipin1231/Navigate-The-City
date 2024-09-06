@@ -11,7 +11,7 @@ function Logout() {
 
   const logoutHandler = async() => {
     setLoading(true);
-    
+
     if (userData) {
       try {
         await service.storeUserLocation({ userId: userData.$id, status: false });
@@ -44,7 +44,7 @@ function Logout() {
     <>
       <span 
         onClick={logoutHandler}
-        className="bg-blue-600 text-white px-4 py-2 rounded-md font-semibold cursor-pointer hover:bg-blue-700"
+        className="bg-blue-600 text-white mt-4 px-4 py-2 rounded-md font-semibold cursor-pointer hover:bg-blue-700"
       >
         Logout
       </span>

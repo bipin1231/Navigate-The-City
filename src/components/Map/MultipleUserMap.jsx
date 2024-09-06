@@ -234,7 +234,7 @@ function MultipleUserMap() {
   };
 
   return (
-    <div className='h-[89vh] w-full relative flex flex-col items-center mt-16'>
+    <div className='h-[90vh] w-full relative flex flex-col items-center mt-[58px]'>
       <MapContainer
         center={[27.68167, 84.43007]}
         zoom={10}

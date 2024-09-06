@@ -2,7 +2,7 @@ import React from 'react';
 
 function ContactPage() {
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center  from-indigo-50 to-blue-100 py-12 px-4 sm:px-6 lg:px-8 mt-20">
+    <div className="min-h-screen flex flex-col items-center justify-center  from-indigo-50 to-blue-100 py-12 px-4 sm:px-6 lg:px-8 mt-[58px]">
       <div className="max-w-3xl w-full space-y-10">
         <div className="text-center">
           <h2 className="text-4xl font-bold text-indigo-700 mb-4">Let's Connect!</h2>

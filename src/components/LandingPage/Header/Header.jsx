@@ -15,9 +15,10 @@ function Header() {
   const toggleMenu = () => setMenuOpen(!menuOpen);
 
   return (
-    <header className="bg-blue-50 shadow-md fixed w-full z-10 top-0">
-      <div className="container mx-auto px-6 py-4 flex justify-between items-center">
-        <div>
+    <header className="bg-blue-50 shadow-md fixed w-full z-[2000] top-0">
+      <div className="container mx-auto px-6 py-2 flex justify-between items-center">
+        <div className='flex'>
+          <img src='../logo1.png' className='w-10 h-10 mr-1' />
           <h1 className="text-2xl font-bold text-gray-800">Navigate The City</h1>
         </div>
 
@@ -56,6 +57,7 @@ function Header() {
             Contact
           </Link>
 
+<div className='mt-4 lg:mt-0'>
           {!status && (
             <Link to='/loginpage' className="block lg:inline-block mt-4 lg:mt-0">
               <span className="bg-blue-600 text-white px-4 py-2 rounded-md font-semibold hover:bg-blue-700">
@@ -65,6 +67,7 @@ function Header() {
           )}
 
           {status && <Logout className="mt-4 lg:mt-0" />}
+          </div>
         </nav>
       </div>
     </header>

@@ -118,7 +118,7 @@ function BusRoute() {
 //         ))}
 // =======
     <>
-      <div className="flex items-center flex-col pt-4 md:pt-8">
+      <div className="flex items-center flex-col mt-[58px]">
         <h1 className="text-2xl font-semibold md:text-3xl md:font-bold">
           Route
         </h1>
