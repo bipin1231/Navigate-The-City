@@ -49,7 +49,7 @@ function LayerControl() {
       setTimeout(() => {
         const layerControlElement = document.querySelector('.leaflet-control-layers');
         if (layerControlElement) {
-          layerControlElement.classList.add('absolute', 'top-1');
+          layerControlElement.classList.add('absolute', 'md:top-1', 'scale-[0.8]', 'md:scale-[1]');
         }
       }, 0);
     // Add the default layer to the map
@@ -279,7 +279,7 @@ function MultipleUserMap() {
          <RoutingControl isRoutingEnabled={isRoutingEnabled} />
          <ContextMenu />
          <button 
-        className="absolute top-[10px] right-[10px] z-[1600] bg-white border-2 border-gray-400 rounded-md w-[46px] h-11" 
+        className="absolute top-[10px] right-[10px] z-[1600] bg-white border-2 border-gray-400 rounded-md w-[46px] h-11 scale-[0.8] md:scale-[1]" 
         onClick={toggleRouting}>
         <img src="../route-icon.png" className='absolute left-[6px] top-1 w-15 h-8' alt="Routing Icon" />
       </button>

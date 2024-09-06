@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import ScrollAnimation from 'react-animate-on-scroll';
 import Card from './Card';
 import Header from './Header/Header';
@@ -11,11 +12,16 @@ function LandingPage() {
     
 
       {/* Hero Section */}
-      <section className="flex flex-col lg:flex-row items-center justify-between container mx-auto px-6 py-20 mt-20 bg-white">
+      <section className="flex flex-col lg:flex-row items-center justify-between container mx-auto px-6 py-20 mt-6 bg-white">
         <div className="lg:w-1/2 mb-12 lg:mb-0">
           <h1 className="text-4xl lg:text-5xl font-bold mb-6">Ease the Public's Commute:</h1>
           <p className="text-lg lg:text-xl mb-6">In our fast-paced world, finding efficient and reliable transportation has become a crucial aspect of daily life.</p>
-          <a href="#" className="bg-blue-600 text-white px-8 py-3 rounded-md font-semibold hover:bg-blue-700">Get Started</a>
+          {/* <a href="#" className="bg-blue-600 text-white px-8 py-3 rounded-md font-semibold hover:bg-blue-700">Get Started</a> */}
+          <Link to='/map'>
+            <button className='text-white bg-blue-600 font-semibold rounded px-8 py-2 hover:bg-blue-700 hover:scale-[0.9] duration-200'>
+              Explore Map
+            </button>
+          </Link>
         </div>
         <div className="lg:w-1/2 flex justify-end">
           <img src="busRoad.png" alt="App Screenshot" className="w-[75%] rounded-lg shadow-md" />

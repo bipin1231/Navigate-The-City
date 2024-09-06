@@ -43,23 +43,23 @@ function Header() {
         <nav
           className={`${
             menuOpen ? 'block' : 'hidden'
-          } lg:flex lg:space-x-6 w-full lg:w-auto lg:bg-transparent lg:static lg:items-center absolute bg-blue-50 top-full left-0 lg:mt-0 mt-4 lg:py-0 py-6 px-6 lg:px-0`}>
-          <Link to='/home' className="block lg:inline-block text-gray-800 font-semibold hover:text-blue-600">
+          } flex items-center flex-col lg:flex-row lg:space-x-6 w-full lg:w-auto lg:bg-transparent lg:static absolute bg-blue-50 top-full left-0 lg:mt-0 mt-[2px] lg:py-0 py-6 px-6 lg:px-0`}>
+          <Link to='/home' className="block lg:inline-block text-gray-800 font-semibold hover:text-blue-600 hover:scale-[1.2] duration-200">
             Home
           </Link>
-          <Link to='/map' className="block lg:inline-block text-gray-800 font-semibold hover:text-blue-600 mt-4 lg:mt-0">
+          <Link to='/map' className="block lg:inline-block text-gray-800 font-semibold hover:text-blue-600 mt-4 lg:mt-0 hover:scale-[1.2] duration-200">
             Map
           </Link>
-          <Link to='/route' className="block lg:inline-block text-gray-800 font-semibold hover:text-blue-600 mt-4 lg:mt-0">
+          <Link to='/route' className="block lg:inline-block text-gray-800 font-semibold hover:text-blue-600 mt-4 lg:mt-0 hover:scale-[1.2] duration-200">
             Route
           </Link>
-          <Link to='/contact' className="block lg:inline-block text-gray-800 font-semibold hover:text-blue-600 mt-4 lg:mt-0">
+          <Link to='/contact' className="block lg:inline-block text-gray-800 font-semibold hover:text-blue-600 mt-4 lg:mt-0 hover:scale-[1.2] duration-200">
             Contact
           </Link>
 
 <div className='mt-4 lg:mt-0'>
           {!status && (
-            <Link to='/loginpage' className="block lg:inline-block mt-4 lg:mt-0">
+            <Link to='/loginpage' className="block lg:inline-block duration-200 hover:scale-[0.9]">
               <span className="bg-blue-600 text-white px-4 py-2 rounded-md font-semibold hover:bg-blue-700">
                 Sign Up
               </span>
