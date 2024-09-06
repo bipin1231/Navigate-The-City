@@ -167,12 +167,34 @@ function MultipleUserMap() {
   const [heading, setHeading] = useState(null);
 
 // Capture device orientation
+// useEffect(() => {
+//   const handleOrientation = (event) => {
+//     const alpha = event.alpha; // Alpha gives the device's heading in degrees
+//     console.log("alpha is..............................................",alpha);
+    
+//     setHeading(alpha); // Store the heading
+//   };
+
+//   // Listen for device orientation changes
+//   window.addEventListener('deviceorientation', handleOrientation);
+
+//   return () => {
+//     window.removeEventListener('deviceorientation', handleOrientation);
+//   };
+
+// }, []);
+
+
+
 useEffect(() => {
   const handleOrientation = (event) => {
     const alpha = event.alpha; // Alpha gives the device's heading in degrees
-    console.log("alpha is..............................................",alpha);
-    
-    setHeading(alpha); // Store the heading
+    if (alpha !== null) {
+      console.log("Current device orientation alpha:", alpha);
+      setHeading(alpha); // Store the heading in state
+    } else {
+      console.warn("No alpha value available for device orientation");
+    }
   };
 
   // Listen for device orientation changes
@@ -181,8 +203,9 @@ useEffect(() => {
   return () => {
     window.removeEventListener('deviceorientation', handleOrientation);
   };
+}, []);  // Empty dependency array means this runs once on mount
 
-}, []);
+
 
   
 

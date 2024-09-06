@@ -18,7 +18,7 @@ function Logout() {
     if (data) {
       try {
        
-     //   await service.storeUserLocation({ userId: userData.$id, status: false });
+        await service.storeUserLocation({ userId: userData.$id, status: false });
         await authService.logout();
          dispatch(logout());
         console.log("Logging out");
