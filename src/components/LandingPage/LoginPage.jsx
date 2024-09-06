@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link, NavLink, useNavigate } from 'react-router-dom'
 import { Button, ButtonGroup } from "@nextui-org/react";
 import { Input } from "@nextui-org/input";
@@ -12,7 +12,7 @@ import { jwtDecode } from "jwt-decode";
 import service from '../../appwrite/config';
 
 function LoginPage() {
-
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const dispatch = useDispatch()
 
@@ -22,6 +22,7 @@ function LoginPage() {
     formState: { errors }
   } = useForm();
   const onSubmit = async (data) => {
+    setLoading(true);
     console.log(data);
 
     //navigate('/selectbus',{state:{...data}});
@@ -40,6 +41,8 @@ function LoginPage() {
       }
     } catch (error) {
       console.log(error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -129,6 +132,12 @@ function LoginPage() {
             <p> Sign in with Google</p>
           </Button>
         </div>
+
+        {loading && (
+          <div className='fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50'>
+            <img src="../loading.gif" alt="Loading..." className='w-30 h-30' />
+          </div>
+        )}
 
       </div>
     </div>
