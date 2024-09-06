@@ -43,7 +43,9 @@ function Header() {
         <nav
           className={`${
             menuOpen ? 'block' : 'hidden'
-          } flex items-center flex-col lg:flex-row lg:space-x-6 w-full lg:w-auto lg:bg-transparent lg:static absolute bg-blue-50 top-full left-0 lg:mt-0 mt-[2px] lg:py-0 py-6 px-6 lg:px-0`}>
+          } flex lg:flex items-center flex-col lg:flex-row lg:space-x-6 w-full lg:w-auto lg:bg-transparent lg:static absolute bg-blue-50 top-full left-0 lg:mt-0 mt-[2px] lg:py-0 py-6 px-6 lg:px-0`}>
+          
+         
           <Link to='/home' className="block lg:inline-block text-gray-800 font-semibold hover:text-blue-600 hover:scale-[1.2] duration-200">
             Home
           </Link>
