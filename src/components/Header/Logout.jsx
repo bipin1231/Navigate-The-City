@@ -10,10 +10,14 @@ const dispatch=useDispatch()
 
 
   const logoutHandler = async() => {
+    console.log(userData);
+    const data = await authService.getCurrentUser();
+    console.log(data);
 
-    if (userData) {
+    if (data) {
       try {
-        await service.storeUserLocation({ userId: userData.$id, status: false });
+       
+     //   await service.storeUserLocation({ userId: userData.$id, status: false });
         await authService.logout();
          dispatch(logout());
         console.log("Logging out");
@@ -35,19 +39,21 @@ const dispatch=useDispatch()
 
     // authService.logout();
     // dispatch(logout());
-    if (!userData) return null;
+   // if (!userData) return null;
    
 
   
   return (
 
     // <button
-    //   className='inline-bock px-6 py-2 duration-200 hover:bg-blue-100 rounded-full'
+    //   className='bg-blue-600 text-white px-4 py-2 rounded-md font-semibold cursor-pointer hover:bg-blue-700'
     //   onClick={logoutHandler}
     // >Logout</button>
     <span 
     onClick={logoutHandler}
-    className="bg-blue-600 text-white px-4 py-2 rounded-md font-semibold cursor-pointer hover:bg-blue-700">Logout</span>
+    className="block  lg:inline-block mt-4 lg:mt-0 cursor-pointer">
+      <span className="bg-blue-600 text-white px-4 py-2 rounded-md font-semibold hover:bg-blue-700">Log Out</span>
+    </span>
 
   )
 }

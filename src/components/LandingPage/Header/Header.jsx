@@ -62,7 +62,7 @@ function Header() {
             </Link>
           )}
 
-          {status && <Logout className="mt-4 lg:mt-0" />}
+          {status && <Logout/>}
         </nav>
       </div>
     </header>
