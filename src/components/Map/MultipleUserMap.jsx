@@ -435,7 +435,7 @@ const iconSrc ='bus.png';
         <RoutingControl isRoutingEnabled={isRoutingEnabled} />
         <ZoomControl />
         <ContextMenu />
-        <BusStop busPositions={busPositions}/>
+        {/* <BusStop busPositions={busPositions}/> */}
       </MapContainer>
       <button 
         className="absolute top-[55px] right-[10px] z-[1600] bg-white border-2 border-gray-400 rounded-md w-[46px] h-11" 

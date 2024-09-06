@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import authService from '../../../appwrite/auth';
@@ -8,8 +8,18 @@ import Logout from '../../Header/Logout';
 
 function Header() {
   const dispatch = useDispatch();
-  const status = useSelector((state) => state.auth.status);
+  const [statusLog,setStatusLog]=useState(null);
   const [menuOpen, setMenuOpen] = useState(false);
+
+(async function(){
+  const userData = await authService.getCurrentUser();
+  console.log(userData);
+  if(userData) setStatusLog(true)
+    
+    
+  
+})();
+
 
   // Toggle menu for mobile view
   const toggleMenu = () => setMenuOpen(!menuOpen);
@@ -60,7 +70,7 @@ function Header() {
           </Link>
 
 <div className='mt-4 lg:mt-0'>
-          {!status && (
+          {!statusLog && (
             <Link to='/loginpage' className="block lg:inline-block duration-200 hover:scale-[0.9]">
               <span className="bg-blue-600 text-white px-4 py-2 rounded-md font-semibold hover:bg-blue-700">
                 Sign Up
@@ -68,7 +78,7 @@ function Header() {
             </Link>
           )}
 
-          {status && <Logout/>}
+          {statusLog && <Logout/>}
           </div>
         </nav>
       </div>
