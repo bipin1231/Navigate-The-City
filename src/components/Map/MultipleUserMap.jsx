@@ -10,7 +10,7 @@ import "leaflet-routing-machine/dist/leaflet-routing-machine.css";
 import "leaflet-routing-machine";
 import "leaflet-control-geocoder";
 import LowerSlideBar from "./LowerSlideBar";
-import ContextMenu from "./ContextMenu";
+
 import CurrentUser from './CurrentUser';
 import { data } from 'autoprefixer';
 import Speedometer from './Speedometer';
