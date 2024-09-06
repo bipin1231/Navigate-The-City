@@ -10,7 +10,8 @@ import "leaflet-routing-machine/dist/leaflet-routing-machine.css";
 import "leaflet-routing-machine";
 import "leaflet-control-geocoder";
 import Speedometer from './Speedometer';
-import BusStop from '../BusRoute/BusStop';
+import ContextMenu from "./ContextMenu";
+// import BusStop from '../BusRoute/BusStop';
 
 const nepalBounds = L.latLngBounds(
   L.latLng(26.347, 80.058), // South-West
@@ -24,7 +25,98 @@ const baseLayers = {
       attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
     }
   ),
+  Detailed: L.tileLayer(
+    "https://{s}.tile.openstreetmap.fr/osmfr/{z}/{x}/{y}.png",
+    {
+      attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+    }
+  ),
+  // Satellite: L.tileLayer(
+  //   "https://tiles.stadiamaps.com/tiles/alidade_satellite/{z}/{x}/{y}{r}.{ext}",
+  //   {
+  //     attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+  //     ext: "jpg",
+  //   }
+  // ),
 };
+
+function LayerControl() {
+  const map = useMap();
+
+  useEffect(() => {
+    const layerControl = L.control.layers(baseLayers, {}, { position: 'topleft' }).addTo(map);
+
+      setTimeout(() => {
+        const layerControlElement = document.querySelector('.leaflet-control-layers');
+        if (layerControlElement) {
+          layerControlElement.classList.add('absolute', 'top-1');
+        }
+      }, 0);
+    // Add the default layer to the map
+    baseLayers["Normal"].addTo(map);
+
+    return () => {
+      map.removeControl(layerControl);
+    };
+  }, [map]);
+
+  return null;
+}
+
+function SearchControl() {
+  const map = useMap();
+
+  useEffect(() => {
+    const provider = new OpenStreetMapProvider();
+
+    const searchControl = new GeoSearchControl({
+      provider: provider,
+      style: 'bar',
+      autoClose: true,
+      keepResult: true,
+      // position: 'topright',
+    });
+    map.addControl(searchControl);
+
+    // const searchControlContainer = searchControl.getContainer();
+    // if (searchControlContainer) {
+    //   searchControlContainer.classList.add('absolute', 'top-[50px]', 'right-14', 'scale-[1.3]', 'pointer-events-auto');
+    // }
+
+    return () => map.removeControl(searchControl);
+  }, [map]);
+
+  return null;
+}
+
+function RoutingControl({ isRoutingEnabled }) {
+  const map = useMap();
+
+  useEffect(() => {
+    let control;
+    if (map && isRoutingEnabled) {
+      control = L.Routing.control({
+        waypoints: [],
+        routeWhileDragging: true,
+        draggableWaypoints: true,
+        removeWaypoints: true,
+        geocoder: L.Control.Geocoder.nominatim(),
+      }).addTo(map);
+        const routingControlElement = control.getContainer();
+        if (routingControlElement) {
+          routingControlElement.classList.add('absolute', 'top-14');
+        }
+      return () => {
+        if (map && control) {
+          map.removeControl(control);
+        }
+      };
+    }
+  }, [map, isRoutingEnabled]);
+  return null;
+}
+
+
 
 function useDeviceOrientation() {
   const [heading, setHeading] = useState(0);
@@ -52,6 +144,14 @@ function MultipleUserMap() {
   const [angles, setAngles] = useState({});
   const [busPositions, setBusPositions] = useState([]);
   const heading = useDeviceOrientation(); // Get device orientation
+
+  const [isRoutingEnabled, setIsRoutingEnabled] = useState(false);
+  const markerRefs = useRef({}); // To store references to user markers
+  const mapRef = useRef(null); // To store reference to the map
+
+  const toggleRouting = () => {
+    setIsRoutingEnabled((prevState) => !prevState);
+  };
 
   useEffect(() => {
     const fetchUserLocation = async () => {
@@ -134,7 +234,7 @@ function MultipleUserMap() {
   };
 
   return (
-    <div className='h-[100vh] w-full relative flex flex-col items-center mt-20'>
+    <div className='h-[89vh] w-full relative flex flex-col items-center mt-16'>
       <MapContainer
         center={[27.68167, 84.43007]}
         zoom={10}
@@ -144,7 +244,9 @@ function MultipleUserMap() {
         maxBounds={nepalBounds}
         maxBoundsViscosity={0.8}
         zoomControl={false}
+        whenCreated={(map) => { mapRef.current = map; }}
       >
+        <LayerControl />
         <TileLayer
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
@@ -173,6 +275,14 @@ function MultipleUserMap() {
             </Marker>
           );
         })}
+         <SearchControl />
+         <RoutingControl isRoutingEnabled={isRoutingEnabled} />
+         <ContextMenu />
+         <button 
+        className="absolute top-[10px] right-[10px] z-[1600] bg-white border-2 border-gray-400 rounded-md w-[46px] h-11" 
+        onClick={toggleRouting}>
+        <img src="../route-icon.png" className='absolute left-[6px] top-1 w-15 h-8' alt="Routing Icon" />
+      </button>
       </MapContainer>
     </div>
   );

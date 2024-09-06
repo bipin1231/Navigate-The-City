@@ -15,9 +15,11 @@ function Header() {
   const toggleMenu = () => setMenuOpen(!menuOpen);
 
   return (
-    <header className="bg-white shadow-md fixed w-full z-10 top-0">
+    <header className="bg-blue-50 shadow-md fixed w-full z-10 top-0">
       <div className="container mx-auto px-6 py-4 flex justify-between items-center">
-        <div className="text-2xl font-bold text-gray-800">Navigate The City</div>
+        <div>
+          <h1 className="text-2xl font-bold text-gray-800">Navigate The City</h1>
+        </div>
 
         {/* Hamburger Menu for Small Screens */}
         <div className="lg:hidden">
@@ -40,7 +42,7 @@ function Header() {
         <nav
           className={`${
             menuOpen ? 'block' : 'hidden'
-          } lg:flex lg:space-x-6 w-full lg:w-auto lg:bg-transparent lg:static absolute bg-white top-full left-0 lg:mt-0 mt-4 lg:py-0 py-6 px-6 lg:px-0`}>
+          } lg:flex lg:space-x-6 w-full lg:w-auto lg:bg-transparent lg:static lg:items-center absolute bg-blue-50 top-full left-0 lg:mt-0 mt-4 lg:py-0 py-6 px-6 lg:px-0`}>
           <Link to='/home' className="block lg:inline-block text-gray-800 font-semibold hover:text-blue-600">
             Home
           </Link>
