@@ -82,14 +82,14 @@ const ContextMenu = () => {
       const popupContent = L.DomUtil.create('div', '');
       popupContent.innerHTML = `
         <div style="text-align: center; zIndex: 1600;">
-          <input type="text" id="marker-input" placeholder="Enter marker text" style="width: 100%; padding: 5px; margin-bottom: 5px;" />
-          <button id="add-marker-btn" style="width: 100%; padding: 5px;">Add Marker</button>
+          <input type="text" id="marker-input" placeholder="Enter marker text" class="w-full p-1 mb-1" />
+          <button id="add-marker-btn" class="w-full p-1 bg-blue-200 rounded duration-200 hover:bg-blue-50">Add Marker</button>
         </div>
       `;
 
       const popupOptions = {
         minWidth: 200,
-        closeButton: false,
+        closeButton: true,
         closeOnClick: false,
         autoClose: false,
         maxWidth: 300,

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link, NavLink, useNavigate } from 'react-router-dom'
 import { Button, ButtonGroup } from "@nextui-org/react";
 import { Input } from "@nextui-org/input";
@@ -11,6 +11,7 @@ import authService from '../../appwrite/auth';
 
 function SignUpPage() {
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
 
   const {
     register,
@@ -19,6 +20,8 @@ function SignUpPage() {
   } = useForm();
   const onSubmit = async (data) => {
     console.log(errors);
+    setLoading(true);
+    
     try {
       const userData = await authService.createAccount(data)
       if (userData) {
@@ -30,6 +33,8 @@ function SignUpPage() {
       }
     } catch (error) {
       console.log(error);
+    } finally {
+      setLoading(false);
     }
   };
   return (
@@ -121,6 +126,12 @@ function SignUpPage() {
             <p> Sign in with Google</p>
           </Button>
         </div>
+
+        {loading && (
+          <div className='fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50'>
+            <img src="../loading.gif" alt="Loading..." className='w-30 h-30' />
+          </div>
+        )}
 
       </div>
     </div>

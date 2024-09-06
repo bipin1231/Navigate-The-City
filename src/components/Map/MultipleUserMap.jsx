@@ -14,7 +14,8 @@ import ContextMenu from "./ContextMenu";
 import CurrentUser from './CurrentUser';
 import { data } from 'autoprefixer';
 import Speedometer from './Speedometer';
-import BusStop from '../BusRoute/BusStop';
+import ContextMenu from "./ContextMenu";
+// import BusStop from '../BusRoute/BusStop';
 
 const nepalBounds = L.latLngBounds(
   L.latLng(26.347, 80.058), // South-West
@@ -370,7 +371,9 @@ useEffect(() => {
         maxBoundsViscosity={0.8}
         zoomControl={false}
         whenCreated={(map) => { mapRef.current = map; }}
+     
       >
+        <LayerControl />
         <LayerControl />
         <TileLayer
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
