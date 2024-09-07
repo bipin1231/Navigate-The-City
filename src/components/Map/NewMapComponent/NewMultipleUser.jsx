@@ -57,6 +57,7 @@ function MultipleUserMap() {
 
   // Geolocation watcher
   useEffect(() => {
+    if(userData)
     geoLocationWatcher(setPositionLoc, setHeading,setSpeed);
   }, [heading]);
 
@@ -120,7 +121,7 @@ function MultipleUserMap() {
               key={user.userId}
               position={user.position}
               icon={new L.divIcon({
-                html: `<div style="transform: rotate(${angle}deg);">
+                html: `<div style="transform: rotate(${360 - user.heading}deg);">
                   <img src="${iconSrc}" style="width: 15px; height: 25px;" alt="Bus Icon"/>
                 </div>`,
                 className: "leaflet-marker-icon",
