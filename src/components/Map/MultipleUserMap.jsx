@@ -35,13 +35,13 @@ const baseLayers = {
       attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
     }
   ),
-  Satellite: L.tileLayer(
-    "https://tiles.stadiamaps.com/tiles/alidade_satellite/{z}/{x}/{y}{r}.{ext}",
-    {
-      attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
-      ext: "jpg",
-    }
-  ),
+  // Satellite: L.tileLayer(
+  //   "https://tiles.stadiamaps.com/tiles/alidade_satellite/{z}/{x}/{y}{r}.{ext}",
+  //   {
+  //     attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+  //     ext: "jpg",
+  //   }
+  // ),
 };
 
 
@@ -51,13 +51,12 @@ function LayerControl() {
   const map = useMap();
 
   useEffect(() => {
-    // const layerControl = L.control.layers(baseLayers, {}, { position: 'topleft' }).addTo(map);
     const layerControl = L.control.layers(baseLayers, {}, { position: 'topleft' }).addTo(map);
 
       setTimeout(() => {
         const layerControlElement = document.querySelector('.leaflet-control-layers');
         if (layerControlElement) {
-          layerControlElement.classList.add('absolute', 'top-12'); // Adjust the values as needed
+          layerControlElement.classList.add('absolute', 'top-1', 'scale-[0.9]', 'lg:scale-[1]');
         }
       }, 0);
 
@@ -79,17 +78,17 @@ function SearchControl() {
 
     const searchControl = new GeoSearchControl({
       provider: provider,
-      style: 'button',
+      style: 'bar',
       autoClose: true,
       keepResult: true,
-      position: 'topright',
+      // position: 'topright',
     });
     map.addControl(searchControl);
 
-    const searchControlContainer = searchControl.getContainer();
-    if (searchControlContainer) {
-      searchControlContainer.classList.add('absolute', 'top-[50px]', 'right-14', 'scale-[1.3]', 'pointer-events-auto');
-    }
+    // const searchControlContainer = searchControl.getContainer();
+    // if (searchControlContainer) {
+    //   searchControlContainer.classList.add('absolute', 'top-[50px]', 'right-14', 'scale-[1.3]', 'pointer-events-auto');
+    // }
 
     return () => map.removeControl(searchControl);
   }, [map]);
@@ -401,11 +400,24 @@ useEffect(() => {
 
 
   return (
-    <div className='h-[100vh] w-full relative flex flex-col items-center mt-20'>
+    // <div className='h-[100vh] w-full relative flex flex-col items-center mt-20'>
+    //   <MapContainer
+    //     center={defaultPosition}
+    //     zoom={10}
+    //     // scrollWheelZoom={false}
+    //     style={{ height: "100%", width: "100%" }}
+    //     maxZoom={18}
+    //     minZoom={7.5}
+    //     maxBounds={nepalBounds}
+    //     maxBoundsViscosity={0.8}
+    //     zoomControl={false}
+    //     whenCreated={(map) => { mapRef.current = map; }}
+     
+    //   >
+        <div className='h-[90vh] w-full relative flex flex-col items-center mt-[58px]'>
       <MapContainer
-        center={defaultPosition}
+        center={[27.68167, 84.43007]}
         zoom={10}
-        // scrollWheelZoom={false}
         style={{ height: "100%", width: "100%" }}
         maxZoom={18}
         minZoom={7.5}
@@ -413,10 +425,9 @@ useEffect(() => {
         maxBoundsViscosity={0.8}
         zoomControl={false}
         whenCreated={(map) => { mapRef.current = map; }}
-     
       >
         <LayerControl />
-        <LayerControl />
+        {/* <LayerControl /> */}
         <TileLayer
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
@@ -466,8 +477,10 @@ const iconSrc = isCurrentUser ? '../navigator.svg' : 'bus.png';
             ref={(marker) => { markerRefs.current[user.userId] = marker; }}
           >
             <Popup>
-              name:{user.name}
-              <Speedometer speed={speed} />
+              <div className='flex items-center flex-col'>
+                Name:{user.name}
+                <Speedometer speed={speed} />
+              </div>
             </Popup>
           </Marker>
           );
@@ -480,7 +493,7 @@ const iconSrc = isCurrentUser ? '../navigator.svg' : 'bus.png';
         {/* <BusStop busPositions={busPositions}/> */}
       </MapContainer>
       <button 
-        className="absolute top-[55px] right-[10px] z-[1600] bg-white border-2 border-gray-400 rounded-md w-[46px] h-11" 
+        className="absolute top-[12px] right-[10px] z-[1600] bg-white border-2 border-gray-400 rounded-md w-[46px] h-11 scale-[0.9] lg:scale-[1]" 
         onClick={toggleRouting}>
         <img src="../route-icon.png" className='absolute left-[6px] top-1 w-15 h-8' alt="Routing Icon" />
       </button>
