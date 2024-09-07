@@ -74,7 +74,7 @@ function Header() {
           {(!status) && (
             <Link to='/loginpage' className="block lg:inline-block duration-200 hover:scale-[0.9]">
               <span className="bg-blue-600 text-white px-4 py-2 rounded-md font-semibold hover:bg-blue-700">
-                Sign Up
+                Sign In
               </span>
             </Link>
           )}
