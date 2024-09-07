@@ -144,6 +144,7 @@ function ZoomControl() {
 
 function MultipleUserMap() {
   const status = useSelector(state => state.auth.status);
+  console.log("status is",status)
   const userData = useSelector(state => state.auth.userData);
   console.log("status is",status)
   console.log(userData);
@@ -269,15 +270,18 @@ useEffect(() => {
           (position) => {
             const { latitude, longitude } = position.coords;
             setPositionLoc(position.coords);
+            console.log(positionLoc);
+            
           },
           (error) => {
             console.error('Error occurred while retrieving location:', error);
           },
           { enableHighAccuracy: true }
         );
-  
+  console.log("storing infi outside the storing function")
         // Store the location and heading at a set interval (e.g., every 10 seconds)
         intervalId = setInterval(async () => {
+          console.log("storing infi insideeeee the storing function")
           if (!isLocationStored) {
             const storeLoc = async () => {
               setLocationStored(true); // Prevent multiple stores at the same time
