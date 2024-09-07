@@ -76,7 +76,7 @@ function MultipleUserMap() {
       return () => clearInterval(intervalId);
   
     }
-  }, [positionLoc, heading]);
+  }, []);
 
 
 
