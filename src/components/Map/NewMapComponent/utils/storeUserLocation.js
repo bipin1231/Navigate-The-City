@@ -11,8 +11,8 @@ export const storeUserLocation = (userData, positionLoc, heading,speed) => {
   service.storeUserLocation({
     userId: userData.$id,
     name: userData.name,
-    longitude: positionLoc.longitude,
-    latitude: positionLoc.latitude,
+    longitude: positionLoc[1],
+    latitude: positionLoc[0],
     heading,
     Speed:speed,
   })

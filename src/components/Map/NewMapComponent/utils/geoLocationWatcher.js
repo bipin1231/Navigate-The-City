@@ -3,6 +3,8 @@ export const geoLocationWatcher = (setPositionLoc, setHeading,setSpeed) => {
     position => {
       setPositionLoc([position.coords.latitude, position.coords.longitude]);
       setSpeed(position.coords.speed || 0)
+
+
     },
     error => console.error('Error retrieving location:', error),
     { enableHighAccuracy: true }
@@ -16,6 +18,7 @@ export const geoLocationWatcher = (setPositionLoc, setHeading,setSpeed) => {
   window.addEventListener('deviceorientation', handleOrientation);
 
   return () => {
+
     navigator.geolocation.clearWatch(geoId);
     window.removeEventListener('deviceorientation', handleOrientation);
   };
