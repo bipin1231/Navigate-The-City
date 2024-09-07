@@ -129,7 +129,7 @@ function MultipleUserMap() {
             >
               <Popup>
                 name:{user.name}
-                <Speedometer speed={user.Speed} />
+                <Speedometer speed={user.speed} />
               </Popup>
             </Marker>
           );

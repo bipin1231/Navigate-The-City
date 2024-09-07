@@ -6,7 +6,7 @@ export const fetchUserLocation = async (setUsers) => {
     userId: doc.userId,
     position: [doc.latitude, doc.longitude],
     heading: doc.heading,
-    speed: doc.speed,
+    speed: doc.Speed,
     name: doc.name,
   }));
   setUsers(userLocations.filter(user => user.position[0] !== null));

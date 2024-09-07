@@ -9,9 +9,11 @@ import Logout from '../../Header/Logout';
 function Header() {
   const dispatch = useDispatch();
   const status = useSelector(state => state.auth.status);
-  const [statusLog,setStatusLog]=useState(null);
+  const [statusLog,setStatusLog]=useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
 
+  console.log("status us ..",status);
+  
 (async function(){
   const userData = await authService.getCurrentUser();
   console.log(userData);
@@ -20,6 +22,7 @@ function Header() {
     
   
 })();
+console.log(statusLog);
 
 
   // Toggle menu for mobile view
@@ -71,7 +74,7 @@ function Header() {
           </Link>
 
 <div className='mt-4 lg:mt-0'>
-          {(!status) && (
+          {(!status || !statusLog) && (
             <Link to='/loginpage' className="block lg:inline-block duration-200 hover:scale-[0.9]">
               <span className="bg-blue-600 text-white px-4 py-2 rounded-md font-semibold hover:bg-blue-700">
                 Sign In

@@ -14,16 +14,17 @@ function Logout() {
 
   const logoutHandler = async() => {
     setLoading(true);
-    console.log("dispatchhhh",dispatch);
+   
     const data = await authService.getCurrentUser();
-    console.log(data);
+
 
     if (data) {
       try {
        
         await service.storeUserLocation({ userId: data.$id, status: false });
+        dispatch(logout());
         await authService.logout();
-         dispatch(logout());
+        
         console.log("Logging out");
       } catch (error) {
         console.error("Error updating user status:", error);
