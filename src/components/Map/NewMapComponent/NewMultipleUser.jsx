@@ -70,6 +70,10 @@ function MultipleUserMap() {
   useEffect(() => {
     if (userData) {
       storeUserLocation(userData, positionLoc, heading,speed);
+      const intervalId = setInterval(() => storeUserLocation(userData, positionLoc, heading,speed), 5000);
+
+      return () => clearInterval(intervalId);
+  
     }
   }, [positionLoc, heading]);
 
@@ -125,7 +129,7 @@ function MultipleUserMap() {
             >
               <Popup>
                 name:{user.name}
-                <Speedometer speed={speed} />
+                <Speedometer speed={user.Speed} />
               </Popup>
             </Marker>
           );
