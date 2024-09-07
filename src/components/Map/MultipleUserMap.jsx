@@ -473,8 +473,10 @@ const iconSrc = isCurrentUser ? '../navigator.svg' : 'bus.png';
             ref={(marker) => { markerRefs.current[user.userId] = marker; }}
           >
             <Popup>
-              name:{user.name}
-              <Speedometer speed={speed} />
+              <div className='flex items-center flex-col'>
+                Name:{user.name}
+                <Speedometer speed={speed} />
+              </div>
             </Popup>
           </Marker>
           );

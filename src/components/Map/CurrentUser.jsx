@@ -74,12 +74,17 @@ function CurrentUser() {
                 </div>
               `,
               iconSize: [15, 25],
-              popupAnchor: [0, -46]
+              popupAnchor: [0, -25]
             })
           }
         >
           <Popup>
-            <Speedometer speed={speed} />
+            <div className='flex items-center flex-col'>
+              <span className="font-semibold">
+                YOU
+              </span>
+              <Speedometer speed={speed} />
+            </div>
           </Popup>
         </Marker>
       </div>
