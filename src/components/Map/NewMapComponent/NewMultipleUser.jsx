@@ -59,11 +59,11 @@ function MultipleUserMap() {
   useEffect(() => {
     if(userData)
     geoLocationWatcher(setPositionLoc, setHeading,setSpeed);
-  }, [heading]);
+    const intervalId = setInterval(() => geoLocationWatcher(setPositionLoc, setHeading,setSpeed), 5000);
 
-  console.log("position....", positionLoc);
-  console.log("heading....", heading);
-  console.log("speed....", speed);
+    return () => clearInterval(intervalId);
+  }, []);
+
 
 
 
@@ -79,6 +79,7 @@ function MultipleUserMap() {
   }, []);
 
 
+ 
 
 
   return (
@@ -121,7 +122,7 @@ function MultipleUserMap() {
               key={user.userId}
               position={user.position}
               icon={new L.divIcon({
-                html: `<div style="transform: rotate(${360 - user.heading}deg);">
+                html: `<div style="transform: rotate(${angle}deg);">
                   <img src="${iconSrc}" style="width: 15px; height: 25px;" alt="Bus Icon"/>
                 </div>`,
                 className: "leaflet-marker-icon",
