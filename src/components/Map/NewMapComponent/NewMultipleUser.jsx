@@ -42,7 +42,7 @@ function MultipleUserMap() {
   const [showLocation, setShowLocation] = useState(false);
   const [speed, setSpeed] = useState(0);
   const [heading, setHeading] = useState(null);
-
+  const [isLocationStored,setLocationStored]=useState(false);
 
 
   // Fetch user locations every 5 seconds
@@ -54,29 +54,81 @@ function MultipleUserMap() {
 
 
   }, []);
+  console.log("fetched users",users)
 
-  // Geolocation watcher
-  useEffect(() => {
-    if(userData)
-    geoLocationWatcher(setPositionLoc, setHeading,setSpeed);
-    const intervalId = setInterval(() => geoLocationWatcher(setPositionLoc, setHeading,setSpeed), 5000);
+  // // Geolocation watcher
+  // useEffect(() => {
+  //   if(userData)
+  //   geoLocationWatcher(setPositionLoc, setHeading,setSpeed);
+  //   const intervalId = setInterval(() => geoLocationWatcher(setPositionLoc, setHeading,setSpeed), 5000);
 
-    return () => clearInterval(intervalId);
-  }, []);
-
-
+  //   return () => clearInterval(intervalId);
+  // }, []);
 
 
-  // Store user location and heading every 3 seconds
-  useEffect(() => {
-    if (userData) {
-      storeUserLocation(userData, positionLoc, heading,speed);
-      const intervalId = setInterval(() => storeUserLocation(userData, positionLoc, heading,speed), 5000);
 
-      return () => clearInterval(intervalId);
+
+  // // Store user location and heading every 3 seconds
+  // useEffect(() => {
+  //   if (userData) {
+  //     storeUserLocation(userData, positionLoc, heading,speed);
+  //     const intervalId = setInterval(() => storeUserLocation(userData, positionLoc, heading,speed), 5000);
+
+  //     return () => clearInterval(intervalId);
   
+  //   }
+  // }, []);
+
+
+  
+  useEffect(() => {
+    if (status && navigator.geolocation) {
+      console.log("Geolocation is enabled");
+
+      const geoId = navigator.geolocation.watchPosition(
+        (position) => {
+          const { latitude, longitude } = position.coords;
+          
+          // Set an interval to store location every X seconds (e.g., every 10 seconds)
+          const intervalId = setInterval(async () => {
+            if (!isLocationStored) {
+              setLocationStored(true);
+              console.log("Storing location...");
+
+              try {
+                const data = await service.storeUserLocation({
+                  userId: userData.$id,
+                  name: userData.name,
+                  latitude,
+                  longitude,
+                  heading: position.coords.heading,
+                  speed: position.coords.speed,
+                });
+                console.log("Location stored in the database:", data);
+              } catch (error) {
+                console.error("Error storing location:", error);
+              } finally {
+                setLocationStored(false);
+              }
+            }
+          }, 5000); // Store location every 10 seconds (you can adjust this interval)
+
+          // Clear the interval and geolocation watcher on unmount
+          return () => {
+            navigator.geolocation.clearWatch(geoId);
+            clearInterval(intervalId);
+          };
+        },
+        (error) => {
+          console.error("Error occurred while retrieving location:", error);
+        },
+        { enableHighAccuracy: true }
+      );
+    } else {
+      console.error("Geolocation is not supported by this browser.");
     }
   }, []);
+
 
 
  
