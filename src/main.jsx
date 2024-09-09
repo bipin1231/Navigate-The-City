@@ -31,6 +31,7 @@ import { persistStore } from 'redux-persist'
 import { GoogleOAuthProvider } from '@react-oauth/google';
 import SimpleMap from './components/Map/SimpleMap.jsx'
 import MultipleUserMap from './components/Map/MultipleUserMap.jsx'
+import OldMultipleUserMap from './components/Map/OldMultipleUserMap.jsx'
 import CompanySignup from './components/Login/CompanySignup.jsx'
 import DriverSignup from './components/Login/DriverSignup.jsx'
 import AddBus from './components/company/AddBus.jsx'
@@ -67,7 +68,7 @@ const router=createBrowserRouter(
       <Route path='driversignup' element={<DriverSignup/>}/>
  
       {/* <Route path='map' element={<Map/>}/> */}
-      <Route path='map' element={<MultipleUserMap/>}/>
+      <Route path='map' element={<OldMultipleUserMap/>}/>
       <Route path='newmap' element={<NewMultipleUser/>}/>
       <Route path='addbus' element={<AddBus/>}/>
       <Route path='addroute' element={<AddRoute/>}/>
