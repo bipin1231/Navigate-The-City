@@ -292,9 +292,9 @@ useEffect(() => {
 // }
 //   }, [position]);
   
-//   const toggleRouting = () => {
-//     setIsRoutingEnabled((prevState) => !prevState);
-//   };
+  const toggleRouting = () => {
+    setIsRoutingEnabled((prevState) => !prevState);
+  };
 //   useEffect(() => {
 //     if (users.length > 0) {
 
