@@ -179,7 +179,7 @@ function MultipleUserMap() {
    
     fetchUserLocation(); // Initial fetch
 
-    const intervalId = setInterval(fetchUserLocation, 3000); // Fetch every 5 seconds
+    const intervalId = setInterval(fetchUserLocation, 300); // Fetch every 5 seconds
   
     return () => clearInterval(intervalId); // Clean up on component unmount
   }, []);
@@ -200,80 +200,13 @@ function MultipleUserMap() {
           },
           { enableHighAccuracy: true }
         );
-      }, 3000); // Runs every 10 seconds
+      }, 300); // Runs every 10 seconds
     }
   
     return () => {
       clearInterval(intervalId);
     };
   }, []);
-
-
-
-  // useEffect(() => {
-  //   let geoId;
-  
-  //   if (navigator.geolocation) {
-  //     geoId = navigator.geolocation.watchPosition(
-  //       (position) => {
-  //         // const { latitude, longitude, heading, speed } = position.coords;
-  //         // // Update the position state every time the user moves
-  //         // setPosition([latitude, longitude]);
-  //         setPosition(position.coords);
-      
-          
-  //       },
-  //       (error) => {
-  //         console.error('Error occurred while retrieving location:', error);
-  //       },
-  //       { enableHighAccuracy: true }
-  //     );
-  //   } else {
-  //     console.error('Geolocation is not supported by this browser.');
-  //   }
-  
-  //   // Cleanup on component unmount
-  //   return () => {
-  //     if (geoId) {
-  //       navigator.geolocation.clearWatch(geoId);
-  //     }
-  //   };
-  // }, [position]);
-
-  // console.log(position);
-
-
-
-  // useEffect(() => {
-  //   if (status) {
-  //     const storeLocationInterval = setInterval(() => {
-  //       if (!isLocationStored && position.length > 0) {
-  //         const storeLoc = async () => {
-  //           setLocationStored(true); // Prevent storing multiple locations at once
-  //           console.log('Storing location...');
-  //           try {
-  //             await service.storeUserLocation({
-  //               userId: userData.$id,
-  //               name: userData.name,
-  //               latitude: position[0],
-  //               longitude: position[1],
-  //               heading: position.heading || 0,
-  //               Speed: position.Speed || 0, // Add speed if available
-  //             });
-  //             console.log('Location stored successfully');
-  //           } catch (error) {
-  //             console.error('Error storing location:', error);
-  //           }
-  //           setLocationStored(false); // Reset the flag
-  //         };
-  //         storeLoc();
-  //       }
-  //     }, 5000); // Store location every 5 seconds
-  
-  //     // Clear interval when the component unmounts
-  //     return () => clearInterval(storeLocationInterval);
-  //   }
-  // }, []);
 
   useEffect(() => {
     if(status){
