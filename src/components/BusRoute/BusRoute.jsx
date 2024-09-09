@@ -57,6 +57,13 @@ function RoutingMachine({ start, end }) {
           showAlternatives: true,
           altLine: true,
         }).addTo(map);
+
+         // Hide the route instructions section after routing is added
+        //  const instructionElement = document.querySelector('.leaflet-routing-container');
+        //   if (instructionElement) {
+        //     instructionElement.style.display = 'none'; // Directly setting the display style
+        //   } 
+
       } catch (error) {
         console.error("Routing setup failed:", error);
       }
@@ -77,8 +84,8 @@ function RoutingMachine({ start, end }) {
 
 function BusRoute() {
   const [routeInfo, setRouteInfo] = useState([]);
-  const [startLocation, setStartLocation] = useState("Kathmandu");
-  const [endLocation, setEndLocation] = useState("Chitwan");
+  const [startLocation, setStartLocation] = useState([27.69179, 84.42521]);
+  const [endLocation, setEndLocation] = useState([27.58455, 84.73335]);
 
   useEffect(() => {
     const fetchRouteInfo = async () => {
@@ -95,54 +102,35 @@ function BusRoute() {
   };
 
   return (
-   
-//   <div className='w-full flex justify-center gap-4 mt-20'>
-//         <Card className='w-[90%] md:w-[40%] mt-10'>
-     
-// //         {routeInfo.map((r,index)=>(
-//           <div key={index}>
-//                  <CardBody>
-//               <div  className='w-full flex justify-center'>
-//               <Card className='w-[90%]  bg-neutral-900 text-white'>
-//             <CardHeader>
-//             <h1><span>{r.from} To {r.to}</span></h1>
-//             </CardHeader>
-//             <Divider/>
-//             <CardHeader>
-//             {/* <p>Total Bus : 5</p> */}
-//             </CardHeader>
-//           </Card>
-//          </div>
-//          </CardBody>
-//          </div>
-//         ))}
-// =======
     <>
       <div className="flex items-center flex-col mt-[58px]">
         <h1 className="text-2xl font-semibold md:text-3xl md:font-bold">
           Route
         </h1>
         <h1 className=" text-lg font-medium">
-          Select on below route list to view in map
+          Select on below route list to view on map
         </h1>
       </div>
 
       
-      <div className="w-full h-full flex flex-col md:flex-row md:justify-center pt-4 md:pt-10 px-4">
-        <div className="w-full md:w-[50%] flex items-center flex-col px-4">
-          <button className="mb-2 md:mb-4 bg-blue-900 text-white w-[80%] md:w-[60%] border-2 border-blue-900 rounded duration-200 hover:bg-blue-100 hover:text-black" onClick={() => handleWaypointClick("Kathmandu", "Chitwan")}>
+      <div className="w-full h-full flex flex-col md:gap-2 md:flex-row md:justify-evenly pt-2 md:pt-4 px-4">
+        <div className="w-full md:w-[40%] h-[30vh] md:h-[70vh] overflow-y-scroll bg-blue-200 rounded pt-2 flex items-center flex-col px-4">
+          <button className="mb-2 md:mb-4 bg-blue-600 text-white w-[80%] md:w-[60%] border-2 border-blue-600 rounded duration-200 hover:bg-blue-100 hover:text-black" onClick={() => handleWaypointClick([27.69179, 84.42521], [27.58455, 84.73335])}>
+            <h1 className="py-1 md:py-2 px-4">Narayangadh to Lothar</h1>
+          </button>
+          <button className="mb-2 md:mb-4 bg-blue-600 text-white w-[80%] md:w-[60%] border-2 border-blue-600 rounded duration-200 hover:bg-blue-100 hover:text-black" onClick={() => handleWaypointClick("Kathmandu", [27.69179, 84.42521])}>
             <h1 className="py-1 md:py-2 px-4">Kathmandu to Chitwan</h1>
           </button>
-          <button className="mb-2 md:mb-4 bg-blue-900 text-white w-[80%] md:w-[60%] border-2 border-blue-900 rounded duration-200 hover:bg-blue-100 hover:text-black" onClick={() => handleWaypointClick("Chitwan", "Pokhara")}>
-          <h1 className="py-1 md:py-2 px-4">Chitwan to Pokhara</h1>
+          <button className="mb-2 md:mb-4 bg-blue-600 text-white w-[80%] md:w-[60%] border-2 border-blue-600 rounded duration-200 hover:bg-blue-100 hover:text-black" onClick={() => handleWaypointClick([27.69179, 84.42521], "Pokhara")}>
+          <h1 className="py-1 md:py-2 px-4">Narayangadh to Pokhara</h1>
           </button>
-          <button className="mb-2 md:mb-4 bg-blue-900 text-white w-[80%] md:w-[60%] border-2 border-blue-900 rounded duration-200 hover:bg-blue-100 hover:text-black" onClick={() => handleWaypointClick("Pokhara", "Lumbini")}>
+          <button className="mb-2 md:mb-4 bg-blue-600 text-white w-[80%] md:w-[60%] border-2 border-blue-600 rounded duration-200 hover:bg-blue-100 hover:text-black" onClick={() => handleWaypointClick("Pokhara", "Lumbini")}>
           <h1 className="py-1 md:py-2 px-4">Pokhara to Lumbini</h1>
           </button>
         </div>
 
         {/* Route map info section */}
-        <div className="w-full md:w-[50%]">
+        <div className="w-full md:w-[45%] mt-3 md:mt-0">
           <MapContainer
             center={[27.68167, 84.43007]}
             zoom={8}
@@ -151,7 +139,7 @@ function BusRoute() {
             minZoom={6.5}
             maxBounds={nepalBounds}
             maxBoundsViscosity={0.8}
-            className="h-[50vh] md:h-[70vh] w-full"
+            className="h-[40vh] md:h-[60vh] w-full"
           >
             <TileLayer
               attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'

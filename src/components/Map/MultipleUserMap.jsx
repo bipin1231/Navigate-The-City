@@ -46,13 +46,12 @@ function LayerControl() {
   const map = useMap();
 
   useEffect(() => {
-    // const layerControl = L.control.layers(baseLayers, {}, { position: 'topleft' }).addTo(map);
     const layerControl = L.control.layers(baseLayers, {}, { position: 'topleft' }).addTo(map);
 
       setTimeout(() => {
         const layerControlElement = document.querySelector('.leaflet-control-layers');
         if (layerControlElement) {
-          layerControlElement.classList.add('absolute', 'top-12'); // Adjust the values as needed
+          layerControlElement.classList.add('absolute', 'top-1', 'scale-[0.9]', 'lg:scale-[1]');
         }
       }, 0);
 
@@ -74,17 +73,17 @@ function SearchControl() {
 
     const searchControl = new GeoSearchControl({
       provider: provider,
-      style: 'button',
+      style: 'bar',
       autoClose: true,
       keepResult: true,
-      position: 'topright',
+      // position: 'topright',
     });
     map.addControl(searchControl);
 
-    const searchControlContainer = searchControl.getContainer();
-    if (searchControlContainer) {
-      searchControlContainer.classList.add('absolute', 'top-[50px]', 'right-14', 'scale-[1.3]', 'pointer-events-auto');
-    }
+    // const searchControlContainer = searchControl.getContainer();
+    // if (searchControlContainer) {
+    //   searchControlContainer.classList.add('absolute', 'top-[50px]', 'right-14', 'scale-[1.3]', 'pointer-events-auto');
+    // }
 
     return () => map.removeControl(searchControl);
   }, [map]);
@@ -105,7 +104,6 @@ function RoutingControl({ isRoutingEnabled }) {
         removeWaypoints: true,
         geocoder: L.Control.Geocoder.nominatim(),
       }).addTo(map);
-        // Apply Tailwind CSS classes to the routing control
         const routingControlElement = control.getContainer();
         if (routingControlElement) {
           routingControlElement.classList.add('absolute', 'top-16');
@@ -291,11 +289,10 @@ function MultipleUserMap() {
   console.log("multiple angles ......",angles);
 
   return (
-    <div className='h-[100vh] w-full relative flex flex-col items-center'>
+    <div className='h-[90vh] w-full relative flex flex-col items-center mt-[58px]'>
       <MapContainer
         center={defaultPosition}
         zoom={10}
-        // scrollWheelZoom={false}
         style={{ height: "100%", width: "100%" }}
         maxZoom={18}
         minZoom={7.5}
@@ -344,8 +341,10 @@ const iconSrc = isCurrentUser ? 'navigator.svg' : 'bus.png';
             ref={(marker) => { markerRefs.current[user.userId] = marker; }}
           >
             <Popup>
-              BusNo:
-              <Speedometer speed={speed} />
+              <div className='flex flex-col items-center'>
+                BusNo:
+                <Speedometer speed={speed} />
+              </div>
             </Popup>
           </Marker>
           );
@@ -357,14 +356,11 @@ const iconSrc = isCurrentUser ? 'navigator.svg' : 'bus.png';
         <ContextMenu />
       </MapContainer>
       <button 
-        className="absolute top-[55px] right-[10px] z-[1600] bg-white border-2 border-gray-400 rounded-md w-[46px] h-11" 
+        className="absolute top-[10px] right-[10px] z-[1600] bg-white border-2 border-gray-400 rounded-md w-[46px] h-11 scale-[0.9] lg:scale-[1]" 
         onClick={toggleRouting}
       >
         <img src="../route-icon.png" className='absolute left-[6px] top-1 w-15 h-8' alt="Routing Icon" />
       </button>
-      {/* <button className="absolute top-[10px] right-[25%] z-[1300]">
-        <img src="../target-location.svg" className="w-[45px] h-[45px]" />
-      </button> */}
       {/* <LowerSlideBar /> */}
     </div>
   );
