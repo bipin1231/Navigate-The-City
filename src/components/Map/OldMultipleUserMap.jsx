@@ -386,14 +386,7 @@ const iconSrc = isCurrentUser ? 'navigator.svg' : 'bus.png';
             key={user.userId}
             position={user.position}
             icon={new L.divIcon({
-             // html: `<img src="${iconSrc}" style="transform: rotate(${angles[user.userId]}deg);/>`,
-            //  html: `<img src="bus.png" style="transform: rotate(${angle}deg);/>`,
-
-            // iconUrl:"bus.png",
-            //   iconSize: [25, 45],
-            //   iconAnchor: [17, 46],
-            //   popupAnchor: [3, -46],
-            html: `<div style="transform: rotate(${angle}deg) transition: transform 0.5s ease;">
+            html: `<div style="transform: rotate(${angle}deg); transition: transform 0.5s ease;">
             <img src="${iconSrc}" style="width: 15px; height: 25px;" alt="Bus Icon"/>
           </div>`,
               className: "leaflet-marker-icon",
