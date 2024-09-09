@@ -184,101 +184,151 @@ function MultipleUserMap() {
     return () => clearInterval(intervalId); // Clean up on component unmount
   }, []);
 
-  useEffect(() => {
-    let intervalId;
-  
-    if (navigator.geolocation) {
-      intervalId = setInterval(() => {
-        navigator.geolocation.getCurrentPosition(
-          (position) => {
-            const { latitude, longitude } = position.coords;
-            setPosition([latitude, longitude]);
-            console.log(`Updated position: Latitude ${latitude}, Longitude ${longitude}`);
-          },
-          (error) => {
-            console.error('Error occurred while retrieving location:', error);
-          },
-          { enableHighAccuracy: true }
-        );
-      }, 300); // Runs every 10 seconds
-    }
-  
-    return () => {
-      clearInterval(intervalId);
-    };
-  }, []);
 
-  useEffect(() => {
-    if(status){
-    if (navigator.geolocation) {
-      console.log("hey");
-      const geoId = navigator.geolocation.watchPosition(
-        (position) => {
-          const { latitude, longitude,heading,speed } = position.coords;
+ // Handle device orientation for the current user
+ useEffect(() => {
+  const handleOrientation = (event) => {
+    const alpha = event.alpha; // Device's rotation around the z-axis
+    setUserDirection(alpha);
+  };
+
+  window.addEventListener('deviceorientation', handleOrientation);
+
+  return () => {
+    window.removeEventListener('deviceorientation', handleOrientation);
+  };
+}, []);
+
+// Storing location of the current user
+useEffect(() => {
+  if (status && navigator.geolocation) {
+    const geoId = navigator.geolocation.watchPosition(
+      (position) => {
+        const { latitude, longitude, heading, speed } = position.coords;
+        setPosition([latitude, longitude]);
+
+        if (!isLocationStored) {
+          const storeLocation = async () => {
+            setLocationStored(true);
+            await service.storeUserLocation({
+              userId: userData.$id,
+              name: userData.name,
+              latitude,
+              longitude,
+              heading: userDirection, // Use the user's direction from the device orientation
+              speed,
+            });
+            setLocationStored(false);
+          };
+          storeLocation();
+        }
+      },
+      (error) => console.error('Error retrieving location:', error),
+      { enableHighAccuracy: true }
+    );
+    return () => navigator.geolocation.clearWatch(geoId);
+  }
+}, [status, userDirection]);
+
+
+
+
+
+//   useEffect(() => {
+//     let intervalId;
+  
+//     if (navigator.geolocation) {
+//       intervalId = setInterval(() => {
+//         navigator.geolocation.getCurrentPosition(
+//           (position) => {
+//             const { latitude, longitude } = position.coords;
+//             setPosition([latitude, longitude]);
+//             console.log(`Updated position: Latitude ${latitude}, Longitude ${longitude}`);
+//           },
+//           (error) => {
+//             console.error('Error occurred while retrieving location:', error);
+//           },
+//           { enableHighAccuracy: true }
+//         );
+//       }, 300); // Runs every 10 seconds
+//     }
+  
+//     return () => {
+//       clearInterval(intervalId);
+//     };
+//   }, []);
+
+//   useEffect(() => {
+//     if(status){
+//     if (navigator.geolocation) {
+//       console.log("hey");
+//       const geoId = navigator.geolocation.watchPosition(
+//         (position) => {
+//           const { latitude, longitude,heading,speed } = position.coords;
  
-           if(!isLocationStored){
-         const storeLoc=async()=>{ 
-          setLocationStored(true);
-          console.log("storing location");
-          const data=await service.storeUserLocation({userId:userData.$id,name:userData.name,latitude,longitude,heading,Speed:speed});
-          console.log("performing storing in database",data);
-          setLocationStored(false);        
-        }          
-          storeLoc();
-      }         
-        },
-        (error) => {
-          console.error('Error occurred while retrieving location:', error);
-        },
-        { enableHighAccuracy: true }
-      ); 
-      return () => {
-        navigator.geolocation.clearWatch(geoId);
-      };
-    } else {
-      console.error('Geolocation is not supported by this browser.');
-    }
-}
-  }, [position]);
+//            if(!isLocationStored){
+//          const storeLoc=async()=>{ 
+//           setLocationStored(true);
+//           console.log("storing location");
+//           const data=await service.storeUserLocation({userId:userData.$id,name:userData.name,latitude,longitude,heading,Speed:speed});
+//           console.log("performing storing in database",data);
+//           setLocationStored(false);        
+//         }          
+//           storeLoc();
+//       }         
+//         },
+//         (error) => {
+//           console.error('Error occurred while retrieving location:', error);
+//         },
+//         { enableHighAccuracy: true }
+//       ); 
+//       return () => {
+//         navigator.geolocation.clearWatch(geoId);
+//       };
+//     } else {
+//       console.error('Geolocation is not supported by this browser.');
+//     }
+// }
+//   }, [position]);
   
-  const toggleRouting = () => {
-    setIsRoutingEnabled((prevState) => !prevState);
-  };
-  useEffect(() => {
-    if (users.length > 0) {
+//   const toggleRouting = () => {
+//     setIsRoutingEnabled((prevState) => !prevState);
+//   };
+//   useEffect(() => {
+//     if (users.length > 0) {
 
-      setPreviousPositions(prev => {
-        const newPos = {};
-        users.forEach(user => {
-          newPos[user.userId] = user.position;
-        });
-        return newPos;
-      });
+//       setPreviousPositions(prev => {
+//         const newPos = {};
+//         users.forEach(user => {
+//           newPos[user.userId] = user.position;
+//         });
+//         return newPos;
+//       });
 
-      setAngles(prevAngles => {
-        const newAngles = {};
-        users.forEach(user => {
-          const prevPos = previousPositions[user.userId];       
-          const newPos = user.position;   
-          const angle = prevPos ? calculateAngle(prevPos, newPos) : 0;
-          newAngles[user.userId] = angle;
-        });
-        return newAngles;
-      });
-    }
-  }, [users]);
- // console.log("position previous of multiple user",previousPositions);
+//       setAngles(prevAngles => {
+//         const newAngles = {};
+//         users.forEach(user => {
+//           const prevPos = previousPositions[user.userId];       
+//           const newPos = user.position;   
+//           const angle = prevPos ? calculateAngle(prevPos, newPos) : 0;
+//           newAngles[user.userId] = angle;
+//         });
+//         return newAngles;
+//       });
+//     }
+//   }, [users]);
+//  // console.log("position previous of multiple user",previousPositions);
 
-  const calculateAngle = (prevPos, newPos) => {
-    const [lat1, lon1] = prevPos;
-    const [lat2, lon2] = newPos;
-    const deltaLon = lon2 - lon1;
-    const y = Math.sin(deltaLon) * Math.cos(lat2);
-    const x = Math.cos(lat1) * Math.sin(lat2) - Math.sin(lat1) * Math.cos(lat2) * Math.cos(deltaLon);
-    const angle = Math.atan2(y, x) * (180 / Math.PI);
-    return (angle + 360) % 360; // Normalize to 0-360 degrees
-  };
-  // console.log("multiple angles ......",angles);
+//   const calculateAngle = (prevPos, newPos) => {
+//     const [lat1, lon1] = prevPos;
+//     const [lat2, lon2] = newPos;
+//     const deltaLon = lon2 - lon1;
+//     const y = Math.sin(deltaLon) * Math.cos(lat2);
+//     const x = Math.cos(lat1) * Math.sin(lat2) - Math.sin(lat1) * Math.cos(lat2) * Math.cos(deltaLon);
+//     const angle = Math.atan2(y, x) * (180 / Math.PI);
+//     return (angle + 360) % 360; // Normalize to 0-360 degrees
+//   };
+//   // console.log("multiple angles ......",angles);
 
   return (
     <div className='h-[90vh] w-full relative flex flex-col items-center mt-[58px]'>
@@ -299,7 +349,7 @@ function MultipleUserMap() {
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
 
-{users.map(user => {
+{/* {users.map(user => {
  
           if (user.position[0]==null) {
             console.error(`Invalid position for user: ${user.userId}`, user.position);
@@ -313,7 +363,14 @@ function MultipleUserMap() {
 
 const isCurrentUser = userData && user.userId === userData.$id;
 const iconSrc = isCurrentUser ? 'navigator.svg' : 'bus.png';
-          return (
+          */}
+
+{users.map(user => {
+          const angle = user.userId === userData.$id ? userDirection : (user.heading || 0);
+          const iconSrc = user.userId === userData.$id ? 'navigator.svg' : 'bus.png';
+          
+          
+return (
 
             <Marker
             key={user.userId}
