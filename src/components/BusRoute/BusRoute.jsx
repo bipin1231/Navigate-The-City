@@ -30,54 +30,49 @@ function RoutingMachine({ start, end }) {
   const routingControlRef = useRef(null);
 
   useEffect(() => {
+    let isMounted = true; // To prevent double renders
     const setupRouting = async () => {
       try {
-        // Remove the existing route if it's already on the map
-        if (routingControlRef.current) {
+        if (routingControlRef.current && isMounted) {
           map.removeControl(routingControlRef.current);
         }
-
-        const startLatLng = await geocode(start); // Convert start place name to LatLng
-        const endLatLng = await geocode(end);     // Convert end place name to LatLng
-
-        // Create a new routing control
-        routingControlRef.current = L.Routing.control({
-          waypoints: [startLatLng, endLatLng],
-          routeWhileDragging: false,
-          draggableWaypoints: false,
-          removeWaypoints: false,
-          addWaypoints: false,
-          clickableWaypoints: false,
-          lineOptions: {
-            styles: [{ color: 'blue', opacity: 0.6, weight: 4 }],
-          },
-          altLineOptions: {
-            styles: [{ color: 'green', opacity: 0.5, weight: 4 }],
-          },
-          showAlternatives: true,
-          altLine: true,
-        }).addTo(map);
-
-         // Hide the route instructions section after routing is added
-        //  const instructionElement = document.querySelector('.leaflet-routing-container');
-        //   if (instructionElement) {
-        //     instructionElement.style.display = 'none'; // Directly setting the display style
-        //   } 
-
+  
+        const startLatLng = await geocode(start);
+        const endLatLng = await geocode(end);
+  
+        if (isMounted) {
+          routingControlRef.current = L.Routing.control({
+            waypoints: [startLatLng, endLatLng],
+            routeWhileDragging: false,
+            draggableWaypoints: false,
+            removeWaypoints: false,
+            addWaypoints: false,
+            clickableWaypoints: false,
+            lineOptions: {
+              styles: [{ color: "blue", opacity: 0.6, weight: 4 }],
+            },
+            altLineOptions: {
+              styles: [{ color: "green", opacity: 0.5, weight: 4 }],
+            },
+            showAlternatives: true,
+            altLine: true,
+          }).addTo(map);
+        }
       } catch (error) {
         console.error("Routing setup failed:", error);
       }
     };
-
+  
     setupRouting();
-
+  
     return () => {
-      // Clean up routing control when component unmounts
+      isMounted = false; // Clean up routing control on unmount or re-render
       if (routingControlRef.current) {
         map.removeControl(routingControlRef.current);
       }
     };
   }, [map, start, end]);
+  
 
   return null;
 }

@@ -51,7 +51,7 @@ function LayerControl() {
       setTimeout(() => {
         const layerControlElement = document.querySelector('.leaflet-control-layers');
         if (layerControlElement) {
-          layerControlElement.classList.add('absolute', 'top-1', 'scale-[0.9]', 'lg:scale-[1]');
+          layerControlElement.classList.add('absolute', 'top-[10px]', 'scale-[0.9]', 'lg:scale-[1]');
         }
       }, 0);
 
