@@ -261,11 +261,18 @@ function MultipleUserMap() {
   useEffect(() => {
     users.forEach(user => {
       if (markerRefs.current[user.userId]) {
-        markerRefs.current[user.userId].setLatLng(user.position); // Smoothly update the marker position
+        // Smoothly update the marker position
+        const currentMarker = markerRefs.current[user.userId];
+        const currentPos = currentMarker.getLatLng();
+        const newPos = L.latLng(user.position);
+  
+        // If positions are different, transition smoothly
+        if (!currentPos.equals(newPos)) {
+          currentMarker.setLatLng(newPos, { animate: true, duration: 2 }); // Adjust duration as needed
+        }
       }
     });
   }, [users]);
-
 
   return (
     <div className='h-[90vh] w-full relative flex flex-col items-center mt-[58px]'>
@@ -314,7 +321,7 @@ return (
             key={user.userId}
             position={user.position}
             icon={new L.divIcon({
-            html: `<div style="transform: rotate(${angle}deg); transition: transform 0.5s ease;">
+            html: `<div style="transform: rotate(${angle}deg); transition: transform 2s ease;">
             <img src="${iconSrc}" style="width: 15px; height: 25px;" alt="Bus Icon"/>
           </div>`,
               className: "leaflet-marker-icon",
