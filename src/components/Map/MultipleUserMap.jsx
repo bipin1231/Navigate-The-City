@@ -33,13 +33,13 @@ const baseLayers = {
       attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
     }
   ),
-  Satellite: L.tileLayer(
-    "https://tiles.stadiamaps.com/tiles/alidade_satellite/{z}/{x}/{y}{r}.{ext}",
-    {
-      attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
-      ext: "jpg",
-    }
-  ),
+  // Satellite: L.tileLayer(
+  //   "https://tiles.stadiamaps.com/tiles/alidade_satellite/{z}/{x}/{y}{r}.{ext}",
+  //   {
+  //     attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+  //     ext: "jpg",
+  //   }
+  // ),
 };
 
 function LayerControl() {
