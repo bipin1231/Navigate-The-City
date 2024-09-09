@@ -93,18 +93,18 @@ function SignUpPage() {
         <div className="mt-6 text-center space-y-2">
           <p className="text-gray-600">Or sign up as:</p>
           <div className="flex justify-center space-x-6">
-            <a
-              href="/signup-driver"
+            <Link
+             to={"/driversignup"}
               className="text-blue-600 hover:text-blue-500 font-medium"
             >
               Driver
-            </a>
-            <a
-              href="/signup-company"
+            </Link>
+            <Link
+              to={"/companysignup"}
               className="text-blue-600 hover:text-blue-500 font-medium"
             >
               Company
-            </a>
+            </Link>
           </div>
         </div>
         <div className="relative mt-6">

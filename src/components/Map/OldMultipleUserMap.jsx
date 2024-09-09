@@ -15,6 +15,8 @@ import CurrentUser from './CurrentUser';
 import { data } from 'autoprefixer';
 import Speedometer from './Speedometer';
 
+import CurrentLocationButton from './CurrentLocationButton';
+
 const nepalBounds = L.latLngBounds(
   L.latLng(26.347, 80.058), // South-West
   L.latLng(30.447, 88.201) // North-East
@@ -180,7 +182,7 @@ function MultipleUserMap() {
    
     fetchUserLocation(); // Initial fetch
 
-    const intervalId = setInterval(fetchUserLocation, 300); // Fetch every 5 seconds
+    const intervalId = setInterval(fetchUserLocation, 3000); // Fetch every 5 seconds
   
     return () => clearInterval(intervalId); // Clean up on component unmount
   }, []);
@@ -258,21 +260,48 @@ function MultipleUserMap() {
   };
   // console.log("multiple angles ......",angles);
 
-  useEffect(() => {
-    users.forEach(user => {
-      if (markerRefs.current[user.userId]) {
-        // Smoothly update the marker position
-        const currentMarker = markerRefs.current[user.userId];
-        const currentPos = currentMarker.getLatLng();
-        const newPos = L.latLng(user.position);
+  // Helper function for linear interpolation (lerp)
+const lerp = (start, end, t) => start + (end - start) * t;
+
+function smoothTransition(marker, oldPosition, newPosition, duration = 1000) {
+  let startTime;
   
-        // If positions are different, transition smoothly
-        if (!currentPos.equals(newPos)) {
-          currentMarker.setLatLng(newPos, { animate: true, duration: 2 }); // Adjust duration as needed
-        }
-      }
-    });
-  }, [users]);
+  const animate = (timestamp) => {
+    if (!startTime) startTime = timestamp;
+    const elapsed = timestamp - startTime;
+
+    // Calculate the interpolation factor (t), clamped between 0 and 1
+    const t = Math.min(elapsed / duration, 1);
+
+    // Interpolate the position
+    const lat = lerp(oldPosition.lat, newPosition.lat, t);
+    const lng = lerp(oldPosition.lng, newPosition.lng, t);
+
+    marker.setLatLng([lat, lng]);
+
+    // Continue animating until the time is up
+    if (t < 1) {
+      requestAnimationFrame(animate);
+    }
+  };
+
+  requestAnimationFrame(animate);
+}
+
+
+useEffect(() => {
+  users.forEach(user => {
+    const currentMarker = markerRefs.current[user.userId];
+    if (currentMarker) {
+      const oldPosition = currentMarker.getLatLng();
+      const newPosition = L.latLng(user.position);
+
+      // Trigger smooth transition between old and new positions
+      smoothTransition(currentMarker, oldPosition, newPosition, 1000); // Duration can be adjusted
+    }
+  });
+}, [users]);
+
 
   return (
     <div className='h-[90vh] w-full relative flex flex-col items-center mt-[58px]'>
@@ -321,29 +350,43 @@ return (
             key={user.userId}
             position={user.position}
             icon={new L.divIcon({
-            html: `<div style="transform: rotate(${angle}deg); transition: transform 2s ease;">
+            html: `<div style="transform: rotate(${angle}deg); transition: transform 1s ease;">
             <img src="${iconSrc}" style="width: 15px; height: 25px;" alt="Bus Icon"/>
           </div>`,
               className: "leaflet-marker-icon",
             })}
             ref={(marker) => { markerRefs.current[user.userId] = marker; }} 
           >
-            <Popup>
-              <div className='flex flex-col items-center'>
-                BusNo:
-                 <Speedometer speed={user.Speed} /> 
-            
+           <Popup>
 
-              </div>
-            </Popup>
+    <div className="font-semibold text-lg mb-2 text-center text-blue-600">
+      🚌 Bus No: {user.userId}
+    </div>
+    <div className="flex items-center justify-between w-full mt-2">
+      <span className="text-sm font-medium text-gray-500">Arrival Time:</span>
+      <span className="text-sm font-bold text-gray-700">10:30 AM</span>
+    </div>
+    <div className="flex items-center justify-between w-full mt-2">
+      <span className="text-sm font-medium text-gray-500">Next Stop:</span>
+      <span className="text-sm font-bold text-gray-700">Central Station</span>
+    </div>
+    <div className="flex flex-col items-center w-full mt-4">
+      <span className="text-sm font-medium text-gray-500">Current Speed</span>
+      <Speedometer speed={user.Speed} />
+    </div>
+
+
+</Popup>
+
           </Marker>
           );
         })}
-        {!status && <CurrentUser/>}
+        {/* {!status && <CurrentUser/>} */}
+      
         <SearchControl />
+       {!status && <CurrentLocationButton/>}
         <RoutingControl isRoutingEnabled={isRoutingEnabled} />
-        <ZoomControl />
-        <ContextMenu />
+      
       </MapContainer>
       <button 
         className="absolute top-[10px] right-[10px] z-[1600] bg-white border-2 border-gray-400 rounded-md w-[46px] h-11 scale-[0.9] lg:scale-[1]" 
@@ -351,7 +394,7 @@ return (
       >
         <img src="../route-icon.png" className='absolute left-[6px] top-1 w-15 h-8' alt="Routing Icon" />
       </button>
-      {/* <LowerSlideBar /> */}
+     
     </div>
   );
 }

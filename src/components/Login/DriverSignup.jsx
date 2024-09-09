@@ -33,10 +33,12 @@ const [found,setFound]=useState(false);
    if(!found){
     try {
       const userData = await service.searchBus(data)
-      if (userData) {
+      if (userData.busNo) {
       setFound(true)
-     
+      console.log(userData);
+      
       }
+      else alert('no data found')
   } catch (error) {
       console.log(error);
   }
@@ -66,7 +68,7 @@ const [found,setFound]=useState(false);
 
   return (
     <>
-      <form onSubmit={handleSubmit(onSubmit)}>
+      {/* <form onSubmit={handleSubmit(onSubmit)}>
         <div className='w-full flex justify-center gap-4'>
           <Card className='w-[90%] md:w-[40%] mt-10 '>
             <CardBody>
@@ -116,7 +118,78 @@ const [found,setFound]=useState(false);
           </Card>
         </div>
 
-      </form>
+      </form> */}
+
+
+<div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-md w-full space-y-8">
+        <div>
+          <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
+            Are You A Driver
+          </h2>
+       
+        </div>
+
+        {!found && 
+                 <form className="mt-8 space-y-6"  onSubmit={handleSubmit(onSubmit)}>
+                 <Input
+                    variant='bordered'
+              
+                    type="text"
+                     label="Enter Bus Number"
+                    {...register("busNo", {required: true })}
+                  />
+         
+                  <Button type='submit' radius="full" className='w-full font-semibold text-slate-50 text-lg bg-blue-600'>
+                   Search
+                  </Button>
+                  </form>
+}
+{found && 
+        <form className="mt-8 space-y-6"  onSubmit={handleSubmit(onSubmit)}>
+          <input type="hidden" name="remember" defaultValue="true" />
+       
+          <div className="rounded-md shadow-sm space-y-4">
+          <Input 
+          variant="bordered" 
+          type="text" 
+          label="Full Name" 
+          {...register("name", { required: true })}
+          />
+          <Input 
+          variant="bordered" 
+          type="email" 
+          label="Email" 
+          {...register("email", { required: true })}
+          />
+          <Input 
+          variant="bordered" 
+          type="password" 
+          label="password" 
+          {...register("password", { required: true })}
+          />
+           
+          </div>
+
+     
+
+          <div>
+            <button
+              type="submit"
+              className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+            >
+              Sign Up
+            </button>
+          </div>
+        </form>
+}
+  
+
+     
+     
+
+      </div>
+    </div>
 
     </>
   )
