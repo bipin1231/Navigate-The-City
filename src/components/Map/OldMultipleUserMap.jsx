@@ -169,6 +169,8 @@ function MultipleUserMap() {
       const userLocations = data.documents.map((doc) => ({
         userId: doc.userId,
         position: [doc.latitude, doc.longitude],
+        heading:doc.heading,
+        Speed:doc.Speed,
       }));
       console.log(userLocations);
       const validUserLocations = userLocations.filter(user => user.position[0] !== null);
@@ -177,25 +179,34 @@ function MultipleUserMap() {
    
     fetchUserLocation(); // Initial fetch
 
-    const intervalId = setInterval(fetchUserLocation, 5000); // Fetch every 5 seconds
+    const intervalId = setInterval(fetchUserLocation, 3000); // Fetch every 5 seconds
   
     return () => clearInterval(intervalId); // Clean up on component unmount
   }, []);
 
+  useEffect(() => {
+    let intervalId;
+  
     if (navigator.geolocation) {
-      const geoId = navigator.geolocation.watchPosition(
-        (position) => {
-          const { latitude, longitude } = position.coords;
-          setPosition([latitude, longitude]);
-        
-        }, 
-        (error) => {
-          console.error('Error occurred while retrieving location:', error);
-        },
-        { enableHighAccuracy: true }
-  )
-  console.log(position); 
-  }
+      intervalId = setInterval(() => {
+        navigator.geolocation.getCurrentPosition(
+          (position) => {
+            const { latitude, longitude } = position.coords;
+            setPosition([latitude, longitude]);
+            console.log(`Updated position: Latitude ${latitude}, Longitude ${longitude}`);
+          },
+          (error) => {
+            console.error('Error occurred while retrieving location:', error);
+          },
+          { enableHighAccuracy: true }
+        );
+      }, 3000); // Runs every 10 seconds
+    }
+  
+    return () => {
+      clearInterval(intervalId);
+    };
+  }, []);
 
   useEffect(() => {
     if(status){
@@ -203,13 +214,13 @@ function MultipleUserMap() {
       console.log("hey");
       const geoId = navigator.geolocation.watchPosition(
         (position) => {
-          const { latitude, longitude } = position.coords;
+          const { latitude, longitude,heading,speed } = position.coords;
  
            if(!isLocationStored){
          const storeLoc=async()=>{ 
           setLocationStored(true);
           console.log("storing location");
-          const data=await service.storeUserLocation({userId:userData.$id,name:userData.name,latitude,longitude});
+          const data=await service.storeUserLocation({userId:userData.$id,name:userData.name,latitude,longitude,heading,Speed:speed});
           console.log("performing storing in database",data);
           setLocationStored(false);        
         }          
@@ -256,7 +267,7 @@ function MultipleUserMap() {
       });
     }
   }, [users]);
-  console.log("position previous of multiple user",previousPositions);
+ // console.log("position previous of multiple user",previousPositions);
 
   const calculateAngle = (prevPos, newPos) => {
     const [lat1, lon1] = prevPos;
@@ -267,7 +278,7 @@ function MultipleUserMap() {
     const angle = Math.atan2(y, x) * (180 / Math.PI);
     return (angle + 360) % 360; // Normalize to 0-360 degrees
   };
-  console.log("multiple angles ......",angles);
+  // console.log("multiple angles ......",angles);
 
   return (
     <div className='h-[90vh] w-full relative flex flex-col items-center mt-[58px]'>
@@ -296,7 +307,8 @@ function MultipleUserMap() {
           }
 
           // Calculate the angle of rotation
-          const angle = angles[user.userId] || 0;
+        //  const angle = angles[user.userId] || 0;
+        const angle=user.heading || 0;
 console.log("angle is ......",angle);
 
 const isCurrentUser = userData && user.userId === userData.$id;
@@ -324,7 +336,9 @@ const iconSrc = isCurrentUser ? 'navigator.svg' : 'bus.png';
             <Popup>
               <div className='flex flex-col items-center'>
                 BusNo:
-                <Speedometer speed={speed} />
+                {/* <Speedometer speed={speed} /> */}
+                speed:{user.Speed}
+
               </div>
             </Popup>
           </Marker>
