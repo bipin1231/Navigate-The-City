@@ -159,6 +159,7 @@ function MultipleUserMap() {
   const [previousPositions, setPreviousPositions] = useState({});
   const [angles, setAngles] = useState({}); // Store angles for each user
 
+  const [userDirection, setUserDirection] = useState(0); // Current user's direction
 
   useEffect(() => {
     const fetchUserLocation = async () => {
