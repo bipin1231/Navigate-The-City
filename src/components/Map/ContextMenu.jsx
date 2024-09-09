@@ -2,6 +2,14 @@ import React, { useEffect, useState } from 'react';
 import { useMapEvents } from 'react-leaflet';
 import L from 'leaflet';
 
+// Define the custom icon
+const customIcon = L.icon({
+  iconUrl: '../pin.svg',
+  iconSize: [25, 25],
+  iconAnchor: [14, 20],
+  popupAnchor: [1, -34],
+});
+
 const ContextMenu = () => {
   const [popupOpen, setPopupOpen] = useState(false);
   const [popupLatLng, setPopupLatLng] = useState(null);
@@ -103,7 +111,11 @@ const ContextMenu = () => {
 
       document.getElementById('add-marker-btn').addEventListener('click', () => {
         const input = document.getElementById('marker-input').value;
-        L.marker(popupLatLng).addTo(map).bindPopup(input).openPopup();
+        // Add marker with custom icon
+        L.marker(popupLatLng, { icon: customIcon })
+          .addTo(map)
+          .bindPopup(input)
+          .openPopup();
         setPopupOpen(false);
         map.closePopup(popup);
       });

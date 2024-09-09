@@ -56,6 +56,15 @@ function RoutingMachine({ start, end }) {
             },
             showAlternatives: true,
             altLine: true,
+            createMarker: function(i, waypoint, n) {
+              return L.marker(waypoint.latLng, {
+                icon: L.icon({
+                  iconUrl: '../pin.svg',
+                  iconSize: [25, 25], 
+                  iconAnchor: [14, 20],
+                })
+              });
+            }
           }).addTo(map);
         }
       } catch (error) {
