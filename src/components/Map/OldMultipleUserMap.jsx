@@ -47,15 +47,12 @@ function LayerControl() {
 
   useEffect(() => {
     const layerControl = L.control.layers(baseLayers, {}, { position: 'topleft' }).addTo(map);
-
       setTimeout(() => {
         const layerControlElement = document.querySelector('.leaflet-control-layers');
         if (layerControlElement) {
           layerControlElement.classList.add('absolute', 'top-[10px]', 'scale-[0.9]', 'lg:scale-[1]');
         }
       }, 0);
-
-    // Add the default layer to the map
     baseLayers["Normal"].addTo(map);
 
     return () => {
@@ -76,14 +73,17 @@ function SearchControl() {
       style: 'bar',
       autoClose: true,
       keepResult: true,
-      // position: 'topright',
+      // marker: (latlng) => {
+      //   return L.marker(latlng, {
+      //     icon: L.icon({
+      //       iconUrl: '../pin.svg', // Ensure this path is correct
+      //       iconSize: [25, 25], // Adjust size as needed
+      //       iconAnchor: [12, 25], // Adjust anchor point if needed
+      //     })
+      //   });
+      // },
     });
     map.addControl(searchControl);
-
-    // const searchControlContainer = searchControl.getContainer();
-    // if (searchControlContainer) {
-    //   searchControlContainer.classList.add('absolute', 'top-[50px]', 'right-14', 'scale-[1.3]', 'pointer-events-auto');
-    // }
 
     return () => map.removeControl(searchControl);
   }, [map]);
@@ -103,6 +103,15 @@ function RoutingControl({ isRoutingEnabled }) {
         draggableWaypoints: true,
         removeWaypoints: true,
         geocoder: L.Control.Geocoder.nominatim(),
+        createMarker: function(i, waypoint, n) {
+          return L.marker(waypoint.latLng, {
+            icon: L.icon({
+              iconUrl: '../pin.svg',
+              iconSize: [25, 25], 
+              iconAnchor: [14, 20],
+            })
+          });
+        }
       }).addTo(map);
         const routingControlElement = control.getContainer();
         if (routingControlElement) {
@@ -134,15 +143,12 @@ function ZoomControl() {
   return null;
 }
 
-
 function MultipleUserMap() {
   const status = useSelector(state => state.auth.status);
   const userData = useSelector(state => state.auth.userData);
   console.log("status is",status)
   console.log(userData);
-
   const [isLocationStored,setLocationStored]=useState(false);
- 
   const [users, setUsers] = useState([]);
   const [position,setPosition]=useState([]);
   const defaultPosition = [27.68167, 84.43007]; // Default location for Bharatpur
@@ -176,10 +182,7 @@ function MultipleUserMap() {
     return () => clearInterval(intervalId); // Clean up on component unmount
   }, []);
 
-
-
     if (navigator.geolocation) {
-
       const geoId = navigator.geolocation.watchPosition(
         (position) => {
           const { latitude, longitude } = position.coords;
@@ -193,10 +196,6 @@ function MultipleUserMap() {
   )
   console.log(position); 
   }
-
-
- 
-
 
   useEffect(() => {
     if(status){
@@ -212,38 +211,25 @@ function MultipleUserMap() {
           console.log("storing location");
           const data=await service.storeUserLocation({userId:userData.$id,name:userData.name,latitude,longitude});
           console.log("performing storing in database",data);
-          setLocationStored(false);
-         
-        }
-          
+          setLocationStored(false);        
+        }          
           storeLoc();
-      }
-         
+      }         
         },
         (error) => {
           console.error('Error occurred while retrieving location:', error);
         },
         { enableHighAccuracy: true }
-      );
-  
+      ); 
       return () => {
         navigator.geolocation.clearWatch(geoId);
       };
     } else {
       console.error('Geolocation is not supported by this browser.');
     }
-  
-
-  // storeUser();
-  // const intervalId = setInterval(storeUser, 10000); // Fetch every 10 seconds
-
-  // return () => clearInterval(intervalId); // Clean up on component unmount
-  }
+}
   }, [position]);
   
- 
-  
-
   const toggleRouting = () => {
     setIsRoutingEnabled((prevState) => !prevState);
   };
@@ -258,21 +244,16 @@ function MultipleUserMap() {
         return newPos;
       });
 
-
       setAngles(prevAngles => {
         const newAngles = {};
         users.forEach(user => {
-          const prevPos = previousPositions[user.userId];
-        
-          const newPos = user.position;
-    
+          const prevPos = previousPositions[user.userId];       
+          const newPos = user.position;   
           const angle = prevPos ? calculateAngle(prevPos, newPos) : 0;
           newAngles[user.userId] = angle;
         });
         return newAngles;
       });
-
-    
     }
   }, [users]);
   console.log("position previous of multiple user",previousPositions);
