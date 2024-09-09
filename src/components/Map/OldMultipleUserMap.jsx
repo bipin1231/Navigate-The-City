@@ -162,9 +162,9 @@ function MultipleUserMap() {
 
   useEffect(() => {
     const fetchUserLocation = async () => {
-      console.log("fetching.........");
+   
       const data = await service.fetchUserLocation();
-      console.log(data);
+
       const userLocations = data.documents.map((doc) => ({
         userId: doc.userId,
         position: [doc.latitude, doc.longitude],
@@ -175,7 +175,7 @@ function MultipleUserMap() {
       const validUserLocations = userLocations.filter(user => user.position[0] !== null);
       setUsers(validUserLocations);
     }
-   console.log("fetxherd users",users);
+
    
     fetchUserLocation(); // Initial fetch
 
@@ -184,105 +184,15 @@ function MultipleUserMap() {
     return () => clearInterval(intervalId); // Clean up on component unmount
   }, []);
 
-  useEffect(() => {
-    let intervalId;
-  
-    if (navigator.geolocation) {
-      intervalId = setInterval(() => {
-        navigator.geolocation.getCurrentPosition(
-          (position) => {
-            const { latitude, longitude } = position.coords;
-            setPosition([latitude, longitude]);
-            console.log(`Updated position: Latitude ${latitude}, Longitude ${longitude}`);
-          },
-          (error) => {
-            console.error('Error occurred while retrieving location:', error);
-          },
-          { enableHighAccuracy: true }
-        );
-      }, 3000); // Runs every 10 seconds
-    }
-  
-    return () => {
-      clearInterval(intervalId);
-    };
-  }, []);
-
-
-
-  // useEffect(() => {
-  //   let geoId;
-  
-  //   if (navigator.geolocation) {
-  //     geoId = navigator.geolocation.watchPosition(
-  //       (position) => {
-  //         // const { latitude, longitude, heading, speed } = position.coords;
-  //         // // Update the position state every time the user moves
-  //         // setPosition([latitude, longitude]);
-  //         setPosition(position.coords);
-      
-          
-  //       },
-  //       (error) => {
-  //         console.error('Error occurred while retrieving location:', error);
-  //       },
-  //       { enableHighAccuracy: true }
-  //     );
-  //   } else {
-  //     console.error('Geolocation is not supported by this browser.');
-  //   }
-  
-  //   // Cleanup on component unmount
-  //   return () => {
-  //     if (geoId) {
-  //       navigator.geolocation.clearWatch(geoId);
-  //     }
-  //   };
-  // }, [position]);
-
-  // console.log(position);
-
-
-
-  // useEffect(() => {
-  //   if (status) {
-  //     const storeLocationInterval = setInterval(() => {
-  //       if (!isLocationStored && position.length > 0) {
-  //         const storeLoc = async () => {
-  //           setLocationStored(true); // Prevent storing multiple locations at once
-  //           console.log('Storing location...');
-  //           try {
-  //             await service.storeUserLocation({
-  //               userId: userData.$id,
-  //               name: userData.name,
-  //               latitude: position[0],
-  //               longitude: position[1],
-  //               heading: position.heading || 0,
-  //               Speed: position.Speed || 0, // Add speed if available
-  //             });
-  //             console.log('Location stored successfully');
-  //           } catch (error) {
-  //             console.error('Error storing location:', error);
-  //           }
-  //           setLocationStored(false); // Reset the flag
-  //         };
-  //         storeLoc();
-  //       }
-  //     }, 5000); // Store location every 5 seconds
-  
-  //     // Clear interval when the component unmounts
-  //     return () => clearInterval(storeLocationInterval);
-  //   }
-  // }, []);
 
   useEffect(() => {
     if(status){
     if (navigator.geolocation) {
-      console.log("hey");
+   
       const geoId = navigator.geolocation.watchPosition(
         (position) => {
           const { latitude, longitude,heading,speed } = position.coords;
- 
+            setPosition(position.coords)
            if(!isLocationStored){
          const storeLoc=async()=>{ 
           setLocationStored(true);
@@ -347,6 +257,15 @@ function MultipleUserMap() {
   };
   // console.log("multiple angles ......",angles);
 
+  useEffect(() => {
+    users.forEach(user => {
+      if (markerRefs.current[user.userId]) {
+        markerRefs.current[user.userId].setLatLng(user.position); // Smoothly update the marker position
+      }
+    });
+  }, [users]);
+
+
   return (
     <div className='h-[90vh] w-full relative flex flex-col items-center mt-[58px]'>
       <MapContainer
@@ -398,7 +317,7 @@ const iconSrc = isCurrentUser ? 'navigator.svg' : 'bus.png';
           </div>`,
               className: "leaflet-marker-icon",
             })}
-            ref={(marker) => { markerRefs.current[user.userId] = marker; }}
+            ref={(marker) => { markerRefs.current[user.userId] = marker; }} 
           >
             <Popup>
               <div className='flex flex-col items-center'>
