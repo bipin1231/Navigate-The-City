@@ -368,7 +368,7 @@ const iconSrc = isCurrentUser ? 'navigator.svg' : 'bus.png';
 
 {users.map(user => {
           const isCurrentUser = userData && user.userId === userData.$id; // Check if userData exists
-          const angle = isCurrentUser ? userDirection : (user.heading || 0);
+          const angle = isCurrentUser ? (360 - userDirection) : (user.heading || 0);
           const iconSrc = isCurrentUser ? 'navigator.svg' : 'bus.png';
           
           
