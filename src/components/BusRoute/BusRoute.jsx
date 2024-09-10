@@ -98,7 +98,7 @@ function BusRoute() {
     setShowRedirectButton(true);
   };
   const handleRedirectClick = () => {
-    navigate("/searchbus"); // Use navigate for routing
+    navigate("/searchbus");
   };
 
 
@@ -108,7 +108,7 @@ function BusRoute() {
         <h1 className="text-2xl font-semibold md:text-3xl md:font-bold">
           Route
         </h1>
-        <h1 className=" text-lg font-medium">
+        <h1 className="text-center md:text-lg font-medium">
           Select on below route list to view on map and book ticket
         </h1>
       </div>
@@ -133,14 +133,14 @@ function BusRoute() {
 
         {/* Route map info section */}
         <div className="w-full md:w-[50%] mt-3 md:mt-0">
-          <div className="bg-blue-400 flex items-center justify-around h-[50px] py-1">
+          <div className="bg-blue-400 text-center flex items-center justify-around h-[50px] px-1">
             <span>Book ticket for {routeName}</span>
             {showRedirectButton && (
               <button
-                className="bg-green-600 text-white border-2 border-green-600 rounded duration-200 hover:bg-green-100 hover:text-black"
+                className="bg-green-600 text-white whitespace-nowrap px-3 py-1 border-2 border-green-600 rounded duration-200 hover:bg-green-100 hover:text-black"
                 onClick={handleRedirectClick}
               >
-                <h1 className="py-1 md:py-2 px-4">Book Ticket</h1>
+                <h1>Book Ticket</h1>
               </button>
             )}
           </div>
