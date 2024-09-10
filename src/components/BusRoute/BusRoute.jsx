@@ -112,7 +112,7 @@ function BusRoute() {
           Select on below route list to view on map and book ticket
         </h1>
       </div>
-      <div className="w-full h-full flex flex-col md:gap-2 md:flex-row md:justify-evenly pt-2 md:pt-4">
+      <div className="w-full h-full flex flex-col md:gap-2 md:flex-row md:justify-evenly px-4 md:px-0 pt-2 md:pt-4">
         <div className="w-full md:w-[40%] h-[30vh] md:h-[70vh] overflow-y-scroll bg-blue-200 rounded pt-2 flex items-center flex-col px-4">
             <button className="mb-2 md:mb-4 bg-blue-600 text-white w-[80%] md:w-[60%] border-2 border-blue-600 rounded duration-200 hover:bg-blue-100 hover:text-black" onClick={() => handleWaypointClick([27.69179, 84.42521], [27.58455, 84.73335], "Narayangadh to Lothar")}>
               <h1 className="py-1 md:py-2 px-4">Narayangadh to Lothar</h1>
