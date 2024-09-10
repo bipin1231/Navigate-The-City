@@ -44,6 +44,7 @@ import LoginPage from './components/LandingPage/LoginPage.jsx'
 import SignUpPage from './components/LandingPage/SignupPage.jsx'
 import ContactPage from './components/LandingPage/ContactPage.jsx'
 import NewMultipleUser from './components/Map/NewMapComponent/NewMultipleUser.jsx'
+import BusStop from './components/BusRoute/BusStop.jsx'
 
 let persistor=persistStore(store)
 
@@ -58,6 +59,7 @@ const router=createBrowserRouter(
       <Route path='ticketcard' element={<TicketCard/>}/>
       <Route path='confirmationcard' element={<ConfirmationCard/>}/>
       <Route path='route' element={<BusRoute/>}/>
+      <Route path='route' element={<BusStop/>}/>
       <Route path='login' element={<Login/>}/>
       <Route path='loginpage' element={<LoginPage/>}/>
       <Route path='signup' element={<Signup/>}/>
