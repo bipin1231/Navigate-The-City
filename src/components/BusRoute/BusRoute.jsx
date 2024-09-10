@@ -1,10 +1,10 @@
 import React, { useState, useEffect, useRef } from "react";
 import { MapContainer, TileLayer, useMap } from "react-leaflet";
+import { useNavigate } from "react-router-dom";
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
 import "leaflet-routing-machine/dist/leaflet-routing-machine.css";
 import "leaflet-routing-machine";
-import service from "../../appwrite/config";
 
 const nepalBounds = L.latLngBounds(
   L.latLng(26.347, 80.058), // South-West
@@ -81,29 +81,26 @@ function RoutingMachine({ start, end }) {
       }
     };
   }, [map, start, end]);
-  
-
   return null;
 }
 
 function BusRoute() {
-  const [routeInfo, setRouteInfo] = useState([]);
   const [startLocation, setStartLocation] = useState([27.69179, 84.42521]);
   const [endLocation, setEndLocation] = useState([27.58455, 84.73335]);
+  const [showRedirectButton, setShowRedirectButton] = useState(false); // State to track when to show the new button
+  const [routeName, setRouteName] = useState("selected route location"); // State to store the route name
+  const navigate = useNavigate();
 
-  useEffect(() => {
-    const fetchRouteInfo = async () => {
-      const data = await service.fetchRoute();
-      setRouteInfo(data.documents);
-    };
-
-    fetchRouteInfo();
-  }, []);
-
-  const handleWaypointClick = (from, to) => {
+  const handleWaypointClick = (from, to, routeName) => {
     setStartLocation(from);
     setEndLocation(to);
+    setRouteName(routeName);
+    setShowRedirectButton(true);
   };
+  const handleRedirectClick = () => {
+    navigate("/searchbus"); // Use navigate for routing
+  };
+
 
   return (
     <>
@@ -112,29 +109,41 @@ function BusRoute() {
           Route
         </h1>
         <h1 className=" text-lg font-medium">
-          Select on below route list to view on map
+          Select on below route list to view on map and book ticket
         </h1>
       </div>
-
-      
-      <div className="w-full h-full flex flex-col md:gap-2 md:flex-row md:justify-evenly pt-2 md:pt-4 px-4">
+      <div className="w-full h-full flex flex-col md:gap-2 md:flex-row md:justify-evenly pt-2 md:pt-4">
         <div className="w-full md:w-[40%] h-[30vh] md:h-[70vh] overflow-y-scroll bg-blue-200 rounded pt-2 flex items-center flex-col px-4">
-          <button className="mb-2 md:mb-4 bg-blue-600 text-white w-[80%] md:w-[60%] border-2 border-blue-600 rounded duration-200 hover:bg-blue-100 hover:text-black" onClick={() => handleWaypointClick([27.69179, 84.42521], [27.58455, 84.73335])}>
-            <h1 className="py-1 md:py-2 px-4">Narayangadh to Lothar</h1>
-          </button>
-          <button className="mb-2 md:mb-4 bg-blue-600 text-white w-[80%] md:w-[60%] border-2 border-blue-600 rounded duration-200 hover:bg-blue-100 hover:text-black" onClick={() => handleWaypointClick("Kathmandu", [27.69179, 84.42521])}>
-            <h1 className="py-1 md:py-2 px-4">Kathmandu to Chitwan</h1>
-          </button>
-          <button className="mb-2 md:mb-4 bg-blue-600 text-white w-[80%] md:w-[60%] border-2 border-blue-600 rounded duration-200 hover:bg-blue-100 hover:text-black" onClick={() => handleWaypointClick([27.69179, 84.42521], "Pokhara")}>
-          <h1 className="py-1 md:py-2 px-4">Narayangadh to Pokhara</h1>
-          </button>
-          <button className="mb-2 md:mb-4 bg-blue-600 text-white w-[80%] md:w-[60%] border-2 border-blue-600 rounded duration-200 hover:bg-blue-100 hover:text-black" onClick={() => handleWaypointClick("Pokhara", "Lumbini")}>
-          <h1 className="py-1 md:py-2 px-4">Pokhara to Lumbini</h1>
-          </button>
+            <button className="mb-2 md:mb-4 bg-blue-600 text-white w-[80%] md:w-[60%] border-2 border-blue-600 rounded duration-200 hover:bg-blue-100 hover:text-black" onClick={() => handleWaypointClick([27.69179, 84.42521], [27.58455, 84.73335], "Narayangadh to Lothar")}>
+              <h1 className="py-1 md:py-2 px-4">Narayangadh to Lothar</h1>
+            </button>
+
+            <button className="mb-2 md:mb-4 bg-blue-600 text-white w-[80%] md:w-[60%] border-2 border-blue-600 rounded duration-200 hover:bg-blue-100 hover:text-black" onClick={() => handleWaypointClick("Kathmandu", [27.69179, 84.42521], "Kathmandu to Chitwan")}>
+              <h1 className="py-1 md:py-2 px-4">Kathmandu to Chitwan</h1>
+            </button>
+
+            <button className="mb-2 md:mb-4 bg-blue-600 text-white w-[80%] md:w-[60%] border-2 border-blue-600 rounded duration-200 hover:bg-blue-100 hover:text-black" onClick={() => handleWaypointClick([27.69179, 84.42521], "Pokhara", "Narayangadh to Pokhara")}>
+            <h1 className="py-1 md:py-2 px-4">Narayangadh to Pokhara</h1>
+            </button>
+
+            <button className="mb-2 md:mb-4 bg-blue-600 text-white w-[80%] md:w-[60%] border-2 border-blue-600 rounded duration-200 hover:bg-blue-100 hover:text-black" onClick={() => handleWaypointClick("Pokhara", "Lumbini", "Pokhara to Lumbini")}>
+            <h1 className="py-1 md:py-2 px-4">Pokhara to Lumbini</h1>
+            </button>
         </div>
 
         {/* Route map info section */}
-        <div className="w-full md:w-[45%] mt-3 md:mt-0">
+        <div className="w-full md:w-[50%] mt-3 md:mt-0">
+          <div className="bg-blue-400 flex items-center justify-around h-[50px] py-1">
+            <span>Book ticket for {routeName}</span>
+            {showRedirectButton && (
+              <button
+                className="bg-green-600 text-white border-2 border-green-600 rounded duration-200 hover:bg-green-100 hover:text-black"
+                onClick={handleRedirectClick}
+              >
+                <h1 className="py-1 md:py-2 px-4">Book Ticket</h1>
+              </button>
+            )}
+          </div>
           <MapContainer
             center={[27.68167, 84.43007]}
             zoom={8}
@@ -143,7 +152,7 @@ function BusRoute() {
             minZoom={6.5}
             maxBounds={nepalBounds}
             maxBoundsViscosity={0.8}
-            className="h-[40vh] md:h-[60vh] w-full"
+            className="h-[40vh] md:h-[50vh] w-full"
           >
             <TileLayer
               attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
