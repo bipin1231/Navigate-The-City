@@ -24,22 +24,22 @@ function ConfirmationPage() {
         </p>
 
         {/* ticket section starts */}
-        <div className="flex justify-center">
-          <div className="bg-gray-100 p-4 rounded-lg">
-            <h1 className="text-2xl font-bold mb-2">{bookingData.busName}</h1>
+        <div className="flex justify-center text-sm md:text-base">
+          <div className="w-[90%] md:w-[60%] lg:w-[45%] bg-gray-100 p-4 rounded-lg">
+            <h1 className="text-lg md:text-2xl font-bold mb-2">{bookingData.busName}</h1>
 
             {/* ticket details starts*/}
-            <div className="flex gap-x-32">
+            <div className="flex gap-x-8 md:gap-x-32">
               {/* left ticket details name and route */}
               <div>
                 <div>
-                  <h1 className="text-sky-800 text-sm">Name</h1>
+                  <h1 className="text-sky-800 text-xs md:text-sm">Name</h1>
                   <h1>
-                    <span className="mr-6">{bookingData.name}</span>
+                    <span className="mr-4 md:mr-6">{bookingData.name}</span>
                     {bookingData.age}</h1>
                 </div>
                 <div>
-                  <h1 className="text-sky-800 text-sm">Route</h1>
+                  <h1 className="text-sky-800 text-xs md:text-sm">Route</h1>
                   <h1>{bookingData.routeName}</h1>
                 </div>
               </div>
@@ -47,11 +47,11 @@ function ConfirmationPage() {
               {/* right ticket details date */}
               <div>
                 <div>
-                  <h1 className="text-sky-800 text-sm">Date</h1>
+                  <h1 className="text-sky-800 text-xs md:text-sm">Date</h1>
                   <h1>{bookingData.date}</h1>
                 </div>
                 <div>
-                  <h1 className="text-sky-800 text-sm">Seat</h1>
+                  <h1 className="text-sky-800 text-xs md:text-sm">Seat</h1>
                   <h1>{bookingData.seat}</h1>
                 </div>
               </div>

@@ -67,7 +67,7 @@ function BookingPage() {
     <div className='mt-[60px] flex items-center flex-col'>
       <h1 className='text-center font-semibold lg:font-bold text-lg lg:text-3xl py-2'>Booking Page</h1>
 
-      <div className='w-[90%] md:w-[60%] bg-blue-100 p-3 mb-4 rounded-lg'> 
+      <div className='w-[95%] md:w-[60%] bg-blue-100 p-3 mb-4 rounded-lg'> 
         <form className='flex flex-col items-center gap-3' onSubmit={handleSubmit(onSubmit)}>
           <p>Selected Route: {routeName}</p>
           <p>Selected Bus: {busName}</p>
