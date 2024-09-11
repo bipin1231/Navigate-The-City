@@ -350,12 +350,13 @@ function MultipleUserMap() {
           //  const angle = angles[user.userId] || 0;
           const angle = user.heading || 0;
           // console.log("angle is ......",angle);
+          let iconSrc="";
 
           if (status) {
             const isCurrentUser = userData && user.userId === userData.userData.$id;
-            const iconSrc = isCurrentUser ? 'navigator.svg' : 'bus.png';
+            iconSrc = isCurrentUser ? 'navigator.svg' : 'bus.png';
           }else{
-            const iconSrc ='bus.png';
+             iconSrc ='bus.png';
           }
 
           {/* {users.map(user => {
