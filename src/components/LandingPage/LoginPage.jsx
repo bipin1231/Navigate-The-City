@@ -32,8 +32,12 @@ function LoginPage() {
       const session = await authService.login(data)
       if (session) {
         const userData = await authService.getCurrentUser()
+        const userType= await service.fetchUser(userData.$id);
+        console.log("userType info",userType);
+        
         if (userData) {
-          dispatch(authLogin(userData));
+          dispatch(authLogin({userData,userType}));
+          //dispatch(authLogin(userType));
           await service.storeUserLocation({userId:userData.$id,name:userData.name,status:true});
           navigate("/")
           console.log(userData);

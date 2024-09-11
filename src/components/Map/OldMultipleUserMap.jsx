@@ -201,7 +201,7 @@ function MultipleUserMap() {
          const storeLoc=async()=>{ 
           setLocationStored(true);
           console.log("storing location");
-          const data=await service.storeUserLocation({userId:userData.$id,name:userData.name,latitude,longitude,heading,Speed:speed});
+          const data=await service.storeUserLocation({userId:userData.userData.$id,name:userData.name,latitude,longitude,heading,Speed:speed});
           console.log("performing storing in database",data);
           setLocationStored(false);        
         }          
@@ -335,7 +335,7 @@ useEffect(() => {
         const angle=user.heading || 0;
 // console.log("angle is ......",angle);
 
-const isCurrentUser = userData && user.userId === userData.$id;
+const isCurrentUser = userData && user.userId === userData.userData.$id;
 const iconSrc = isCurrentUser ? 'navigator.svg' : 'bus.png';
           
 

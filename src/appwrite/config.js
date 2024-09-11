@@ -124,6 +124,20 @@ export class Service{
       console.log("error in fetchUser function in config.js",error);
     }
   }
+  async fetchDriverInfo(userId){
+    try{
+      return await this.databases.listDocuments(
+        conf.appwriteDatabaseId,
+        conf.DrivernfoCollectionIdInfoCollectionId,
+        [
+          Query.equal('userId', userId),
+        ]
+      )
+
+    }catch(error){
+      console.log("error in fetchUser function in config.js",error);
+    }
+  }
 
   async fetchBus(){
     try{
@@ -165,7 +179,7 @@ export class Service{
       throw error;
     }
   }
-  async addBus({busNo,ownerName,route}){
+  async addBus({busNo,ownerName,route,driver}){
     try{
   return  await this.databases.createDocument(conf.appwriteDatabaseId, 
       conf.busCollectionId, 
@@ -173,7 +187,8 @@ export class Service{
       {
      busNo,
      ownerName,
-     route
+     route,
+     driver
    
     });
     }catch(error){
@@ -186,7 +201,7 @@ export class Service{
       conf.busCollectionId, 
       [
         Query.equal('busNo', busNo),
-      ] 
+      ]
     );
     
     }catch(error){

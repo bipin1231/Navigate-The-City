@@ -18,6 +18,15 @@ export class AuthService{
     try{
    const userAccount =  await this.account.create(ID.unique(),email,password,name,label)
    if(userAccount) {
+    await this.databases.createDocument(conf.appwriteDatabaseId, 
+      conf.userInfoCollectionId, 
+      ID.unique(),
+      {
+      userId:userAccount.$id,
+      type:"normal",
+      name
+   
+    })
     return this.login({email,password})
    }
    else {return userAccount;}
@@ -34,7 +43,8 @@ export class AuthService{
       ID.unique(),
       {
       userId:userAccount.$id,
-      type:"company"
+      type:"company",
+      name
    
     });
 

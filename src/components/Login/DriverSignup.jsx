@@ -23,6 +23,7 @@ function DriverSignup() {
 const navigate=useNavigate();
 
 const [found,setFound]=useState(false);
+const [userData,setUserData]=useState([])
 
   const {
     register,
@@ -30,33 +31,40 @@ const [found,setFound]=useState(false);
    
   } = useForm();
   const onSubmit = async(data) => {
+    console.log(data)
    if(!found){
-    try {
-      const userData = await service.searchBus(data)
-      if (userData.busNo) {
+ try{
+      const userInfo = await service.searchBus(data)
+      console.log(userInfo.documents[0])
+      if (userInfo.total>0) {
+       setUserData(userInfo.documents[0])
       setFound(true)
-      console.log(userData);
+    
       
-      }
-      else alert('no data found')
-  } catch (error) {
-      console.log(error);
-  }
+      }else   alert("nodata found")
+      
+   
+
    }
+  catch(error){
+   console.log("something went wrong")
+  }
+}
 
    if(found){
     try {
       const userData = await authService.createDriverAccount(data)
       if (userData) {
-     
+        const doc = await authService.getCurrentUser()
+        authService.logout();
      console.log(userData);
+     navigate("/loginpage")
       }
   } catch (error) {
       console.log(error);
   }
    }
-  console.log(data);
-  console.log("erorrrrr");
+ 
   };
 
 
@@ -152,6 +160,7 @@ const [found,setFound]=useState(false);
           <div className="rounded-md shadow-sm space-y-4">
           <Input 
           variant="bordered" 
+          value={userData.driver}
           type="text" 
           label="Full Name" 
           {...register("name", { required: true })}
