@@ -3,122 +3,92 @@ import { useLocation } from "react-router-dom";
 
 function ConfirmationPage() {
   const location = useLocation();
-  const { routeName, busName, date, seat, price } = location.state;
-  const [gender, setGender] = useState("");
-
-  const handleChange = (e) => {
-    setGender(e.target.value);
-  };
+  const bookingData = location.state;
 
   return (
     <div className="mt-[60px]">
-      <h1 className="text-center font-semibold lg:font-bold text-lg lg:text-3xl py-3">
-        Confirmation Page
+      <h1 className="bg-blue-200 text-center font-semibold lg:font-bold text-lg lg:text-3xl py-3">
+        Confirmation of
+        <br />
+        Your Ticket Purchase
       </h1>
-      <form action="" className="flex justify-center">
-        <div className="bg-blue-200 w-[90%] md:w-[50%] py-4 mb-4 rounded-lg">
+
+      <div className="text-center py-3">
+        <h1 className="font-bold">Hi {bookingData.name}</h1>
+        <p>Your ticket booking is almost there!</p>
+      </div>
+
+      <div className="bg-blue-200 py-5">
+        <p className="text-center mb-4">
+          Following are the completed details of your ticket
+        </p>
+
+        {/* ticket section starts */}
         <div className="flex justify-center">
-          <div className="bg-blue-400 rounded-lg p-4 w-[90%] grid gap-y-2">
-            <p className="bg-blue-200 rounded p-2">Route Name: {routeName}</p>
-            <p className="bg-blue-200 rounded p-2">Selected Bus: {busName}</p>
-            <p className="bg-blue-200 rounded p-2">Date: {date}</p>
-            <p className="bg-blue-200 rounded p-2">
-              Selected Seats: {seat.join(", ")}
-            </p>
-            <p className="bg-blue-200 rounded p-2">
-              Total Price: Rs. {price}/-
-            </p>
-          </div>
-        </div>
+          <div className="bg-gray-100 p-4 rounded-lg">
+            <h1 className="text-2xl font-bold mb-2">{bookingData.busName}</h1>
 
-        {/* input section of user details */}
-        <div className="flex justify-center p-4">
-          <div className="w-[90%] bg-blue-400 p-3 rounded-lg grid gap-y-2">
-            {/* <label htmlFor="full-name" className="sr-only">
-              Full Name
-            </label> */}
-            <input
-              id="full-name"
-              name="name"
-              type="text"
-              autoComplete="name"
-              required
-              className="appearance-none rounded-md px-4 py-3 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none"
-              placeholder="Your Name"
-            />
-
-            {/* <label htmlFor="contact" className="sr-only">
-              Full Name
-            </label> */}
-            <input
-              id="contact"
-              name="contact"
-              type="text"
-              autoComplete="name"
-              required
-              className="appearance-none rounded-md px-4 py-3 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none"
-              placeholder="Contact"
-            />
-            <input
-              id="age"
-              name="age"
-              type="text"
-              autoComplete="name"
-              required
-              className="appearance-none rounded-md px-4 py-3 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none"
-              placeholder="Age"
-            />
-            <div className="flex gap-x-3">
-              <legend className="text-gray-700 font-medium">Gender</legend>
-              <div className="flex items-center space-x-4">
-                <label htmlFor="male" className="flex items-center space-x-2">
-                  <input
-                    id="male"
-                    name="gender"
-                    type="radio"
-                    value="male"
-                    checked={gender === "male"}
-                    onChange={handleChange}
-                    className="h-4 w-4 text-blue-600 border-gray-300 focus:ring-blue-500"
-                  />
-                  <span className="text-gray-700">Male</span>
-                </label>
-                <label htmlFor="female" className="flex items-center space-x-2">
-                  <input
-                    id="female"
-                    name="gender"
-                    type="radio"
-                    value="female"
-                    checked={gender === "female"}
-                    onChange={handleChange}
-                    className="h-4 w-4 text-pink-600 border-gray-300 focus:ring-pink-500"
-                  />
-                  <span className="text-gray-700">Female</span>
-                </label>
-                <label htmlFor="other" className="flex items-center space-x-2">
-                  <input
-                    id="other"
-                    name="gender"
-                    type="radio"
-                    value="other"
-                    checked={gender === "other"}
-                    onChange={handleChange}
-                    className="h-4 w-4 text-green-600 border-gray-300 focus:ring-green-500"
-                  />
-                  <span className="text-gray-700">Other</span>
-                </label>
+            {/* ticket details starts*/}
+            <div className="flex gap-x-32">
+              {/* left ticket details name and route */}
+              <div>
+                <div>
+                  <h1 className="text-sky-800 text-sm">Name</h1>
+                  <h1>
+                    <span className="mr-6">{bookingData.name}</span>
+                    {bookingData.age}</h1>
+                </div>
+                <div>
+                  <h1 className="text-sky-800 text-sm">Route</h1>
+                  <h1>{bookingData.routeName}</h1>
+                </div>
               </div>
+
+              {/* right ticket details date */}
+              <div>
+                <div>
+                  <h1 className="text-sky-800 text-sm">Date</h1>
+                  <h1>{bookingData.date}</h1>
+                </div>
+                <div>
+                  <h1 className="text-sky-800 text-sm">Seat</h1>
+                  <h1>{bookingData.seat}</h1>
+                </div>
+              </div>
+
             </div>
+              {/* ticket details ends */}
+
+              <hr className='text-red-900 w-full border-1 border-black my-2' />
+
+              <div className="flex justify-between">
+              <p>
+              Total Price:
+              </p>
+              <p>
+              Rs. {bookingData.price}/-
+              </p>
+              </div>
           </div>
         </div>
 
-        <div className="flex justify-center gap-x-10">
+      </div>
+         {/* ticket section ends */}
+
+         <div className="flex justify-center gap-x-10 mt-4">
           <button className="bg-green-400 rounded py-1 px-4 border-1 border-green-400 duration-200 hover:scale-[1.1] hover:bg-green-300">Pay Now</button>
           <button className="bg-green-400 rounded py-1 px-4 border-1 border-green-400 duration-200 hover:scale-[1.1] hover:bg-green-300">Pay Later</button>
         </div>
 
+
+        <div className="text-center mt-2 bg-blue-200">
+          <p>
+            Thanks you for choosing us, 
+            <br />
+            we hope that you have a safe journey!
+          </p>
         </div>
-      </form>
+
     </div>
   );
 }

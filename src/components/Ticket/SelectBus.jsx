@@ -27,7 +27,7 @@ function SelectBus() {
           <div className="flex items-center gap-3 p-3 bg-blue-200 rounded-lg">
             <h1>Super Express</h1>
             <button className="bg-green-500 px-3 py-2 rounded-lg" onClick={() => handleBusSelection("Super Express")}>
-              Book
+              Book Ticket
             </button>
             <p>
               Total Available Buses: 
@@ -38,7 +38,7 @@ function SelectBus() {
           <div className="flex items-center gap-3 p-3 bg-blue-200 rounded-lg">
             <h1>Bipin Travels</h1>
             <button className="bg-green-500 px-3 py-2 rounded-lg" onClick={() => handleBusSelection("Bipin Travels")}>
-              Book
+              Book Ticket
             </button>
             <p>
               Total Available Buses: 
