@@ -17,8 +17,6 @@ function Header() {
   const [statusLog, setStatusLog] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
 
-  console.log(a == null);
-
 
   useEffect(() => {
     if(status){

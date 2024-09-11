@@ -176,7 +176,7 @@ function MultipleUserMap() {
 
   useEffect(()=>{
     (async function(){
-      if(userData){
+      if(userData && status){
       const data = await service.fetchDriverInfo(userData.userData.$id);
     
       if(data.total>0){
