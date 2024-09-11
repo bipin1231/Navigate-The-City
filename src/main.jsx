@@ -29,8 +29,8 @@ import { PersistGate } from 'redux-persist/integration/react'
 import { persistStore } from 'redux-persist'
 
 import { GoogleOAuthProvider } from '@react-oauth/google';
-import SimpleMap from './components/Map/SimpleMap.jsx'
-import MultipleUserMap from './components/Map/MultipleUserMap.jsx'
+// import SimpleMap from './components/Map/SimpleMap.jsx'
+// import MultipleUserMap from './components/Map/MultipleUserMap.jsx'
 import OldMultipleUserMap from './components/Map/OldMultipleUserMap.jsx'
 import CompanySignup from './components/Login/CompanySignup.jsx'
 import DriverSignup from './components/Login/DriverSignup.jsx'
@@ -43,7 +43,7 @@ import LandingPage from './components/LandingPage/LandingPage.jsx'
 import LoginPage from './components/LandingPage/LoginPage.jsx'
 import SignUpPage from './components/LandingPage/SignupPage.jsx'
 import ContactPage from './components/LandingPage/ContactPage.jsx'
-import NewMultipleUser from './components/Map/NewMapComponent/NewMultipleUser.jsx'
+//import NewMultipleUser from './components/Map/NewMapComponent/NewMultipleUser.jsx'
 import Dashboard from './components/company/Dashboard.jsx'
 import ManageRoutes from './components/company/ManageRoutes.jsx'
 import ManageBus from './components/company/ManageBus.jsx'
@@ -74,7 +74,7 @@ const router=createBrowserRouter(
  
       {/* <Route path='map' element={<Map/>}/> */}
       <Route path='map' element={<OldMultipleUserMap/>}/>
-      <Route path='newmap' element={<NewMultipleUser/>}/>
+   {/*    <Route path='newmap' element={<NewMultipleUser/>}/> */}
 
 
       <Route path='companysignup' element={<CompanySignup/>}/>

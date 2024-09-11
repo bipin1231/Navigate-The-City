@@ -17,6 +17,7 @@ import Speedometer from './Speedometer';
 
 import CurrentLocationButton from './CurrentLocationButton';
 import BusStop from '../BusRoute/BusStop';
+import RouteList from './RouteList';
 
 const nepalBounds = L.latLngBounds(
   L.latLng(26.347, 80.058), // South-West
@@ -164,6 +165,31 @@ function MultipleUserMap() {
 
   const [userDirection, setUserDirection] = useState(0); // Current user's direction
 
+  const [driverInfo,setDriverInfo]=useState([
+    {
+      busNo:null,
+
+    }
+  ])
+
+
+
+  useEffect(()=>{
+    (async function(){
+      if(userData){
+      const data = await service.fetchDriverInfo(userData.userData.$id);
+    
+      if(data.total>0){
+        setDriverInfo(data.documents)
+        console.log(data);
+        console.log(driverInfo);
+        
+      }
+    }
+        
+    }())
+  },[])
+
   useEffect(() => {
     const fetchUserLocation = async () => {
    
@@ -174,8 +200,9 @@ function MultipleUserMap() {
         position: [doc.latitude, doc.longitude],
         heading:doc.heading,
         Speed:doc.Speed,
+        busNo:doc.BusNo
       }));
-      console.log(userLocations);
+    //  console.log(userLocations);
       const validUserLocations = userLocations.filter(user => user.position[0] !== null);
       setUsers(validUserLocations);
     }
@@ -200,9 +227,9 @@ function MultipleUserMap() {
            if(!isLocationStored){
          const storeLoc=async()=>{ 
           setLocationStored(true);
-          console.log("storing location");
-          const data=await service.storeUserLocation({userId:userData.userData.$id,name:userData.name,latitude,longitude,heading,Speed:speed});
-          console.log("performing storing in database",data);
+       //   console.log("storing location");
+          const data=await service.storeUserLocation({userId:userData.userData.$id,name:userData.name,latitude,longitude,heading,Speed:speed,busNo:driverInfo.busNo});
+         // console.log("performing storing in database",data);
           setLocationStored(false);        
         }          
           storeLoc();
@@ -306,7 +333,9 @@ useEffect(() => {
 
   return (
     <div className='h-[90vh] w-full relative flex flex-col items-center mt-[58px]'>
+ 
       <MapContainer
+    
         center={defaultPosition}
         zoom={10}
         style={{ height: "100%", width: "100%" }}
@@ -361,15 +390,15 @@ return (
            <Popup>
 
     <div className="font-semibold text-lg mb-2 text-center text-blue-600">
-      🚌 Bus No: {user.userId}
+      🚌 Bus No: {user.busNo}
     </div>
     <div className="flex items-center justify-between w-full mt-2">
-      <span className="text-sm font-medium text-gray-500">Arrival Time:</span>
+      <span className="text-sm font-medium text-gray-500">Estimated Arrival Time:</span>
       <span className="text-sm font-bold text-gray-700">10:30 AM</span>
     </div>
     <div className="flex items-center justify-between w-full mt-2">
       <span className="text-sm font-medium text-gray-500">Next Stop:</span>
-      <span className="text-sm font-bold text-gray-700">Central Station</span>
+      <span className="text-sm font-bold text-gray-700">Tandi</span>
     </div>
     <div className="flex flex-col items-center w-full mt-4">
       <span className="text-sm font-medium text-gray-500">Current Speed</span>
@@ -389,7 +418,9 @@ return (
         <RoutingControl isRoutingEnabled={isRoutingEnabled} />
         <BusStop />
         <ContextMenu />
+       
       </MapContainer>
+
       <button 
         className="absolute top-[10px] right-[10px] z-[1600] bg-white border-2 border-gray-400 rounded-md w-[46px] h-11 scale-[0.9] lg:scale-[1]" 
         onClick={toggleRouting}

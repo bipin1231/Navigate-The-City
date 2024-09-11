@@ -18,41 +18,36 @@ function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
 
 
-  useEffect(()=>{
-
-  
-   
+  useEffect(()=>{   
       if(a) {
         console.log(a);
         
-        if(a.userType){
-          const userType=null//a.userType.documents[0].type;
+        if(a.userType.total>0){
+          const userType=a.userType.documents[0].type;
           setUserTypeInfo(userType)
         }
       }
-        
-  
-     
-      
-      
-      
-      
-      (async function(){
-        try{
-        const userData = await authService.getCurrentUser();
-      
-        if(userData) setStatusLog(true)
-         else {
-          setUserTypeInfo(null) 
-          setStatusLog(false)
-        }
-        setUserTypeInfo(null) 
-        }catch(e){
-          console.log("not login anyone")
-        } 
-        
-      })();
+    
   },[status])
+
+  useEffect(()=>{
+     
+    (async function(){
+      try{
+      const userData = await authService.getCurrentUser();
+    
+      if(userData) setStatusLog(true)
+       else {
+        setUserTypeInfo(null) 
+        setStatusLog(false)
+      }
+      setUserTypeInfo(null) 
+      }catch(e){
+        console.log("not login anyone")
+      } 
+      
+    })();
+  },[statusLog])
 
 
 
