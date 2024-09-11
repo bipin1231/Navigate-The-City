@@ -354,6 +354,8 @@ function MultipleUserMap() {
           if (status) {
             const isCurrentUser = userData && user.userId === userData.userData.$id;
             const iconSrc = isCurrentUser ? 'navigator.svg' : 'bus.png';
+          }else{
+            const iconSrc ='bus.png';
           }
 
           {/* {users.map(user => {
