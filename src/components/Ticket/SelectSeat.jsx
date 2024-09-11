@@ -2,24 +2,38 @@ import React, { useState } from 'react'
 import { Card, CardHeader, CardBody, CardFooter, Divider } from "@nextui-org/react";
 import BusSeat from './BusSeat';
 import { Button, ButtonGroup } from "@nextui-org/react";
-import { Link,useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import {useDispatch,useSelector} from 'react-redux'
 import { seatPrices } from '../../ticketStore/ticketSlice';
-function SelectSeat() {
+function SelectSeat({ onSeatSelect }) {
 
     const dispatch=useDispatch();
 
   const totalSeats = 4;
-  const price = 800;
-  const [selectedSeat, setSelectedSeats] = useState([]);
+  // const pricePerSeat = 800;
+  const [selectedSeat, setSelectedSeat] = useState([]);
+  
+const location = useLocation();
+const pricePerSeat = location.state?.pricePerSeat || 0;
 
-  console.log(selectedSeat);
+  // console.log(selectedSeat);
+  // const handleSeatSelect = (seatId) => {
+  //   if (selectedSeat.includes(seatId)) {
+  //     setSelectedSeat(selectedSeat.filter(seat => seat !== seatId));
+  //   } else {
+  //     setSelectedSeat([...selectedSeat, seatId]);
+  //   }
+  // }
   const handleSeatSelect = (seatId) => {
+    let updatedSeats;
     if (selectedSeat.includes(seatId)) {
-      setSelectedSeats(selectedSeat.filter(seat => seat !== seatId));
+      updatedSeats = selectedSeat.filter(seat => seat !== seatId);
     } else {
-      setSelectedSeats([...selectedSeat, seatId]);
+      updatedSeats = [...selectedSeat, seatId];
     }
+    setSelectedSeat(updatedSeats);
+    const totalPrice = updatedSeats.length * pricePerSeat;
+    onSeatSelect(updatedSeats, totalPrice); // Pass updated seats to parent component
   }
 
   const renderSeat = (seatalpha) => {
@@ -42,17 +56,17 @@ function SelectSeat() {
     return seats;
   }
 
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
 
-  const toComponentB=()=>{
-    dispatch(seatPrices({selectedSeat,price}))
-navigate('/ticketcard',{state:{seatNo:selectedSeat,price:price}});
-  }
+//   const toComponentB=()=>{
+//     dispatch(seatPrices({selectedSeat,price}))
+// navigate('/ticketcard',{state:{seatNo:selectedSeat,price:price}});
+//   }
 
 
   return (
     <div className='w-full flex justify-center'>
-      <Card className='w-[90%] md:w-[50%] mt-10 flex justify-center'>
+      <Card className='w-[100%] flex justify-center'>
 
 
         <CardHeader className='items-center flex justify-center p-1'>
@@ -89,7 +103,7 @@ navigate('/ticketcard',{state:{seatNo:selectedSeat,price:price}});
             </div>
           </Card>
 
-          <CardFooter className='align-middle items-center flex flex-col gap-5 justify-center pb-0'>
+          <CardFooter className='align-middle items-center flex flex-col gap-2 justify-center pb-0'>
             <div className='align-middle items-center flex  gap-4 justify-center'>
               <div className='flex gap-3 align-middle justify-center text-center items-center'>
                 <div className='w-5 h-5'>
@@ -105,21 +119,21 @@ navigate('/ticketcard',{state:{seatNo:selectedSeat,price:price}});
                 <span>Available</span>
               </div>
 
-              <div className='flex  gap-2 align-middle justify-center text-center items-center'>
+              <div className='flex align-middle justify-center text-center items-center'>
                 <div className='w-5 h-5'>
                   <img src='../bookedSeat.png' />
                 </div>
                 <span>Booked</span>
               </div>
             </div>
-            <div className='flex items-start justify-start w-full '>
+            <div className='flex items-start justify-start w-[80%] '>
               {selectedSeat.length > 0 && (
                 <p>Selected Seats: {selectedSeat.join(', ')}</p>
               )}
             </div>
-            <div className='flex items-start justify-start w-full '>
+            <div className='flex items-start justify-start w-[80%] '>
               {selectedSeat.length > 0 && (
-                <p>Price: {(selectedSeat.length) * price}</p>
+                <p>Price: Rs. {(selectedSeat.length) * pricePerSeat}/-</p>
               )}
             </div>
             <div className='flex items-start justify-center '>
@@ -134,20 +148,20 @@ navigate('/ticketcard',{state:{seatNo:selectedSeat,price:price}});
               )} */}
 
          
-                <Button
+                {/* <Button
                 onClick={()=>{toComponentB()}}
                 type='' radius="full" className=' font-semibold text-lg'>
                   Proceed
-                </Button>
+                </Button> */}
            
             </div>
 
           </CardFooter>
 
         </CardBody>
-        <CardFooter>
+        {/* <CardFooter>
 
-        </CardFooter>
+        </CardFooter> */}
       </Card>
 
 
