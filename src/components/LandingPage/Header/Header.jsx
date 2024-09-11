@@ -23,8 +23,10 @@ function Header() {
   
    
       if(a) {
-        if(a.userType.documents[0].type){
-          const userType=a.userType.documents[0].type;
+        console.log(a);
+        
+        if(a.userType){
+          const userType=null//a.userType.documents[0].type;
           setUserTypeInfo(userType)
         }
       }
