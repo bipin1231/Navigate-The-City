@@ -44,6 +44,9 @@ import LoginPage from './components/LandingPage/LoginPage.jsx'
 import SignUpPage from './components/LandingPage/SignupPage.jsx'
 import ContactPage from './components/LandingPage/ContactPage.jsx'
 import NewMultipleUser from './components/Map/NewMapComponent/NewMultipleUser.jsx'
+import Dashboard from './components/company/Dashboard.jsx'
+import ManageRoutes from './components/company/ManageRoutes.jsx'
+import ManageBus from './components/company/ManageBus.jsx'
 
 let persistor=persistStore(store)
 
@@ -64,12 +67,18 @@ const router=createBrowserRouter(
       <Route path='signuppage' element={<SignUpPage/>}/>
       <Route path='contact' element={<ContactPage/>}/>
 
-      <Route path='companysignup' element={<CompanySignup/>}/>
+   
       <Route path='driversignup' element={<DriverSignup/>}/>
  
       {/* <Route path='map' element={<Map/>}/> */}
       <Route path='map' element={<OldMultipleUserMap/>}/>
       <Route path='newmap' element={<NewMultipleUser/>}/>
+
+
+      <Route path='companysignup' element={<CompanySignup/>}/>
+      <Route path="dashboard" element={<Dashboard/>}/>
+      <Route path="manageroutes" element={<ManageRoutes/>}/>
+      <Route path="managebus" element={<ManageBus/>}/>
       <Route path='addbus' element={<AddBus/>}/>
       <Route path='addroute' element={<AddRoute/>}/>
       <Route path='viewbuslist' element={<ViewBusList/>}/>

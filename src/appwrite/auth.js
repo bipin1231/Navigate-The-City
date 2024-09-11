@@ -34,7 +34,8 @@ export class AuthService{
       ID.unique(),
       {
       userId:userAccount.$id,
-      type:"company"
+      type:"company",
+      name
    
     });
 

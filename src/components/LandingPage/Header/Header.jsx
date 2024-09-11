@@ -4,25 +4,53 @@ import { useSelector, useDispatch } from 'react-redux';
 import authService from '../../../appwrite/auth';
 import { login } from '../../../ticketStore/authSlice';
 import Logout from '../../Header/Logout';
+import { user } from '@nextui-org/react';
 
 
 function Header() {
-  const dispatch = useDispatch();
+
   const status = useSelector(state => state.auth.status);
+
+  const a = useSelector(state => state.auth.userData);
+  const [userTypeInfo,setUserTypeInfo]=useState(null);
+  
   const [statusLog,setStatusLog]=useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
 
-  console.log("status us ..",status);
+
+  useEffect(()=>{
+
   
-(async function(){
-  const userData = await authService.getCurrentUser();
-  console.log(userData);
-  if(userData) setStatusLog(true)
-    
-    
+   
+      if(a) {
+          const userType=a.userType.documents[0].type;
+          setUserTypeInfo(userType)
+      }
+        
   
-})();
-console.log(statusLog);
+     
+      
+      
+      
+      
+      (async function(){
+        try{
+        const userData = await authService.getCurrentUser();
+      
+        if(userData) setStatusLog(true)
+         else {
+          setUserTypeInfo(null) 
+          setStatusLog(false)
+        }
+        setUserTypeInfo(null) 
+        }catch(e){
+          console.log("not login anyone")
+        } 
+        
+      })();
+  },[status])
+
+
 
 
   // Toggle menu for mobile view
@@ -60,7 +88,8 @@ console.log(statusLog);
           } flex lg:flex items-center flex-col lg:flex-row lg:space-x-6 w-full lg:w-auto lg:bg-transparent lg:static absolute bg-blue-50 top-full left-0 lg:mt-0 mt-[2px] lg:py-0 py-6 px-6 lg:px-0`}>
           
          
-          <Link to='/home' className="block lg:inline-block text-gray-800 font-semibold hover:text-blue-600 hover:scale-[1.2] duration-200">
+          {userTypeInfo!=="company" && <>
+            <Link to='/home' className="block lg:inline-block text-gray-800 font-semibold hover:text-blue-600 hover:scale-[1.2] duration-200">
             Home
           </Link>
           <Link to='/map' className="block lg:inline-block text-gray-800 font-semibold hover:text-blue-600 mt-4 lg:mt-0 hover:scale-[1.2] duration-200">
@@ -72,9 +101,29 @@ console.log(statusLog);
           <Link to='/contact' className="block lg:inline-block text-gray-800 font-semibold hover:text-blue-600 mt-4 lg:mt-0 hover:scale-[1.2] duration-200">
             Contact
           </Link>
+          </>
+          }
+          {userTypeInfo=="company" && <>
+            <Link to='/dashboard' className="block lg:inline-block text-gray-800 font-semibold hover:text-blue-600 hover:scale-[1.2] duration-200">
+            Home
+          </Link>
+          <Link to='/map' className="block lg:inline-block text-gray-800 font-semibold hover:text-blue-600 mt-4 lg:mt-0 hover:scale-[1.2] duration-200">
+            Map
+          </Link>
+          <Link to='/route' className="block lg:inline-block text-gray-800 font-semibold hover:text-blue-600 mt-4 lg:mt-0 hover:scale-[1.2] duration-200">
+            Route
+          </Link>
+          <Link to='/manageroutes' className="block lg:inline-block text-gray-800 font-semibold hover:text-blue-600 mt-4 lg:mt-0 hover:scale-[1.2] duration-200">
+           Manage Route
+          </Link>
+          <Link to='/managebus' className="block lg:inline-block text-gray-800 font-semibold hover:text-blue-600 mt-4 lg:mt-0 hover:scale-[1.2] duration-200">
+          Manage Bus
+          </Link>
+          </>
+          }
 
 <div className='mt-4 lg:mt-0'>
-          {(!status || !statusLog) && (
+          {(!status && !statusLog) && (
             <Link to='/loginpage' className="block lg:inline-block duration-200 hover:scale-[0.9]">
               <span className="bg-blue-600 text-white px-4 py-2 rounded-md font-semibold hover:bg-blue-700">
                 Sign In
@@ -82,7 +131,7 @@ console.log(statusLog);
             </Link>
           )}
 
-          {(status) && <Logout/>}
+          {(status || statusLog) && <Logout/>}
           </div>
         </nav>
       </div>
