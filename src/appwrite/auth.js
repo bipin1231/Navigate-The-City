@@ -96,7 +96,7 @@ export class AuthService{
     try {
       return await this.account.get()
     } catch (error) {
-      console.log(error); 
+      console.log("no current user"); 
     }
     return null;
   }
