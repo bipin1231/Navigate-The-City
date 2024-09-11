@@ -9,7 +9,7 @@ function SelectSeat({ onSeatSelect }) {
 
     const dispatch=useDispatch();
 
-  const totalSeats = 4;
+  const totalSeats = 8;
   // const pricePerSeat = 800;
   const [selectedSeat, setSelectedSeat] = useState([]);
   
@@ -74,7 +74,7 @@ const pricePerSeat = location.state?.pricePerSeat || 0;
         </CardHeader>
         <CardBody className='flex justify-center'>
 
-          <Card className=''>
+          <Card>
             <CardHeader className="flex flex-col">
             </CardHeader>
             <div className='flex flex-col h-auto'>

@@ -9,7 +9,7 @@ function BusSeat({id,selected,onSelect}) {
   return (
    
     <div
-    className={`w-12 h-12 flex items-center justify-center cursor-pointer`}
+    className={`w-10 h-10 flex items-center justify-center cursor-pointer`}
     onClick={handleClick}
   >
     <img src={`../${selected ? 'selectedSeat.png' : 'availableSeat.png'}`} alt={`Seat ${id}`} />
