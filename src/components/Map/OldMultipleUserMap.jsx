@@ -51,12 +51,12 @@ function LayerControl() {
 
   useEffect(() => {
     const layerControl = L.control.layers(baseLayers, {}, { position: 'topleft' }).addTo(map);
-      setTimeout(() => {
-        const layerControlElement = document.querySelector('.leaflet-control-layers');
-        if (layerControlElement) {
-          layerControlElement.classList.add('absolute', 'top-[0px]', 'scale-[0.9]', 'lg:scale-[1]');
-        }
-      }, 0);
+    setTimeout(() => {
+      const layerControlElement = document.querySelector('.leaflet-control-layers');
+      if (layerControlElement) {
+        layerControlElement.classList.add('absolute', 'top-[0px]', 'scale-[0.9]', 'lg:scale-[1]');
+      }
+    }, 0);
     baseLayers["Normal"].addTo(map);
 
     return () => {
@@ -107,20 +107,20 @@ function RoutingControl({ isRoutingEnabled }) {
         draggableWaypoints: true,
         removeWaypoints: true,
         geocoder: L.Control.Geocoder.nominatim(),
-        createMarker: function(i, waypoint, n) {
+        createMarker: function (i, waypoint, n) {
           return L.marker(waypoint.latLng, {
             icon: L.icon({
               iconUrl: '../pin.svg',
-              iconSize: [25, 25], 
+              iconSize: [25, 25],
               iconAnchor: [14, 20],
             })
           });
         }
       }).addTo(map);
-        const routingControlElement = control.getContainer();
-        if (routingControlElement) {
-          routingControlElement.classList.add('absolute', 'top-16');
-        }
+      const routingControlElement = control.getContainer();
+      if (routingControlElement) {
+        routingControlElement.classList.add('absolute', 'top-16');
+      }
 
       return () => {
         if (map && control) {
@@ -133,27 +133,14 @@ function RoutingControl({ isRoutingEnabled }) {
   return null;
 }
 
-function ZoomControl() {
-  const map = useMap();
-
-  useEffect(() => {
-    const zoomControl = L.control.zoom({ position: 'bottomleft' }).addTo(map);
-
-    return () => {
-      map.removeControl(zoomControl);
-    };
-  }, [map]);
-
-  return null;
-}
 
 function MultipleUserMap() {
   const status = useSelector(state => state.auth.status);
   const userData = useSelector(state => state.auth.userData);
 
-  const [isLocationStored,setLocationStored]=useState(false);
+  const [isLocationStored, setLocationStored] = useState(false);
   const [users, setUsers] = useState([]);
-  const [position,setPosition]=useState([]);
+  const [position, setPosition] = useState([]);
   const defaultPosition = [27.68167, 84.43007]; // Default location for Bharatpur
   const [isRoutingEnabled, setIsRoutingEnabled] = useState(false);
   const markerRefs = useRef({}); // To store references to user markers
@@ -165,117 +152,117 @@ function MultipleUserMap() {
 
   const [userDirection, setUserDirection] = useState(0); // Current user's direction
 
-  const [driverInfo,setDriverInfo]=useState([
+  const [driverInfo, setDriverInfo] = useState([
     {
-      busNo:null,
+      busNo: null,
 
     }
   ])
 
 
 
-  useEffect(()=>{
-    (async function(){
-      if(userData && status){
-      const data = await service.fetchDriverInfo(userData.userData.$id);
-    
-      if(data.total>0){
-        setDriverInfo(data.documents)
-        console.log(data);
-        console.log(driverInfo);
-        
+  useEffect(() => {
+    (async function () {
+      if (userData && status) {
+        const data = await service.fetchDriverInfo(userData.userData.$id);
+
+        if (data.total > 0) {
+          setDriverInfo(data.documents)
+          console.log(data);
+          console.log(driverInfo);
+
+        }
       }
-    }
-        
+
     }())
-  },[])
+  }, [])
 
   useEffect(() => {
     const fetchUserLocation = async () => {
-   
+
       const data = await service.fetchUserLocation();
 
       const userLocations = data.documents.map((doc) => ({
         userId: doc.userId,
         position: [doc.latitude, doc.longitude],
-        heading:doc.heading,
-        Speed:doc.Speed,
-        busNo:doc.BusNo
+        heading: doc.heading,
+        Speed: doc.Speed,
+        busNo: doc.BusNo
       }));
-    //  console.log(userLocations);
+      //  console.log(userLocations);
       const validUserLocations = userLocations.filter(user => user.position[0] !== null);
       setUsers(validUserLocations);
     }
 
-   
+
     fetchUserLocation(); // Initial fetch
 
     const intervalId = setInterval(fetchUserLocation, 3000); // Fetch every 5 seconds
-  
+
     return () => clearInterval(intervalId); // Clean up on component unmount
   }, []);
 
 
   useEffect(() => {
-    if(status){
-    if (navigator.geolocation) {
-   
-      const geoId = navigator.geolocation.watchPosition(
-        (position) => {
-          const { latitude, longitude,heading,speed } = position.coords;
+    if (status) {
+      if (navigator.geolocation) {
+
+        const geoId = navigator.geolocation.watchPosition(
+          (position) => {
+            const { latitude, longitude, heading, speed } = position.coords;
             setPosition(position.coords)
-           if(!isLocationStored){
-         const storeLoc=async()=>{ 
-          setLocationStored(true);
-       //   console.log("storing location");
-          const data=await service.storeUserLocation({userId:userData.userData.$id,name:userData.name,latitude,longitude,heading,Speed:speed,busNo:driverInfo.busNo});
-         // console.log("performing storing in database",data);
-          setLocationStored(false);        
-        }          
-          storeLoc();
-      }         
-        },
-        (error) => {
-          console.error('Error occurred while retrieving location:', error);
-        },
-        { enableHighAccuracy: true }
-      ); 
-      return () => {
-        navigator.geolocation.clearWatch(geoId);
-      };
-    } else {
-      console.error('Geolocation is not supported by this browser.');
+            if (!isLocationStored) {
+              const storeLoc = async () => {
+                setLocationStored(true);
+                //   console.log("storing location");
+                const data = await service.storeUserLocation({ userId: userData.userData.$id, name: userData.name, latitude, longitude, heading, Speed: speed, busNo: driverInfo.busNo });
+                // console.log("performing storing in database",data);
+                setLocationStored(false);
+              }
+              storeLoc();
+            }
+          },
+          (error) => {
+            console.error('Error occurred while retrieving location:', error);
+          },
+          { enableHighAccuracy: true }
+        );
+        return () => {
+          navigator.geolocation.clearWatch(geoId);
+        };
+      } else {
+        console.error('Geolocation is not supported by this browser.');
+      }
     }
-}
   }, [position]);
-  
+
   const toggleRouting = () => {
     setIsRoutingEnabled((prevState) => !prevState);
   };
-//   useEffect(() => {
-//     if (users.length > 0) {
+  //   useEffect(() => {
+  //     if (users.length > 0) {
 
-//       setPreviousPositions(prev => {
-//         const newPos = {};
-//         users.forEach(user => {
-//           newPos[user.userId] = user.position;
-//         });
-//         return newPos;
-//       });
+  //       setPreviousPositions(prev => {
+  //         const newPos = {};
+  //         users.forEach(user => {
+  //           newPos[user.userId] = user.position;
+  //         });
+  //         return newPos;
+  //       });
 
-//       setAngles(prevAngles => {
-//         const newAngles = {};
-//         users.forEach(user => {
-//           const prevPos = previousPositions[user.userId];       
-//           const newPos = user.position;   
-//           const angle = prevPos ? calculateAngle(prevPos, newPos) : 0;
-//           newAngles[user.userId] = angle;
-//         });
-//         return newAngles;
-//       });
-//     }
-//   }, [users]);
-//  // console.log("position previous of multiple user",previousPositions);
+  //       setAngles(prevAngles => {
+  //         const newAngles = {};
+  //         users.forEach(user => {
+  //           const prevPos = previousPositions[user.userId];       
+  //           const newPos = user.position;   
+  //           const angle = prevPos ? calculateAngle(prevPos, newPos) : 0;
+  //           newAngles[user.userId] = angle;
+  //         });
+  //         return newAngles;
+  //       });
+  //     }
+  //   }, [users]);
+  //  // console.log("position previous of multiple user",previousPositions);
 
   const calculateAngle = (prevPos, newPos) => {
     const [lat1, lon1] = prevPos;
@@ -289,53 +276,53 @@ function MultipleUserMap() {
   // console.log("multiple angles ......",angles);
 
   // Helper function for linear interpolation (lerp)
-const lerp = (start, end, t) => start + (end - start) * t;
+  const lerp = (start, end, t) => start + (end - start) * t;
 
-function smoothTransition(marker, oldPosition, newPosition, duration = 1000) {
-  let startTime;
-  
-  const animate = (timestamp) => {
-    if (!startTime) startTime = timestamp;
-    const elapsed = timestamp - startTime;
+  function smoothTransition(marker, oldPosition, newPosition, duration = 1000) {
+    let startTime;
 
-    // Calculate the interpolation factor (t), clamped between 0 and 1
-    const t = Math.min(elapsed / duration, 1);
+    const animate = (timestamp) => {
+      if (!startTime) startTime = timestamp;
+      const elapsed = timestamp - startTime;
 
-    // Interpolate the position
-    const lat = lerp(oldPosition.lat, newPosition.lat, t);
-    const lng = lerp(oldPosition.lng, newPosition.lng, t);
+      // Calculate the interpolation factor (t), clamped between 0 and 1
+      const t = Math.min(elapsed / duration, 1);
 
-    marker.setLatLng([lat, lng]);
+      // Interpolate the position
+      const lat = lerp(oldPosition.lat, newPosition.lat, t);
+      const lng = lerp(oldPosition.lng, newPosition.lng, t);
 
-    // Continue animating until the time is up
-    if (t < 1) {
-      requestAnimationFrame(animate);
-    }
-  };
+      marker.setLatLng([lat, lng]);
 
-  requestAnimationFrame(animate);
-}
+      // Continue animating until the time is up
+      if (t < 1) {
+        requestAnimationFrame(animate);
+      }
+    };
+
+    requestAnimationFrame(animate);
+  }
 
 
-useEffect(() => {
-  users.forEach(user => {
-    const currentMarker = markerRefs.current[user.userId];
-    if (currentMarker) {
-      const oldPosition = currentMarker.getLatLng();
-      const newPosition = L.latLng(user.position);
+  useEffect(() => {
+    users.forEach(user => {
+      const currentMarker = markerRefs.current[user.userId];
+      if (currentMarker) {
+        const oldPosition = currentMarker.getLatLng();
+        const newPosition = L.latLng(user.position);
 
-      // Trigger smooth transition between old and new positions
-      smoothTransition(currentMarker, oldPosition, newPosition, 1000); // Duration can be adjusted
-    }
-  });
-}, [users]);
+        // Trigger smooth transition between old and new positions
+        smoothTransition(currentMarker, oldPosition, newPosition, 1000); // Duration can be adjusted
+      }
+    });
+  }, [users]);
 
 
   return (
     <div className='h-[90vh] w-full relative flex flex-col items-center mt-[58px]'>
- 
+
       <MapContainer
-    
+
         center={defaultPosition}
         zoom={10}
         style={{ height: "100%", width: "100%" }}
@@ -352,82 +339,83 @@ useEffect(() => {
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
 
- {users.map(user => {
- 
-          if (user.position[0]==null) {
+        {users.map(user => {
+
+          if (user.position[0] == null) {
             console.error(`Invalid position for user: ${user.userId}`, user.position);
             return null;
           }
 
           // Calculate the angle of rotation
-        //  const angle = angles[user.userId] || 0;
-        const angle=user.heading || 0;
-// console.log("angle is ......",angle);
+          //  const angle = angles[user.userId] || 0;
+          const angle = user.heading || 0;
+          // console.log("angle is ......",angle);
 
-const isCurrentUser = userData && user.userId === userData.userData.$id;
-const iconSrc = isCurrentUser ? 'navigator.svg' : 'bus.png';
-          
+          if (status) {
+            const isCurrentUser = userData && user.userId === userData.userData.$id;
+            const iconSrc = isCurrentUser ? 'navigator.svg' : 'bus.png';
+          }
 
-{/* {users.map(user => {
+          {/* {users.map(user => {
           const isCurrentUser = userData && user.userId === userData.$id; // Check if userData exists
           const angle = isCurrentUser ? (360 - userDirection) : (user.heading || 0);
           const iconSrc = isCurrentUser ? 'navigator.svg' : 'bus.png'; */}
-          
-          
-return (
+
+
+          return (
 
             <Marker
-            key={user.userId}
-            position={user.position}
-            icon={new L.divIcon({
-            html: `<div style="transform: rotate(${angle}deg); transition: transform 1s ease;">
+              key={user.userId}
+              position={user.position}
+              icon={new L.divIcon({
+                html: `<div style="transform: rotate(${angle}deg); transition: transform 1s ease;">
             <img src="${iconSrc}" style="width: 15px; height: 25px;" alt="Bus Icon"/>
           </div>`,
-              className: "leaflet-marker-icon",
-            })}
-            ref={(marker) => { markerRefs.current[user.userId] = marker; }} 
-          >
-           <Popup>
+                className: "leaflet-marker-icon",
+              })}
+              ref={(marker) => { markerRefs.current[user.userId] = marker; }}
+            >
+              <Popup>
 
-    <div className="font-semibold text-lg mb-2 text-center text-blue-600">
-      🚌 Bus No: {user.busNo}
-    </div>
-    <div className="flex items-center justify-between w-full mt-2">
-      <span className="text-sm font-medium text-gray-500">Estimated Arrival Time:</span>
-      <span className="text-sm font-bold text-gray-700">10:30 AM</span>
-    </div>
-    <div className="flex items-center justify-between w-full mt-2">
-      <span className="text-sm font-medium text-gray-500">Next Stop:</span>
-      <span className="text-sm font-bold text-gray-700">Tandi</span>
-    </div>
-    <div className="flex flex-col items-center w-full mt-4">
-      <span className="text-sm font-medium text-gray-500">Current Speed</span>
-      <Speedometer speed={user.Speed} />
-    </div>
+                <div className="font-semibold text-lg mb-2 text-center text-blue-600">
+                  🚌 Bus No: {user.busNo}
+                </div>
+                <div className="flex items-center justify-between w-full mt-2">
+                  <span className="text-sm font-medium text-gray-500">Estimated Arrival Time:</span>
+                  <span className="text-sm font-bold text-gray-700">10:30 AM</span>
+                </div>
+                <div className="flex items-center justify-between w-full mt-2">
+                  <span className="text-sm font-medium text-gray-500">Next Stop:</span>
+                  <span className="text-sm font-bold text-gray-700">Tandi</span>
+                </div>
+                <div className="flex flex-col items-center w-full mt-4">
+                  <span className="text-sm font-medium text-gray-500">Current Speed</span>
+                  <Speedometer speed={user.Speed} />
+                </div>
 
 
-</Popup>
+              </Popup>
 
-          </Marker>
+            </Marker>
           );
         })}
         {/* {!status && <CurrentUser/>} */}
-      
+
         <SearchControl />
-       {!status && <CurrentLocationButton/>}
+        {!status && <CurrentLocationButton />}
         <RoutingControl isRoutingEnabled={isRoutingEnabled} />
         <BusStop />
         <ContextMenu />
-       
+
       </MapContainer>
 
-      <button 
-        className="absolute top-[10px] right-[10px] z-[1600] bg-white border-2 border-gray-400 rounded-md w-[46px] h-11 scale-[0.9] lg:scale-[1]" 
+      <button
+        className="absolute top-[10px] right-[10px] z-[1600] bg-white border-2 border-gray-400 rounded-md w-[46px] h-11 scale-[0.9] lg:scale-[1]"
         onClick={toggleRouting}
       >
         <img src="../route-icon.png" className='absolute left-[6px] top-1 w-15 h-8' alt="Routing Icon" />
       </button>
-     
+
     </div>
   );
 }
