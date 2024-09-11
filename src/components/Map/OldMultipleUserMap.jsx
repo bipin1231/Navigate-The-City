@@ -16,6 +16,7 @@ import { data } from 'autoprefixer';
 import Speedometer from './Speedometer';
 
 import CurrentLocationButton from './CurrentLocationButton';
+import BusStop from '../BusRoute/BusStop';
 
 const nepalBounds = L.latLngBounds(
   L.latLng(26.347, 80.058), // South-West
@@ -52,7 +53,7 @@ function LayerControl() {
       setTimeout(() => {
         const layerControlElement = document.querySelector('.leaflet-control-layers');
         if (layerControlElement) {
-          layerControlElement.classList.add('absolute', 'top-[10px]', 'scale-[0.9]', 'lg:scale-[1]');
+          layerControlElement.classList.add('absolute', 'top-[0px]', 'scale-[0.9]', 'lg:scale-[1]');
         }
       }, 0);
     baseLayers["Normal"].addTo(map);
@@ -386,7 +387,8 @@ return (
         <SearchControl />
        {!status && <CurrentLocationButton/>}
         <RoutingControl isRoutingEnabled={isRoutingEnabled} />
-      
+        <BusStop />
+        <ContextMenu />
       </MapContainer>
       <button 
         className="absolute top-[10px] right-[10px] z-[1600] bg-white border-2 border-gray-400 rounded-md w-[46px] h-11 scale-[0.9] lg:scale-[1]" 

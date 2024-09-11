@@ -49,8 +49,9 @@ function CurrentLocationButton() {
             const newMarker = L.marker(latlng, {
               icon: L.icon({
                 iconUrl: 'navigator.svg', // Path to your custom icon
-                iconSize: [25, 25],
-                iconAnchor: [12, 25],
+                iconSize: [15, 25],
+                // iconAnchor: [12, 25],
+                popupAnchor: [0, -15]
               }),
             }).addTo(map);
 
