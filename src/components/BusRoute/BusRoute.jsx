@@ -89,16 +89,22 @@ function BusRoute() {
   const [endLocation, setEndLocation] = useState([27.58455, 84.73335]);
   const [showRedirectButton, setShowRedirectButton] = useState(false); // State to track when to show the new button
   const [routeName, setRouteName] = useState("selected route location"); // State to store the route name
+  const [pricePerSeat, setPricePerSeat] = useState(0);
   const navigate = useNavigate();
 
-  const handleWaypointClick = (from, to, routeName) => {
+  const handleWaypointClick = (from, to, routeName, price) => {
     setStartLocation(from);
     setEndLocation(to);
     setRouteName(routeName);
+    setPricePerSeat(price);
     setShowRedirectButton(true);
   };
   const handleRedirectClick = () => {
-    navigate("/searchbus");
+    // navigate('/bookingpage', { state: { routeName: routeName } });
+    navigate('/selectbus', { state: { routeName: routeName, pricePerSeat: pricePerSeat } });
+    // navigate('/selectbus', { state: { routeName: routeName, pricePerSeat: pricePerSeat} });
+    // navigate('/selectseat', { state: { pricePerSeat: pricePerSeat } });
+    // navigate('/bookingpage', { state: { pricePerSeat: pricePerSeat } });
   };
 
 
@@ -114,19 +120,19 @@ function BusRoute() {
       </div>
       <div className="w-full h-full flex flex-col md:gap-2 md:flex-row md:justify-evenly px-4 md:px-0 pt-2 md:pt-4">
         <div className="w-full md:w-[40%] h-[30vh] md:h-[70vh] overflow-y-scroll bg-blue-200 rounded pt-2 flex items-center flex-col px-4">
-            <button className="mb-2 md:mb-4 bg-blue-600 text-white w-[80%] md:w-[60%] border-2 border-blue-600 rounded duration-200 hover:bg-blue-100 hover:text-black" onClick={() => handleWaypointClick([27.69179, 84.42521], [27.58455, 84.73335], "Narayangadh to Lothar")}>
+            <button className="mb-2 md:mb-4 bg-blue-600 text-white w-[80%] md:w-[60%] border-2 border-blue-600 rounded duration-200 hover:bg-blue-100 hover:text-black" onClick={() => handleWaypointClick([27.69179, 84.42521], [27.58455, 84.73335], "Narayangadh to Lothar", 100)}>
               <h1 className="py-1 md:py-2 px-4">Narayangadh to Lothar</h1>
             </button>
 
-            <button className="mb-2 md:mb-4 bg-blue-600 text-white w-[80%] md:w-[60%] border-2 border-blue-600 rounded duration-200 hover:bg-blue-100 hover:text-black" onClick={() => handleWaypointClick("Kathmandu", [27.69179, 84.42521], "Kathmandu to Chitwan")}>
+            <button className="mb-2 md:mb-4 bg-blue-600 text-white w-[80%] md:w-[60%] border-2 border-blue-600 rounded duration-200 hover:bg-blue-100 hover:text-black" onClick={() => handleWaypointClick("Kathmandu", [27.69179, 84.42521], "Kathmandu to Chitwan", 600)}>
               <h1 className="py-1 md:py-2 px-4">Kathmandu to Chitwan</h1>
             </button>
 
-            <button className="mb-2 md:mb-4 bg-blue-600 text-white w-[80%] md:w-[60%] border-2 border-blue-600 rounded duration-200 hover:bg-blue-100 hover:text-black" onClick={() => handleWaypointClick([27.69179, 84.42521], "Pokhara", "Narayangadh to Pokhara")}>
+            <button className="mb-2 md:mb-4 bg-blue-600 text-white w-[80%] md:w-[60%] border-2 border-blue-600 rounded duration-200 hover:bg-blue-100 hover:text-black" onClick={() => handleWaypointClick([27.69179, 84.42521], "Pokhara", "Narayangadh to Pokhara", 600)}>
             <h1 className="py-1 md:py-2 px-4">Narayangadh to Pokhara</h1>
             </button>
 
-            <button className="mb-2 md:mb-4 bg-blue-600 text-white w-[80%] md:w-[60%] border-2 border-blue-600 rounded duration-200 hover:bg-blue-100 hover:text-black" onClick={() => handleWaypointClick("Pokhara", "Lumbini", "Pokhara to Lumbini")}>
+            <button className="mb-2 md:mb-4 bg-blue-600 text-white w-[80%] md:w-[60%] border-2 border-blue-600 rounded duration-200 hover:bg-blue-100 hover:text-black" onClick={() => handleWaypointClick("Pokhara", "Lumbini", "Pokhara to Lumbini", 700)}>
             <h1 className="py-1 md:py-2 px-4">Pokhara to Lumbini</h1>
             </button>
         </div>

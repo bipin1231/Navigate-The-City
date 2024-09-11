@@ -48,6 +48,8 @@ import Dashboard from './components/company/Dashboard.jsx'
 import ManageRoutes from './components/company/ManageRoutes.jsx'
 import ManageBus from './components/company/ManageBus.jsx'
 import BusStop from './components/BusRoute/BusStop.jsx'
+import BookingPage from './components/Ticket/BookingPage.jsx'
+import ConfirmationPage from './components/Ticket/ConfirmationPage.jsx'
 
 let persistor=persistStore(store)
 
@@ -62,7 +64,9 @@ const router=createBrowserRouter(
       <Route path='ticketcard' element={<TicketCard/>}/>
       <Route path='confirmationcard' element={<ConfirmationCard/>}/>
       <Route path='route' element={<BusRoute/>}/>
-      <Route path='route' element={<BusStop/>}/>
+      <Route path='bookingpage' element={<BookingPage/>}/>
+      <Route path='comfirmationpage' element={<ConfirmationPage/>}/>
+      <Route path='busstop' element={<BusStop/>}/>
       <Route path='login' element={<Login/>}/>
       <Route path='loginpage' element={<LoginPage/>}/>
       <Route path='signup' element={<Signup/>}/>
