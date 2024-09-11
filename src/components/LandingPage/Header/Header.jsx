@@ -17,10 +17,14 @@ function Header() {
   const [statusLog,setStatusLog]=useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
 
+console.log(a==null);
+
 
   useEffect(()=>{   
-      if(a) {
+      if(a!==null) {
         console.log(a);
+        console.log(a);
+        
         
         if(a.userType.total>0){
           const userType=a.userType.documents[0].type;
