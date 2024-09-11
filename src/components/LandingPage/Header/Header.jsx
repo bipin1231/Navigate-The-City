@@ -30,6 +30,7 @@ console.log(a==null);
           const userType=a.userType.documents[0].type;
           setUserTypeInfo(userType)
         }
+        else setUserTypeInfo(null) 
       }
     
   },[status])
@@ -45,7 +46,7 @@ console.log(a==null);
         setUserTypeInfo(null) 
         setStatusLog(false)
       }
-      setUserTypeInfo(null) 
+     
       }catch(e){
         console.log("not login anyone")
       } 
