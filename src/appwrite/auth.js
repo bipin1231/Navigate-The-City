@@ -113,7 +113,7 @@ export class AuthService{
       return this.account.createOAuth2Session(
          OAuthProvider.Google,
         
-        "http://localhost:5173/searchbus",
+        "http://localhost:5173/home",
          "http://localhost:5173/login"
       );
     } catch (error) {

@@ -6,9 +6,10 @@ import { login } from '../../../ticketStore/authSlice';
 import Logout from '../../Header/Logout';
 import { user } from '@nextui-org/react';
 
+import authSlice, { logout } from '../../../ticketStore/authSlice';
 
 function Header() {
-
+  const dispatch=useDispatch()
   const status = useSelector(state => state.auth.status);
 
   const a = useSelector(state => state.auth.userData);
@@ -19,7 +20,10 @@ function Header() {
 
 
   useEffect(() => {
+    console.log("status is",status);
+    
     if(status){
+    
     if (a !== null) {
 
       if (a.userType.total > 0) {
@@ -31,26 +35,31 @@ function Header() {
   }
   else setUserTypeInfo(null)
 
-  }, [status])
+
+  }, [status,statusLog])
 
   useEffect(() => {
 
     (async function () {
       try {
         const userData = await authService.getCurrentUser();
+        
 
-        if (userData) setStatusLog(true)
+        if (userData){ 
+        
+          setStatusLog(true)}
         else {
           setUserTypeInfo(null)
           setStatusLog(false)
         }
-
+        if(!userData) dispatch(logout());
       } catch (e) {
         console.log("not login anyone")
       }
 
     })();
-  }, [statusLog])
+    console.log("statis log is",statusLog)
+  }, [statusLog,status])
 
 
 

@@ -4,11 +4,12 @@ import { useSelector } from 'react-redux';
 import authSlice, { logout } from '../../ticketStore/authSlice';
 import { useDispatch } from 'react-redux';
 import service from '../../appwrite/config';
+import {useNavigate } from 'react-router-dom'
 function Logout() {
   const [loading, setLoading] = useState(false);
  
   const dispatch=useDispatch()
-
+  const navigate = useNavigate();
 
   
 
@@ -25,8 +26,10 @@ function Logout() {
        
         await authService.logout();
         dispatch(logout());
+
         
         console.log("Logging out");
+        navigate("/")
       } catch (error) {
         console.error("Error updating user status:", error);
       } finally {

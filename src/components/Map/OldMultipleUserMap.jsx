@@ -18,6 +18,8 @@ import Speedometer from './Speedometer';
 import CurrentLocationButton from './CurrentLocationButton';
 import BusStop from '../BusRoute/BusStop';
 import RouteList from './RouteList';
+import RouteInfoSidebar from './RouteInfoSidebar';
+import { FaMapMarkedAlt } from 'react-icons/fa';
 
 const nepalBounds = L.latLngBounds(
   L.latLng(26.347, 80.058), // South-West
@@ -152,12 +154,9 @@ function MultipleUserMap() {
 
   const [userDirection, setUserDirection] = useState(0); // Current user's direction
 
-  const [driverInfo, setDriverInfo] = useState([
-    {
-      busNo: null,
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
-    }
-  ])
+  const [driverInfo, setDriverInfo] = useState()
 
 
 
@@ -167,17 +166,19 @@ function MultipleUserMap() {
         const data = await service.fetchDriverInfo(userData.userData.$id);
 
         if (data.total > 0) {
-          setDriverInfo(data.documents)
-          console.log(data);
-          console.log(driverInfo);
+          console.log(data.documents[0])
+          setDriverInfo(data.documents[0])
+    
 
         }
       }
+      console.log(driverInfo);
 
     }())
   }, [])
-
+ 
   useEffect(() => {
+
     const fetchUserLocation = async () => {
 
       const data = await service.fetchUserLocation();
@@ -215,7 +216,9 @@ function MultipleUserMap() {
               const storeLoc = async () => {
                 setLocationStored(true);
                 //   console.log("storing location");
-                const data = await service.storeUserLocation({ userId: userData.userData.$id, name: userData.name, latitude, longitude, heading, Speed: speed, busNo: driverInfo.busNo });
+          
+                const data = await service.storeUserLocation({ userId: userData.userData.$id, name: userData.name, latitude, longitude, heading, Speed: speed, BusNo: driverInfo.busNo });
+                
                 // console.log("performing storing in database",data);
                 setLocationStored(false);
               }
@@ -235,6 +238,14 @@ function MultipleUserMap() {
       }
     }
   }, [position]);
+
+
+
+
+
+  const toggleSidebar = () => {
+    setIsSidebarOpen(prevState => !prevState);
+  };
 
   const toggleRouting = () => {
     setIsRoutingEnabled((prevState) => !prevState);
@@ -412,12 +423,21 @@ function MultipleUserMap() {
 
       </MapContainer>
 
-      <button
-        className="absolute top-[10px] right-[10px] z-[1600] bg-white border-2 border-gray-400 rounded-md w-[46px] h-11 scale-[0.9] lg:scale-[1]"
-        onClick={toggleRouting}
+
+  
+
+<button
+        className="absolute top-[10px] right-[60px] z-[1600] bg-blue-600 text-white p-3 rounded-full shadow-lg hover:bg-blue-700 focus:outline-none"
+        onClick={toggleSidebar}
       >
-        <img src="../route-icon.png" className='absolute left-[6px] top-1 w-15 h-8' alt="Routing Icon" />
+        <FaMapMarkedAlt className="text-2xl" />
       </button>
+
+      {/* Sidebar component */}
+      <RouteInfoSidebar
+      users={users} 
+      isOpen={isSidebarOpen} 
+      onClose={() => setIsSidebarOpen(false)} />
 
     </div>
   );

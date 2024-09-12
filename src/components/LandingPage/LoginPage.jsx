@@ -130,7 +130,7 @@ function LoginPage() {
           <Button
             color=''
             radius="full" className='w-full font-semibold text-lg'
-          // onClick={googleAuth}
+           onClick={googleAuth}
           >
             <img className='w-9 bg-transparent' src="https://imagepng.org/wp-content/uploads/2019/08/google-icon.png" alt="" />
             <p> Sign in with Google</p>
