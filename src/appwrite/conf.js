@@ -7,6 +7,7 @@ const conf={
    routeCollectionId:String(import.meta.env.VITE_APPWRITE_Route_COLLECTION_ID),
    userInfoCollectionId:String(import.meta.env.VITE_APPWRITE_UserInfo_COLLECTION_ID),
    DrivernfoCollectionId:String(import.meta.env.VITE_APPWRITE_DriverInfo_COLLECTION_ID),
+   TicketInfoCollectionId:String(import.meta.env.VITE_APPWRITE_TicketInfo_COLLECTION_ID),
   // appwriteBucketId:String(import.meta.env.VITE_APPWRITE_BUCKET_ID),
 }
 

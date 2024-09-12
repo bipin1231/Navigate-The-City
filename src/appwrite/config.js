@@ -209,7 +209,40 @@ export class Service{
       throw error;
     }
   }
-
+  async addTicketInfo({name,seatNo,busNo,date,contact}){
+    try{
+  return  await this.databases.createDocument(conf.appwriteDatabaseId, 
+      conf.TicketInfoCollectionId, 
+      ID.unique(),
+      {
+        name,
+        seatNo,
+        busNo,
+        date,
+        contact
+   
+    });
+    }catch(error){
+      throw error;
+    }
+  }
+  async showTicketInfo({name,seatNo,busNo,date,contact}){
+    try{
+  return  await this.databases.listDocuments(conf.appwriteDatabaseId, 
+      conf.TicketInfoCollectionId, 
+      ID.unique(),
+      {
+        name,
+        seatNo,
+        busNo,
+        date,
+        contact
+   
+    });
+    }catch(error){
+      throw error;
+    }
+  }
 
 
 }
