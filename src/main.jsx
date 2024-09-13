@@ -50,6 +50,7 @@ import ManageBus from './components/company/ManageBus.jsx'
 import BusStop from './components/BusRoute/BusStop.jsx'
 import BookingPage from './components/Ticket/BookingPage.jsx'
 import ConfirmationPage from './components/Ticket/ConfirmationPage.jsx'
+import TicketMessage from './components/Ticket/TicketMessage.jsx'
 
 let persistor=persistStore(store)
 
@@ -63,9 +64,10 @@ const router=createBrowserRouter(
       <Route path='selectseat' element={<SelectSeat/>}/>
       <Route path='ticketcard' element={<TicketCard/>}/>
       <Route path='confirmationcard' element={<ConfirmationCard/>}/>
+      <Route path='ticketmessage' element={<TicketMessage/>}/>
       <Route path='route' element={<BusRoute/>}/>
       <Route path='bookingpage' element={<BookingPage/>}/>
-      <Route path='comfirmationpage' element={<ConfirmationPage/>}/>
+      <Route path='confirmationpage' element={<ConfirmationPage/>}/>
       <Route path='busstop' element={<BusStop/>}/>
       <Route path='login' element={<Login/>}/>
       <Route path='loginpage' element={<LoginPage/>}/>

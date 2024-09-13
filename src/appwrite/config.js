@@ -226,19 +226,19 @@ export class Service{
     }
   }
   async showTicketInfo({name,seatNo,busNo,date,contact}){
-    try{
-  return  await this.databases.listDocuments(conf.appwriteDatabaseId, 
-      conf.TicketInfoCollectionId, 
-      ID.unique(),
-      {
-        name,
-        seatNo,
-        busNo,
-        date,
-        contact
-   
-    });
-    }catch(error){
+    try {
+      return await this.databases.listDocuments(
+        conf.appwriteDatabaseId,
+        conf.TicketInfoCollectionId,
+        [
+          Query.equal('name', name),
+          Query.equal('seatNo', seatNo),
+          Query.equal('busNo', busNo),
+          Query.equal('date', date),
+          Query.equal('contact', contact),
+        ]
+      );
+    } catch (error) {
       throw error;
     }
   }
