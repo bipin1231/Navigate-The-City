@@ -18,7 +18,7 @@ import { Input } from "@nextui-org/input";
 import authService from '../../appwrite/auth';
 
 function CompanySignup() {
-
+  const [loading, setLoading] = useState(false);
 
 const navigate=useNavigate();
 
@@ -29,6 +29,7 @@ const navigate=useNavigate();
   } = useForm();
   const onSubmit = async(data) => {
    
+    setLoading(true);
 
     console.log(errors);
 
@@ -43,6 +44,8 @@ const navigate=useNavigate();
       }
   } catch (error) {
       console.log(error);
+  } finally {
+    setLoading(false);
   }
 
   };
@@ -155,6 +158,11 @@ const navigate=useNavigate();
              Register
             </button>
           </div>
+          {loading && (
+                <div className='fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50'>
+                  <img src="../loading.gif" alt="Loading..." className='w-24 h-24' />
+                </div>
+              )}
         </form>
     
 
