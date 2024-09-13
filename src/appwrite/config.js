@@ -230,35 +230,7 @@ export class Service{
       throw error;
     }
   }
-<<<<<<< HEAD
   async showTicketInfo({name,seatNo,busNo,date,contact}){
-    try {
-      return await this.databases.listDocuments(
-        conf.appwriteDatabaseId,
-        conf.TicketInfoCollectionId,
-        [
-          Query.equal('name', name),
-          Query.equal('seatNo', seatNo),
-          Query.equal('busNo', busNo),
-          Query.equal('date', date),
-          Query.equal('contact', contact),
-        ]
-      );
-    } catch (error) {
-=======
-  async showTicketInfo(userId){
-    try{
-  return  await this.databases.listDocuments(conf.appwriteDatabaseId, 
-      conf.TicketInfoCollectionId,
-      [
-        Query.equal('userId', userId),
-      ] 
-  );
-    }catch(error){
-      throw error;
-    }
-  }
-  async showTicketInfoForDriver({name,seatNo,busNo,date,contact}){
     try{
   return  await this.databases.listDocuments(conf.appwriteDatabaseId, 
       conf.TicketInfoCollectionId, 
@@ -272,7 +244,6 @@ export class Service{
    
     });
     }catch(error){
->>>>>>> 9f632739f3e679616aedf8196c1e59d1babd4ff1
       throw error;
     }
   }
