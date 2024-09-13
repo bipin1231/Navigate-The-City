@@ -165,26 +165,26 @@ function MultipleUserMap() {
 
 
 
-  useEffect(() => {
+  // useEffect(() => {
 
     
-    (async function () {
-      if (userData && status) {
-        const data = await service.fetchDriverInfo(userData.userData.$id);
+  //   (async function () {
+  //     if (userData && status) {
+  //       const data = await service.fetchDriverInfo(userData.userData.$id);
 
-        if (data.total > 0) {
-          console.log(data)
-          console.log(data.documents[0])
-          setDriverInfo(data.documents[0])
+  //       if (data.total > 0) {
+  //         console.log(data)
+  //         console.log(data.documents[0])
+  //         setDriverInfo(data.documents[0])
     
 
-        }
-      }
-      console.log(driverInfo);
+  //       }
+  //     }
+  //     console.log(driverInfo);
 
-    }())
-    console.log(driverInfo);
-  }, [])
+  //   }())
+  //   console.log(driverInfo);
+  // }, [])
  
   useEffect(() => {
 
@@ -198,14 +198,15 @@ function MultipleUserMap() {
         heading: doc.heading,
         Speed: doc.Speed,
         busNo: doc.BusNo,
-        nextStop:doc.nextStop
+        nextStop:doc.nextStop,
+        arrivalTime:doc.arrivalTime
       }));
-      //  console.log(userLocations);
+      
       const validUserLocations = userLocations.filter(user => user.position[0] !== null);
       setUsers(validUserLocations);
     }
 
-
+    //console.log(userLocations);
     fetchUserLocation(); // Initial fetch
 
     const intervalId = setInterval(fetchUserLocation, 3000); // Fetch every 5 seconds
@@ -225,11 +226,11 @@ function MultipleUserMap() {
             if (!isLocationStored) {
               const storeLoc = async () => {
                 setLocationStored(true);
-                //   console.log("storing location");
+                   console.log("storing location");
           
-                const data = await service.storeUserLocation({ userId: userData.userData.$id, name: userData.name, latitude, longitude, heading, Speed: speed, BusNo: driverInfo.busNo});
+                const data = await service.storeUserLocation({ userId: userData.userData.$id, name: userData.name, latitude, longitude, heading, Speed: speed});
                 
-                // console.log("performing storing in database",data);
+                 console.log("performing storing in database",data);
                 setLocationStored(false);
               }
               storeLoc();
@@ -374,7 +375,8 @@ function MultipleUserMap() {
           let iconSrc="";
 
           if (status) {
-            const isCurrentUser = userData && user.userId === userData.userData.$id;
+          
+            const isCurrentUser =user.userId === userData.userData.$id;
             iconSrc = isCurrentUser ? 'navigator.svg' : 'bus.png';
           }else{
              iconSrc ='bus.png';
@@ -406,11 +408,11 @@ function MultipleUserMap() {
                 </div>
                 <div className="flex items-center justify-between w-full mt-2">
                   <span className="text-sm font-medium text-gray-500">Estimated Arrival Time:</span>
-                  <span className="text-sm font-bold text-gray-700">10:30 AM</span>
+                  <span className="text-sm font-bold text-gray-700">{user.arrivalTime}</span>
                 </div>
                 <div className="flex items-center justify-between w-full mt-2">
                   <span className="text-sm font-medium text-gray-500">Next Stop:</span>
-                  <span className="text-sm font-bold text-gray-700">Tandi</span>
+                  <span className="text-sm font-bold text-gray-700">{user.nextStop}</span>
                 </div>
                 <div className="flex flex-col items-center w-full mt-4">
                   <span className="text-sm font-medium text-gray-500">Current Speed</span>
