@@ -1,31 +1,15 @@
 import React, { useState } from "react";
 import { useLocation } from "react-router-dom";
-import { useDispatch } from 'react-redux'; // Import useDispatch
-// import { setTicketData } from '../src/ticketStore/ticketSlice'; // Import the action
-import { search } from "../../ticketStore/ticketSlice";
-
 
 function ConfirmationPage() {
   const location = useLocation();
   const bookingData = location.state;
-  const dispatch = useDispatch(); // Get the dispatch function
 
   const [payNowDialogBox, setPayNowDialogBox] = useState(false);
 
   const togglePayNowDialogBox = () => {
     setPayNowDialogBox(!payNowDialogBox);
   };
-  const handlePayLater = () => {
-    // Dispatch the action to store ticket data in Redux store
-    dispatch(search({
-      name: bookingData.name,
-      seat: bookingData.seat,
-      busName: bookingData.busName,
-      price: bookingData.price,
-      date: bookingData.date
-    }));
-  };
- 
 
   return (
     <div className="mt-[60px]">
@@ -99,7 +83,7 @@ function ConfirmationPage() {
 
          <div className="flex justify-center gap-x-10 mt-4">
           <button className="bg-green-400 rounded py-1 px-4 border-1 border-green-400 duration-200 hover:scale-[1.1] hover:bg-green-300" onClick={togglePayNowDialogBox}>Pay Now</button>
-          <button className="bg-green-400 rounded py-1 px-4 border-1 border-green-400 duration-200 hover:scale-[1.1] hover:bg-green-300" onClick={handlePayLater}>Pay Later</button>
+          <button className="bg-green-400 rounded py-1 px-4 border-1 border-green-400 duration-200 hover:scale-[1.1] hover:bg-green-300">Pay Later</button>
         </div>
 
         {payNowDialogBox && (
