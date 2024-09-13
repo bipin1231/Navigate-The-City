@@ -133,7 +133,7 @@ function Header() {
               Manage Bus
             </Link>
             <Link to='/ticketmessage' className="block lg:inline-block text-gray-800 font-semibold hover:text-blue-600 mt-4 lg:mt-0 hover:scale-[1.2] duration-200">
-              Ticket Message
+              Ticket Notification
             </Link>
           </>
           }
