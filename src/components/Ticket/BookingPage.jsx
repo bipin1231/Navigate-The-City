@@ -50,6 +50,7 @@ function BookingPage() {
       seat: selectedSeat,  
       price: totalPrice,
       name: data.name,
+      contact: data.contact,
       age: data.age,
     };
     // Navigate to the next page and pass the booking data as state
@@ -128,6 +129,7 @@ function BookingPage() {
               required
               className="appearance-none rounded-md px-4 py-3 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none"
               placeholder="Contact"
+              {...register("contact")}
             />
             <input
               id="age"

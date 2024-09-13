@@ -1,9 +1,16 @@
-import {configureStore} from '@reduxjs/toolkit'
-import ticketSlice from './ticketSlice'
-import authSlice from './authSlice'
+// import {configureStore} from '@reduxjs/toolkit'
+// import ticketSlice from './ticketSlice'
+// import authSlice from './authSlice'
+// import storage from 'redux-persist/lib/storage';
+// import { persistReducer } from 'redux-persist';
+// import { combineReducers } from '@reduxjs/toolkit';
+
+import { configureStore } from '@reduxjs/toolkit';
+import { combineReducers } from 'redux'; // Use 'redux' instead of '@reduxjs/toolkit'
 import storage from 'redux-persist/lib/storage';
-import { persistReducer } from 'redux-persist';
-import { combineReducers } from '@reduxjs/toolkit';
+import { persistReducer, persistStore } from 'redux-persist';
+import ticketSlice from './ticketSlice'; // Ensure correct path
+import authSlice from './authSlice'; // Ensure correct path
 
 const persistConfig={
   key:"root",
@@ -26,6 +33,9 @@ const store=configureStore({
   // }
 
 });
+// Create persistor
+export const persistor = persistStore(store);
+
 export default store;
 
 // const reducer={

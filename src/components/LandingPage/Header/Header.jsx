@@ -120,14 +120,17 @@ function Header() {
             <Link to='/map' className="block lg:inline-block text-gray-800 font-semibold hover:text-blue-600 mt-4 lg:mt-0 hover:scale-[1.2] duration-200">
               Map
             </Link>
-            <Link to='/route' className="block lg:inline-block text-gray-800 font-semibold hover:text-blue-600 mt-4 lg:mt-0 hover:scale-[1.2] duration-200">
+            {/* <Link to='/route' className="block lg:inline-block text-gray-800 font-semibold hover:text-blue-600 mt-4 lg:mt-0 hover:scale-[1.2] duration-200">
               Route
-            </Link>
+            </Link> */}
             <Link to='/manageroutes' className="block lg:inline-block text-gray-800 font-semibold hover:text-blue-600 mt-4 lg:mt-0 hover:scale-[1.2] duration-200">
               Manage Route
             </Link>
             <Link to='/managebus' className="block lg:inline-block text-gray-800 font-semibold hover:text-blue-600 mt-4 lg:mt-0 hover:scale-[1.2] duration-200">
               Manage Bus
+            </Link>
+            <Link to='/ticketmessage' className="block lg:inline-block text-gray-800 font-semibold hover:text-blue-600 mt-4 lg:mt-0 hover:scale-[1.2] duration-200">
+              Ticket Message
             </Link>
           </>
           }
