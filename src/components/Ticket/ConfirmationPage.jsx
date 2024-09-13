@@ -58,7 +58,7 @@ function ConfirmationPage() {
                 </div>
                 <div>
                   <h1 className="text-sky-800 text-xs md:text-sm">Seat</h1>
-                  <h1>{bookingData.seat}</h1>
+                  <h1>{bookingData.seat.join(", ")}</h1>
                 </div>
               </div>
 
