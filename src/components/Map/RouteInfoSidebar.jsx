@@ -1,52 +1,129 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { FaBus, FaTimes, FaArrowLeft } from 'react-icons/fa'; // Icons for navigation and bus details
-import { motion } from 'framer-motion';
-
+import { motion, AnimatePresence } from 'framer-motion';
+import { Button, ButtonGroup } from "@nextui-org/react";
+import { Input } from "@nextui-org/input";
+import { useForm, Controller } from 'react-hook-form';
+import service from '../../appwrite/config';
 // Sample Data for Routes and Buses (replace with dynamic data)
 const sampleRoutes = [
   {
     id: 1,
     name: 'Pulchowk To Loathor',
     totalBuses: 5,
-
-    // buses: [
-    //   { busNo: '12345', nextStop: 'Tandi', status: 'On Time' },
-    //   { busNo: '23456', nextStop: 'Bharatpur', status: 'Delayed' },
-    //   { busNo: '34567', nextStop: 'Pokhara', status: 'On Time' }
-    // ]
   },
-  // {
-  //   id: 2,
-  //   name: 'Route 2',
-  //   totalBuses: 4,
-  //   activeBuses: 2,
-  //   buses: [
-  //     { busNo: '45678', nextStop: 'Damauli', status: 'On Time' },
-  //     { busNo: '56789', nextStop: 'Kathmandu', status: 'Delayed' }
-  //   ]
-  // },
-  // {
-  //   id: 3,
-  //   name: 'Route 3',
-  //   totalBuses: 6,
-  //   activeBuses: 4,
-  //   buses: [
-  //     { busNo: '67890', nextStop: 'Butwal', status: 'On Time' },
-  //     { busNo: '78901', nextStop: 'Lumbini', status: 'On Time' },
-  //     { busNo: '89012', nextStop: 'Nepalgunj', status: 'On Time' }
-  //   ]
-  // }
 ];
 
-const RouteInfoSidebar = ({ isOpen, onClose,users }) => {
-  const [selectedRoute, setSelectedRoute] = useState(null);
+// RouteInfoSidebar component
+const RouteInfoSidebar = ({ isOpen, onClose, users }) => {
 
+  const [selectedRoute, setSelectedRoute] = useState(null);
+  const [selectedBus, setSelectedBus] = useState(null); // State to handle selected bus for booking
+  const [showBookingForm, setShowBookingForm] = useState(false); // State to show the booking form
+  const [bookingDetails, setBookingDetails] = useState({
+    name: '',
+    contact: '',
+  });
+  // console.log("selected bus",selectedBus);
+  
+  const [location, setLocation] = useState({
+    latitude: null,
+    longitude: null,
+  });
+  const {
+    register,
+    handleSubmit,
+    formState: { errors }
+  } = useForm();
+
+  useEffect(()=>{
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const { latitude, longitude } = position.coords;
+        setLocation({
+          latitude,
+          longitude
+        })
+
+     
+
+         
+        },
+        (error) => {
+          console.error("Error getting current location:", error);
+        },
+        { enableHighAccuracy: true }
+      );
+    } else {
+      console.error("Geolocation is not supported by this browser.");
+    }
+  },[])
+ 
+  
+  const onSubmit = async (data) => {
+
+    
+    
+    try{
+        const storeData=await service.addTicketInfo({name:data.name,contact:data.contact,latitude:location.latitude,longitude:location.longitude,busNo:selectedBus.busNo,userId:selectedBus.userId})
+        if(storeData){
+          console.log("data stored succesfully");
+          setShowBookingForm(false);
+          
+        }
+    }catch(err){
+      console.log("something went wrong",err);
+      
+    }
+  }
+
+  // Handle when a route is clicked
   const handleRouteClick = (route) => {
     setSelectedRoute(route);
   };
 
+  // Handle going back to the list of routes
   const handleBackToRoutes = () => {
     setSelectedRoute(null);
+    setSelectedBus(null);
+    setShowBookingForm(false);
+  };
+
+  // Handle when a bus is clicked for booking
+  const handleBusClick = (bus) => {
+    setSelectedBus(bus);
+    setShowBookingForm(true); // Show booking form when bus is clicked
+  };
+
+  // Handle input changes in the booking form
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setBookingDetails((prevDetails) => ({
+      ...prevDetails,
+      [name]: value,
+    }));
+  };
+
+  // Handle form submission
+  const handleBookingSubmit = (e) => {
+    e.preventDefault();
+    // Process the booking (e.g., send data to backend)
+    console.log('Booking Details:', bookingDetails);
+    console.log('Selected Bus:', selectedBus);
+
+    // After submitting, reset form and hide the booking form
+    setShowBookingForm(false);
+    setBookingDetails({
+      name: '',
+      contact: '',
+    });
+  };
+
+  // Handle closing the booking form
+  const handleCloseBookingForm = () => {
+    setShowBookingForm(false);
+    setSelectedBus(null);
   };
 
   return (
@@ -75,69 +152,123 @@ const RouteInfoSidebar = ({ isOpen, onClose,users }) => {
 
       {/* Sidebar Content */}
       <div className="p-4 space-y-4 overflow-auto">
-        {/* If no route is selected, show the list of routes */}
-        {!selectedRoute ? (
-          sampleRoutes.map((route) => (
-            <div
-              key={route.id}
-              className="p-4 bg-gray-50 rounded-lg shadow-md cursor-pointer hover:bg-gray-100"
-              onClick={() => handleRouteClick(route)}
+        {/* List of Routes */}
+        <AnimatePresence>
+          {!selectedRoute && (
+            <motion.div
+              key="route-list"
+              initial={{ opacity: 0, x: 50 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: 50 }}
+              transition={{ duration: 0.4 }}
             >
-              <h3 className="text-md font-semibold">{route.name}</h3>
-              <p className="text-sm text-gray-600">Total Buses: {route.totalBuses}</p>
-              <p className="text-sm text-green-600">Active Buses: {users.length}</p>
-            </div>
-          ))
-        ) : 
-        /*(
-          // /* If a route is selected, show the list of buses in that route 
-          selectedRoute.buses.map((bus, index) => (
-            <div key={index} className="p-4 bg-gray-50 rounded-lg shadow-md flex items-center justify-between">
-              <div className="flex items-center space-x-3">
-                <FaBus className="text-blue-500 text-2xl" />
-                <div>
-                  <p className="text-sm font-semibold">Bus No: {bus.busNo}</p>
-                  <p className="text-xs text-gray-500">Next Stop: {bus.nextStop}</p>
+              {sampleRoutes.map((route) => (
+                <div
+                  key={route.id}
+                  className="p-4 bg-gray-50 rounded-lg shadow-md cursor-pointer hover:bg-gray-100"
+                  onClick={() => handleRouteClick(route)}
+                >
+                  <h3 className="text-md font-semibold">{route.name}</h3>
+                  <p className="text-sm text-gray-600">Total Buses: {route.totalBuses}</p>
+                  <p className="text-sm text-green-600">Active Buses: {users.length}</p>
                 </div>
-              </div>
-              <span
-                className={`text-xs font-semibold px-2 py-1 rounded-lg ${
-                  bus.status === 'On Time' ? 'bg-green-100 text-green-600' : 'bg-red-100 text-red-600'
-                }`}
-              >
-                {bus.status}
-              </span>
-            </div>
-          ))
-        )*/
-          (
-            /* If a route is selected, show the list of buses in that route */
-            users.map((bus,index) => (
-              <div key={index} className="p-4 bg-gray-50 rounded-lg shadow-md flex items-center justify-between">
-                <div className="flex items-center space-x-3">
-                  <FaBus className="text-blue-500 text-2xl" />
-                  <div>
-                    <p className="text-sm font-semibold">Bus No: {bus.busNo}</p>
-                    <p className="text-xs text-gray-500">Next Stop: </p>
+              ))}
+            </motion.div>
+          )}
+
+          {/* List of Buses */}
+          {selectedRoute && !showBookingForm && (
+            <motion.div
+              key="bus-list"
+              initial={{ opacity: 0, x: 50 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: 50 }}
+              transition={{ duration: 0.2 }}
+            >
+              {users.map((bus, index) => (
+                <div
+                  key={index}
+                  className="p-4 bg-gray-50 rounded-lg shadow-md flex items-center justify-between cursor-pointer"
+                  onClick={() => handleBusClick(bus)}
+                >
+                  <div className="flex items-center space-x-3">
+                    <FaBus className="text-blue-500 text-2xl" />
+                    <div>
+                      <p className="text-sm font-semibold">Bus No: {bus.busNo}</p>
+                      <p className="text-sm font-semibold">Next Stop: {bus.nextStop}</p>
+                    </div>
                   </div>
                 </div>
-                {/* <span
-                  className={`text-xs font-semibold px-2 py-1 rounded-lg ${
-                    bus.status === 'On Time' ? 'bg-green-100 text-green-600' : 'bg-red-100 text-red-600'
-                  }`}
-                >
-                  {bus.status}
-                </span> */}
-              </div>
-            ))
-          )
+              ))}
+            </motion.div>
+          )}
 
-        }
+          {/* Booking Form */}
+          {showBookingForm && (
+            <motion.div
+              key="booking-form"
+              initial={{ opacity: 0, x: 50 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: 50 }}
+              transition={{ duration: 0.2 }}
+              className="p-4 bg-gray-50 rounded-lg shadow-md"
+            >
+              <h3 className="text-lg font-semibold">Book Bus {selectedBus?.busNo}</h3>
+ 
+
+<form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+  {/* Close Icon */}
+  <div className="flex justify-end">
+    <button type="button" onClick={handleCloseBookingForm}>
+      <FaTimes className="text-gray-500 hover:text-gray-800 text-xl" />
+    </button>
+  </div>
+
+  {/* Name Input */}
+  <div>
+    <Input 
+      variant="bordered" 
+      type="text" 
+      label="Enter Your Name"
+      className="w-full" 
+      {...register("name", { required: "Name is required" })}
+    />
+    {errors.name && <p className="text-red-500 text-sm mt-1">{errors.name.message}</p>}
+  </div>
+
+  {/* Contact Input */}
+  <div>
+    <Input 
+      variant="bordered" 
+      type="text" 
+      label="Contact" 
+      className="w-full" 
+      {...register("contact", { required: "Contact is required" })}
+    />
+    {errors.contact && <p className="text-red-500 text-sm mt-1">{errors.contact.message}</p>}
+  </div>
+
+  {/* Submit Button */}
+  <div className="w-full">
+    <button 
+      type="submit" 
+      className="px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg shadow-md transition-all w-full"
+    >
+      Submit
+    </button>
+  </div>
+</form>
+
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
 
       {/* Footer Section */}
       <div className="p-4 bg-gray-100 text-center text-sm text-gray-600">
-        {!selectedRoute ? `Total Routes: ${sampleRoutes.length}` : `Total Buses in Route: ${selectedRoute.totalBuses}`}
+        {!selectedRoute
+          ? `Total Routes: ${sampleRoutes.length}`
+          : `Total Buses in Route: ${selectedRoute.totalBuses}`}
       </div>
     </motion.div>
   );

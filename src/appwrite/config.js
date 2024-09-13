@@ -71,7 +71,8 @@ export class Service{
           status,
           Speed,
           heading,
-          BusNo
+          BusNo,
+          userType
         });
        
       } else {
@@ -208,7 +209,7 @@ export class Service{
       throw error;
     }
   }
-  async addTicketInfo({name,seatNo,busNo,date,contact}){
+  async addTicketInfo({name,seatNo,busNo,date,contact,latitude,longitude,userId}){
     try{
   return  await this.databases.createDocument(conf.appwriteDatabaseId, 
       conf.TicketInfoCollectionId, 
@@ -218,14 +219,30 @@ export class Service{
         seatNo,
         busNo,
         date,
-        contact
+        contact,
+        longitude,
+        latitude,
+        userId
+
    
     });
     }catch(error){
       throw error;
     }
   }
-  async showTicketInfo({name,seatNo,busNo,date,contact}){
+  async showTicketInfo(userId){
+    try{
+  return  await this.databases.listDocuments(conf.appwriteDatabaseId, 
+      conf.TicketInfoCollectionId,
+      [
+        Query.equal('userId', userId),
+      ] 
+  );
+    }catch(error){
+      throw error;
+    }
+  }
+  async showTicketInfoForDriver({name,seatNo,busNo,date,contact}){
     try{
   return  await this.databases.listDocuments(conf.appwriteDatabaseId, 
       conf.TicketInfoCollectionId, 

@@ -111,6 +111,9 @@ function Header() {
             <Link to='/contact' className="block lg:inline-block text-gray-800 font-semibold hover:text-blue-600 mt-4 lg:mt-0 hover:scale-[1.2] duration-200">
               Contact
             </Link>
+        {userTypeInfo=="driver"  &&  <Link to='/msg' className="block lg:inline-block text-gray-800 font-semibold hover:text-blue-600 mt-4 lg:mt-0 hover:scale-[1.2] duration-200">
+              Message
+            </Link>}
           </>
           }
           {userTypeInfo == "company" && <>
