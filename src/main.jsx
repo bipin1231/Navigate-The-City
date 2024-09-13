@@ -50,7 +50,11 @@ import ManageBus from './components/company/ManageBus.jsx'
 import BusStop from './components/BusRoute/BusStop.jsx'
 import BookingPage from './components/Ticket/BookingPage.jsx'
 import ConfirmationPage from './components/Ticket/ConfirmationPage.jsx'
+<<<<<<< HEAD
 import TicketMessage from './components/Ticket/TicketMessage.jsx'
+=======
+import BookingInfoForDriver from './components/Login/BookingInfoForDriver.jsx'
+>>>>>>> 9f632739f3e679616aedf8196c1e59d1babd4ff1
 
 let persistor=persistStore(store)
 
@@ -92,6 +96,7 @@ const router=createBrowserRouter(
       <Route path='viewbuslist' element={<ViewBusList/>}/>
       <Route path='DriverInfo' element={<DriverInfo/>}/>
       <Route path='CompanyInfo' element={<CompanyInfo/>}/>
+      <Route path='msg' element={<BookingInfoForDriver/>}/>
     </Route>
   )
 )

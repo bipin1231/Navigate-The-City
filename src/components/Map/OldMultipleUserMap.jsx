@@ -139,6 +139,8 @@ function RoutingControl({ isRoutingEnabled }) {
 function MultipleUserMap() {
   const status = useSelector(state => state.auth.status);
   const userData = useSelector(state => state.auth.userData);
+  
+  
 
   const [isLocationStored, setLocationStored] = useState(false);
   const [users, setUsers] = useState([]);
@@ -158,14 +160,19 @@ function MultipleUserMap() {
 
   const [driverInfo, setDriverInfo] = useState()
 
+  const [userType,setuserType]=useState("");
+
 
 
   useEffect(() => {
+
+    
     (async function () {
       if (userData && status) {
         const data = await service.fetchDriverInfo(userData.userData.$id);
 
         if (data.total > 0) {
+          console.log(data)
           console.log(data.documents[0])
           setDriverInfo(data.documents[0])
     
@@ -175,6 +182,7 @@ function MultipleUserMap() {
       console.log(driverInfo);
 
     }())
+    console.log(driverInfo);
   }, [])
  
   useEffect(() => {
@@ -188,7 +196,8 @@ function MultipleUserMap() {
         position: [doc.latitude, doc.longitude],
         heading: doc.heading,
         Speed: doc.Speed,
-        busNo: doc.BusNo
+        busNo: doc.BusNo,
+        nextStop:doc.nextStop
       }));
       //  console.log(userLocations);
       const validUserLocations = userLocations.filter(user => user.position[0] !== null);
@@ -217,7 +226,7 @@ function MultipleUserMap() {
                 setLocationStored(true);
                 //   console.log("storing location");
           
-                const data = await service.storeUserLocation({ userId: userData.userData.$id, name: userData.name, latitude, longitude, heading, Speed: speed, BusNo: driverInfo.busNo });
+                const data = await service.storeUserLocation({ userId: userData.userData.$id, name: userData.name, latitude, longitude, heading, Speed: speed, BusNo: driverInfo.busNo});
                 
                 // console.log("performing storing in database",data);
                 setLocationStored(false);
