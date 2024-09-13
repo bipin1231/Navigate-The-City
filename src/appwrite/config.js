@@ -242,19 +242,11 @@ export class Service{
       throw error;
     }
   }
-  async showTicketInfoForDriver({name,seatNo,busNo,date,contact}){
+  async showTicketInfoForCompany(){
     try{
   return  await this.databases.listDocuments(conf.appwriteDatabaseId, 
-      conf.TicketInfoCollectionId, 
-      ID.unique(),
-      {
-        name,
-        seatNo,
-        busNo,
-        date,
-        contact
-   
-    });
+      conf.TicketInfoCollectionId,
+  );
     }catch(error){
       throw error;
     }

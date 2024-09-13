@@ -54,7 +54,7 @@ function BookingPage() {
       age: data.age,
     };
     // Navigate to the next page and pass the booking data as state
-    navigate('/comfirmationpage', { state: bookingData });
+    navigate('/confirmationpage', { state: bookingData });
 
   };
   // const [name, setName] = useState(''); // State for capturing the user's name and passing to another file

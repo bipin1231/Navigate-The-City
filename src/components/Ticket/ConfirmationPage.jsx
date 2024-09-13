@@ -1,14 +1,45 @@
 import React, { useState } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
+import service from '../../appwrite/config.js';
 
 function ConfirmationPage() {
   const location = useLocation();
+  const navigate = useNavigate();
   const bookingData = location.state;
 
   const [payNowDialogBox, setPayNowDialogBox] = useState(false);
+  const [payLaterDialogBox, setPayLaterDialogBox] = useState(false);
 
   const togglePayNowDialogBox = () => {
     setPayNowDialogBox(!payNowDialogBox);
+  };
+  // const togglePayNowDialogBox = () => {
+  //   setPayNowDialogBox(!payNowDialogBox);
+  // };
+  const handleSendTicketData = async () => {
+    setPayLaterDialogBox(!payLaterDialogBox);
+
+    try {
+      console.log('Sending ticket data:', {
+        name: bookingData.name,
+        seatNo: bookingData.seat.join(", "),
+        busNo: bookingData.busName,
+        date: bookingData.date,
+        contact: bookingData.contact,
+      });
+      await service.addTicketInfo({
+        name: bookingData.name,
+        seatNo: bookingData.seat.join(", "),
+        busNo: bookingData.busName,
+        date: bookingData.date,
+        contact: bookingData.contact,
+      });
+
+      console.log('Ticket information saved successfully.');
+      // navigate("/ticketmessage");
+    } catch (error) {
+      console.error("Error saving ticket information:", error);
+    }
   };
 
   return (
@@ -83,7 +114,7 @@ function ConfirmationPage() {
 
          <div className="flex justify-center gap-x-10 mt-4">
           <button className="bg-green-400 rounded py-1 px-4 border-1 border-green-400 duration-200 hover:scale-[1.1] hover:bg-green-300" onClick={togglePayNowDialogBox}>Pay Now</button>
-          <button className="bg-green-400 rounded py-1 px-4 border-1 border-green-400 duration-200 hover:scale-[1.1] hover:bg-green-300">Pay Later</button>
+          <button className="bg-green-400 rounded py-1 px-4 border-1 border-green-400 duration-200 hover:scale-[1.1] hover:bg-green-300" onClick={handleSendTicketData}>Pay Later</button>
         </div>
 
         {payNowDialogBox && (
@@ -99,6 +130,22 @@ function ConfirmationPage() {
               </button>
             </div>
             <p className="my-4">The Online Payment is not currently working!</p>
+          </div>
+        </div>
+      )}
+        {payLaterDialogBox && (
+        <div className="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center">
+          <div className="bg-white p-6 rounded shadow-lg">
+            <div className="flex items-center justify-between">
+              <h2 className="text-2xl text-yellow-500 font-semibold">Processing...</h2>
+              <button
+                className="bg-red-500 text-white px-4 py-2 rounded"
+                onClick={handleSendTicketData}
+              >
+                X
+              </button>
+            </div>
+            <p className="my-4">Your Booking is processing now!</p>
           </div>
         </div>
       )}
