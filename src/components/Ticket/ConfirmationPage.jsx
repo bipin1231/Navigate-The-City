@@ -8,11 +8,17 @@ function ConfirmationPage() {
   const bookingData = location.state;
 
   const [payNowDialogBox, setPayNowDialogBox] = useState(false);
+  const [payLaterDialogBox, setPayLaterDialogBox] = useState(false);
 
   const togglePayNowDialogBox = () => {
     setPayNowDialogBox(!payNowDialogBox);
   };
+  // const togglePayNowDialogBox = () => {
+  //   setPayNowDialogBox(!payNowDialogBox);
+  // };
   const handleSendTicketData = async () => {
+    setPayLaterDialogBox(!payLaterDialogBox);
+
     try {
       console.log('Sending ticket data:', {
         name: bookingData.name,
@@ -127,14 +133,14 @@ function ConfirmationPage() {
           </div>
         </div>
       )}
-        {/* {payNowDialogBox && (
+        {payLaterDialogBox && (
         <div className="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center">
           <div className="bg-white p-6 rounded shadow-lg">
             <div className="flex items-center justify-between">
               <h2 className="text-2xl text-yellow-500 font-semibold">Processing...</h2>
               <button
                 className="bg-red-500 text-white px-4 py-2 rounded"
-                onClick={togglePayNowDialogBox}
+                onClick={handleSendTicketData}
               >
                 X
               </button>
@@ -142,7 +148,7 @@ function ConfirmationPage() {
             <p className="my-4">Your Booking is processing now!</p>
           </div>
         </div>
-      )} */}
+      )}
 
 
 
