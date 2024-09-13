@@ -1,6 +1,7 @@
 import { useMap } from 'react-leaflet';
 import { useState } from 'react';
 import L from 'leaflet';
+import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 
 function CurrentLocationButton() {
   const map = useMap();
@@ -13,27 +14,30 @@ function CurrentLocationButton() {
           const { latitude, longitude } = position.coords;
           const latlng = L.latLng(latitude, longitude);
 
-          // Smooth zoom effect
+          // Smooth zoom effect with easing function
           const zoomTo = (latlng, zoomLevel) => {
             const currentZoom = map.getZoom();
             const zoomDiff = zoomLevel - currentZoom;
 
+            const easeInOutQuad = (t) => t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t;
+
             const start = performance.now();
 
             const animateZoom = (timestamp) => {
-              const progress = (timestamp - start) / 500; // Duration in seconds
+              const progress = (timestamp - start) / 1000; // Duration in seconds
               const t = Math.min(progress / 1, 1); // 1 second for the animation
+              const easedProgress = easeInOutQuad(t); // Apply easing function
 
               map.setView(
                 latlng,
-                currentZoom + zoomDiff * t,
+                currentZoom + zoomDiff * easedProgress,
                 { animate: false } // Disable default animation
               );
 
               if (t < 1) {
                 requestAnimationFrame(animateZoom);
               } else {
-                map.setView(latlng, zoomLevel); // Final view
+                map.setView(latlng, zoomLevel); // Final view after animation
               }
             };
 
@@ -50,12 +54,10 @@ function CurrentLocationButton() {
               icon: L.icon({
                 iconUrl: 'navigator.svg', // Path to your custom icon
                 iconSize: [15, 25],
-                // iconAnchor: [12, 25],
-                popupAnchor: [0, -15]
+                popupAnchor: [0, -15],
               }),
             }).addTo(map);
 
-           
             newMarker.bindPopup('<b>You are here!</b>').openPopup(); // Add and open popup
             setMarker(newMarker);
           }

@@ -20,6 +20,7 @@ import BusStop from '../BusRoute/BusStop';
 import RouteList from './RouteList';
 import RouteInfoSidebar from './RouteInfoSidebar';
 import { FaMapMarkedAlt } from 'react-icons/fa';
+import ToggleStatus from './ToggleStatus';
 
 const nepalBounds = L.latLngBounds(
   L.latLng(26.347, 80.058), // South-West
@@ -340,7 +341,7 @@ function MultipleUserMap() {
 
   return (
     <div className='h-[90vh] w-full relative flex flex-col items-center mt-[58px]'>
-
+          
       <MapContainer
 
         center={defaultPosition}
@@ -432,7 +433,10 @@ function MultipleUserMap() {
 
       </MapContainer>
 
-
+      
+    {status && <div className="absolute top-5 right-2 z-[1600]">
+      <ToggleStatus/>
+    </div>}
   
 
 <button
@@ -441,6 +445,9 @@ function MultipleUserMap() {
       >
         <FaMapMarkedAlt className="text-2xl" />
       </button>
+ 
+
+ 
 
       {/* Sidebar component */}
       <RouteInfoSidebar
