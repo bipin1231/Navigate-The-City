@@ -230,19 +230,23 @@ export class Service{
       throw error;
     }
   }
-  async showTicketInfo({name,seatNo,busNo,date,contact}){
+  async showTicketInfo(userId){
     try{
   return  await this.databases.listDocuments(conf.appwriteDatabaseId, 
-      conf.TicketInfoCollectionId, 
-      ID.unique(),
-      {
-        name,
-        seatNo,
-        busNo,
-        date,
-        contact
-   
-    });
+      conf.TicketInfoCollectionId,
+      [
+        Query.equal('userId', userId),
+      ] 
+  );
+    }catch(error){
+      throw error;
+    }
+  }
+  async showTicketInfoForCompany(){
+    try{
+  return  await this.databases.listDocuments(conf.appwriteDatabaseId, 
+      conf.TicketInfoCollectionId,
+  );
     }catch(error){
       throw error;
     }

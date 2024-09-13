@@ -18,13 +18,7 @@ function TicketMessage() {
           contact: "",
         });
 
-        const result = await service.showTicketInfo({
-          name: "", // Optional filter
-          seatNo: "", // Optional filter
-          busNo: "", // Optional filter
-          date: formattedDate, // Optional filter
-          contact: "", // Optional filter
-        });
+        const result = await service.showTicketInfoForCompany();
 
         console.log('Fetched tickets:', result);
         setTicketData(result.documents);
