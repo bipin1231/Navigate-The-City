@@ -5,18 +5,21 @@ import { Button, ButtonGroup } from "@nextui-org/react";
 import { Input } from "@nextui-org/input";
 import { useForm, Controller } from 'react-hook-form';
 import service from '../../appwrite/config';
+
 // Sample Data for Routes and Buses (replace with dynamic data)
 const sampleRoutes = [
   {
     id: 1,
     name: 'Pulchowk To Loathor',
+    districtName: 'Chitwan', // Added district name
     totalBuses: 5,
   },
+
+  // Add more routes as needed
 ];
 
 // RouteInfoSidebar component
 const RouteInfoSidebar = ({ isOpen, onClose, users }) => {
-
   const [selectedRoute, setSelectedRoute] = useState(null);
   const [selectedBus, setSelectedBus] = useState(null); // State to handle selected bus for booking
   const [showBookingForm, setShowBookingForm] = useState(false); // State to show the booking form
@@ -24,31 +27,27 @@ const RouteInfoSidebar = ({ isOpen, onClose, users }) => {
     name: '',
     contact: '',
   });
-  // console.log("selected bus",selectedBus);
-  
+
   const [location, setLocation] = useState({
     latitude: null,
     longitude: null,
   });
+
   const {
     register,
     handleSubmit,
     formState: { errors }
   } = useForm();
 
-  useEffect(()=>{
+  useEffect(() => {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
         (position) => {
           const { latitude, longitude } = position.coords;
-        setLocation({
-          latitude,
-          longitude
-        })
-
-     
-
-         
+          setLocation({
+            latitude,
+            longitude
+          });
         },
         (error) => {
           console.error("Error getting current location:", error);
@@ -58,45 +57,42 @@ const RouteInfoSidebar = ({ isOpen, onClose, users }) => {
     } else {
       console.error("Geolocation is not supported by this browser.");
     }
-  },[])
- 
-  
+  }, []);
+
   const onSubmit = async (data) => {
-
-    
-    
-    try{
-        const storeData=await service.addTicketInfo({name:data.name,contact:data.contact,latitude:location.latitude,longitude:location.longitude,busNo:selectedBus.busNo,userId:selectedBus.userId})
-        if(storeData){
-          console.log("data stored succesfully");
-          setShowBookingForm(false);
-          
-        }
-    }catch(err){
-      console.log("something went wrong",err);
-      
+    try {
+      const storeData = await service.addTicketInfo({
+        name: data.name,
+        contact: data.contact,
+        latitude: location.latitude,
+        longitude: location.longitude,
+        busNo: selectedBus.busNo,
+        userId: selectedBus.userId
+      });
+      if (storeData) {
+        console.log("Data stored successfully");
+        setShowBookingForm(false);
+      }
+    } catch (err) {
+      console.log("Something went wrong", err);
     }
-  }
+  };
 
-  // Handle when a route is clicked
   const handleRouteClick = (route) => {
     setSelectedRoute(route);
   };
 
-  // Handle going back to the list of routes
   const handleBackToRoutes = () => {
     setSelectedRoute(null);
     setSelectedBus(null);
     setShowBookingForm(false);
   };
 
-  // Handle when a bus is clicked for booking
   const handleBusClick = (bus) => {
     setSelectedBus(bus);
     setShowBookingForm(true); // Show booking form when bus is clicked
   };
 
-  // Handle input changes in the booking form
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setBookingDetails((prevDetails) => ({
@@ -105,7 +101,6 @@ const RouteInfoSidebar = ({ isOpen, onClose, users }) => {
     }));
   };
 
-  // Handle form submission
   const handleBookingSubmit = (e) => {
     e.preventDefault();
     // Process the booking (e.g., send data to backend)
@@ -120,7 +115,6 @@ const RouteInfoSidebar = ({ isOpen, onClose, users }) => {
     });
   };
 
-  // Handle closing the booking form
   const handleCloseBookingForm = () => {
     setShowBookingForm(false);
     setSelectedBus(null);
@@ -169,7 +163,9 @@ const RouteInfoSidebar = ({ isOpen, onClose, users }) => {
                   onClick={() => handleRouteClick(route)}
                 >
                   <h3 className="text-md font-semibold">{route.name}</h3>
+                  <p className="text-sm text-gray-600">{route.districtName}</p>
                   <p className="text-sm text-gray-600">Total Buses: {route.totalBuses}</p>
+                  {/* Added district name */}
                   <p className="text-sm text-green-600">Active Buses: {users.length}</p>
                 </div>
               ))}
@@ -214,51 +210,49 @@ const RouteInfoSidebar = ({ isOpen, onClose, users }) => {
               className="p-4 bg-gray-50 rounded-lg shadow-md"
             >
               <h3 className="text-lg font-semibold">Book Bus {selectedBus?.busNo}</h3>
- 
 
-<form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-  {/* Close Icon */}
-  <div className="flex justify-end">
-    <button type="button" onClick={handleCloseBookingForm}>
-      <FaTimes className="text-gray-500 hover:text-gray-800 text-xl" />
-    </button>
-  </div>
+              <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+                {/* Close Icon */}
+                <div className="flex justify-end">
+                  <button type="button" onClick={handleCloseBookingForm}>
+                    <FaTimes className="text-gray-500 hover:text-gray-800 text-xl" />
+                  </button>
+                </div>
 
-  {/* Name Input */}
-  <div>
-    <Input 
-      variant="bordered" 
-      type="text" 
-      label="Enter Your Name"
-      className="w-full" 
-      {...register("name", { required: "Name is required" })}
-    />
-    {errors.name && <p className="text-red-500 text-sm mt-1">{errors.name.message}</p>}
-  </div>
+                {/* Name Input */}
+                <div>
+                  <Input
+                    variant="bordered"
+                    type="text"
+                    label="Enter Your Name"
+                    className="w-full"
+                    {...register("name", { required: "Name is required" })}
+                  />
+                  {errors.name && <p className="text-red-500 text-sm mt-1">{errors.name.message}</p>}
+                </div>
 
-  {/* Contact Input */}
-  <div>
-    <Input 
-      variant="bordered" 
-      type="text" 
-      label="Contact" 
-      className="w-full" 
-      {...register("contact", { required: "Contact is required" })}
-    />
-    {errors.contact && <p className="text-red-500 text-sm mt-1">{errors.contact.message}</p>}
-  </div>
+                {/* Contact Input */}
+                <div>
+                  <Input
+                    variant="bordered"
+                    type="text"
+                    label="Contact"
+                    className="w-full"
+                    {...register("contact", { required: "Contact is required" })}
+                  />
+                  {errors.contact && <p className="text-red-500 text-sm mt-1">{errors.contact.message}</p>}
+                </div>
 
-  {/* Submit Button */}
-  <div className="w-full">
-    <button 
-      type="submit" 
-      className="px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg shadow-md transition-all w-full"
-    >
-      Submit
-    </button>
-  </div>
-</form>
-
+                {/* Submit Button */}
+                <div className="w-full">
+                  <button
+                    type="submit"
+                    className="px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg shadow-md transition-all w-full"
+                  >
+                    Submit
+                  </button>
+                </div>
+              </form>
             </motion.div>
           )}
         </AnimatePresence>
