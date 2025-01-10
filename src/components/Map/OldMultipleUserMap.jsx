@@ -442,7 +442,7 @@ function MultipleUserMap() {
   
 
 <button
-        className="absolute top-[10px] right-[60px] z-[1600] bg-blue-600 text-white p-3 rounded-full shadow-lg hover:bg-blue-700 focus:outline-none"
+        className="absolute top-[10px] right-2 md:right-4 z-[1600] bg-blue-600 text-white p-3 rounded-full shadow-lg hover:bg-blue-700 focus:outline-none"
         onClick={toggleSidebar}
       >
         <FaMapMarkedAlt className="text-2xl" />
